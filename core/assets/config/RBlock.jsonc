@@ -1,0 +1,152 @@
+{
+    "BlockSize":{
+        "x":5,
+        "y":5
+    },
+    "BlockData": [
+        {
+            "groupId": 0,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 1,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 0, 0, 0],
+                [0, 1, 0, 0, 0],
+                [0, 1, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 2,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 1, 0],
+                [0, 0, 1, 1, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 3,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 1, 1, 1, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 4,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": false,
+            "define": [
+                [0, 0, 0, 0, 0],
+                [0, 1, 1, 0, 0],
+                [0, 1, 1, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 5,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 1, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 6,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 1, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 1, 1, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 7,
+            "type": 1,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 8,
+            "type": 2,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 9,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 0, 0, 0],
+                [0, 1, 0, 0, 0],
+                [0, 1, 0, 0, 0],
+                [0, 1, 1, 1, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 10,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0],
+                [0, 1, 0, 1, 0],
+                [0, 1, 1, 1, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        },
+        {
+            "groupId": 11,
+            "type": 0,  //0: normal, 1: pierce, 2, bomb
+            "canRotate": true,
+            "define": [
+                [0, 0, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 1, 1, 1, 0],
+                [0, 1, 1, 1, 0],
+                [0, 0, 0, 0, 0]
+            ]
+        }
+    ]
+}

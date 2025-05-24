@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{e4d28127-2a64-48e4-aa92-c37aa42ab666}</ProjectGuid>
+    <RootNamespace>Tetris</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\WorkSpace\Tetris\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>md "$(OutputPath)assets\"
+xcopy /y /S "$(OutputPath)\..\..\..\..\core\assets\*.*" "$(OutputPath)assets\"
+xcopy /y "$(OutputPath)\..\..\..\..\core\LibsAndDlls\*.dll" "$(OutputPath)"
+</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>将游戏资源和dll拷贝到生成目录</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\WorkSpace\Tetris\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>md "$(OutputPath)assets\"
+xcopy /y /S "$(OutputPath)\..\..\..\..\core\assets\*.*" "$(OutputPath)assets\"
+xcopy /y "$(OutputPath)\..\..\..\..\core\LibsAndDlls\*.dll" "$(OutputPath)"
+</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>将游戏资源和dll拷贝到生成目录</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\WorkSpace\Tetris\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>md "$(OutputPath)assets\"
+xcopy /y /S "$(OutputPath)\..\..\..\..\core\assets\*.*" "$(OutputPath)assets\"
+xcopy /y "$(OutputPath)\..\..\..\..\core\LibsAndDlls\*.dll" "$(OutputPath)"
+</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>将游戏资源和dll拷贝到生成目录</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\WorkSpace\Tetris\core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>md "$(OutputPath)assets\"
+xcopy /y /S "$(OutputPath)\..\..\..\..\core\assets\*.*" "$(OutputPath)assets\"
+xcopy /y "$(OutputPath)\..\..\..\..\core\LibsAndDlls\*.dll" "$(OutputPath)"
+</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>将游戏资源和dll拷贝到生成目录</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\core\Actor.cpp" />
+    <ClCompile Include="..\..\core\Animation.cpp" />
+    <ClCompile Include="..\..\core\Arena.cpp" />
+    <ClCompile Include="..\..\core\AudioSuite.cpp" />
+    <ClCompile Include="..\..\core\BlockGroup.cpp" />
+    <ClCompile Include="..\..\core\BlockMoveTracker.cpp" />
+    <ClCompile Include="..\..\core\BrickPool.cpp" />
+    <ClCompile Include="..\..\core\Button.cpp" />
+    <ClCompile Include="..\..\core\ConstDef.cpp" />
+    <ClCompile Include="..\..\core\Control.cpp" />
+    <ClCompile Include="..\..\core\DebugTrace.cpp" />
+    <ClCompile Include="..\..\core\Dialog.cpp" />
+    <ClCompile Include="..\..\core\EventQueue.cpp" />
+    <ClCompile Include="..\..\core\FadeTracker.cpp" />
+    <ClCompile Include="..\..\core\Label.cpp" />
+    <ClCompile Include="..\..\core\main.cpp" />
+    <ClCompile Include="..\..\core\Material.cpp" />
+    <ClCompile Include="..\..\core\MusicCarousel.cpp" />
+    <ClCompile Include="..\..\core\Panel.cpp" />
+    <ClCompile Include="..\..\core\PhotoCarousel.cpp" />
+    <ClCompile Include="..\..\core\Screen.cpp" />
+    <ClCompile Include="..\..\core\Timer.cpp" />
+    <ClCompile Include="..\..\core\TinyFS.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\core\Actor.h" />
+    <ClInclude Include="..\..\core\Animation.h" />
+    <ClInclude Include="..\..\core\Arena.h" />
+    <ClInclude Include="..\..\core\AudioSuite.h" />
+    <ClInclude Include="..\..\core\BlockGroup.h" />
+    <ClInclude Include="..\..\core\BlockMoveTracker.h" />
+    <ClInclude Include="..\..\core\BrickPool.h" />
+    <ClInclude Include="..\..\core\Button.h" />
+    <ClInclude Include="..\..\core\ConstDef.h" />
+    <ClInclude Include="..\..\core\Control.h" />
+    <ClInclude Include="..\..\core\DebugTrace.h" />
+    <ClInclude Include="..\..\core\Dialog.h" />
+    <ClInclude Include="..\..\core\EventQueue.h" />
+    <ClInclude Include="..\..\core\FadeTracker.h" />
+    <ClInclude Include="..\..\core\Label.h" />
+    <ClInclude Include="..\..\core\Material.h" />
+    <ClInclude Include="..\..\core\MusicCarousel.h" />
+    <ClInclude Include="..\..\core\Panel.h" />
+    <ClInclude Include="..\..\core\PhotoCarousel.h" />
+    <ClInclude Include="..\..\core\Screen.h" />
+    <ClInclude Include="..\..\core\StateMachine.h" />
+    <ClInclude Include="..\..\core\Timer.h" />
+    <ClInclude Include="..\..\core\TinyFS.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\core\LibsAndDlls\SDL3.lib" />
+    <Library Include="..\..\core\LibsAndDlls\SDL3_image.lib" />
+    <Library Include="..\..\core\LibsAndDlls\SDL3_ttf.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\core\LibsAndDlls\SDL3.pdb" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

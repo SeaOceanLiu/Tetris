@@ -96,7 +96,7 @@ public:
     ~Label(void);
     void update(void);
     void draw(void);
-    bool handleEvent(GameEvent &event);
+    bool handleEvent(shared_ptr<Event> event);
     int getId(void) const;
 
     Label& setNormalStateColor(SDL_Color color);

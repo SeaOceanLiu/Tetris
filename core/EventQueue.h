@@ -6,6 +6,8 @@
 #include "ConstDef.h"
 #include "StateMachine.h"
 
+using namespace std;
+
 enum class EventName: int{
     None,
 
@@ -44,29 +46,19 @@ enum class EventName: int{
     Exit
 };
 
-class GameEvent: public Event<void *> {
+class EventQueue{
+private:
+    static std::mutex m_mtxForEventQueue;
+    std::queue<shared_ptr<Event>> m_eventQueue;
+    EventQueue(){}
+    ~EventQueue(){clear();}
 public:
-    GameEvent(): Event<void *>(EventName::None, 0){}
-    // 构造函数
-    GameEvent(EventName eventName, void *param): Event<void *>(eventName, param) {}
-    // 拷贝构造函数
-    GameEvent(const GameEvent &event): Event<void *>(event) {}
-    // 移动构造函数
-    GameEvent(GameEvent &&event): Event<void *>(event) {}
-    // 拷贝赋值运算符
-    GameEvent &operator=(const GameEvent &event) {
-        Event<void *>::operator=(event);
-        return *this;
+    static EventQueue* getInstance(void){
+        static EventQueue instance; // 静态局部变量，程序运行期间只会被初始化一次
+        return &instance;
     }
-    // 移动赋值运算符
-    GameEvent &operator=(GameEvent &&event) {
-        Event<void *>::operator=(event);
-        return *this;
-    }
-    ~GameEvent() {}
-
-    bool isPositionEvent(void) const {
-        switch(m_eventName){
+    static bool isPositionEvent(EventName eventName) {
+        switch(eventName){
             case EventName::FINGER_DOWN         :
             case EventName::FINGER_UP           :
             case EventName::FINGER_MOTION       :
@@ -82,21 +74,8 @@ public:
                 return false;
         }
     }
-};
-
-class EventQueue{
-private:
-    static std::mutex m_mtxForEventQueue;
-    std::queue<GameEvent *> m_eventQueue;
-    EventQueue(){}
-    ~EventQueue(){clear();}
-public:
-    static EventQueue* getInstance(void){
-        static EventQueue instance; // 静态局部变量，程序运行期间只会被初始化一次
-        return &instance;
-    }
-    void pushEventIntoQueue(GameEvent *event);
-    GameEvent* popEventFromQueue(void);
+    void pushEventIntoQueue(shared_ptr<Event> event);
+    shared_ptr<Event> popEventFromQueue(void);
     void clear(void);
 };
 #endif

@@ -33,7 +33,7 @@ public:
     Button(Control *parent, SRect rect, float xScale=1.0f, float yScale=1.0f);
     void update(void) override;
     void draw(void) override;
-    bool handleEvent(GameEvent &event) override;
+    bool handleEvent(shared_ptr<Event> event) override;
     int getId(void) const;
 
     Button& setBtnNormalStateActor(shared_ptr<Actor> actor);

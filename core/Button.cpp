@@ -95,14 +95,14 @@ void Button::draw(void){
     ControlImpl::draw();
 }
 
-bool Button::handleEvent(GameEvent &event){
+bool Button::handleEvent(shared_ptr<Event> event){
     if (!m_enable || !m_visible) return false;
 
-    if (event.isPositionEvent()){
-        SPoint *pos = (SPoint *)(event.m_eventParam);
+    if (EventQueue::isPositionEvent(event->m_eventName)){
+        shared_ptr<SPoint> pos = any_cast<shared_ptr<SPoint>>(event->m_eventParam);
         SRect drawRect = getDrawRect(); // 获取当前控件的绘制区域
         if (drawRect.contains(pos->x, pos->y)){
-            switch(event.m_eventName){
+            switch(event->m_eventName){
                 case EventName::FINGER_DOWN:
                 case EventName::FINGER_MOTION:
                     // Todo: 如果是触控，一般是要考虑连续触发，所以这里没有像下面MOUSE_LBUTTON_DOWN那样处理成判断按钮状态，但这里最好做成参数控制

@@ -125,8 +125,7 @@ void SDLCALL AudioSuite::sharedFeedTheAudioStream(void *userdata, SDL_AudioStrea
             /* we've reached the end of the audio data. Stop feeding the stream. */
             audioSuiteInst->m_isPlaying = !SDL_PauseAudioStreamDevice(astream);
 
-            // GameEvent *event = new GameEvent(EventName::AudioEnded, audioSuiteInst);
-            audioSuiteInst->triggerEvent({EventName::AudioEnded, audioSuiteInst});
+            audioSuiteInst->triggerEvent(make_shared<Event>(EventName::AudioEnded, audioSuiteInst));
             return;
         } else {
             audioSuiteInst->m_nextPlayPos = 0;

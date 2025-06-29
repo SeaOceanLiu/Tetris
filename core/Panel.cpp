@@ -78,8 +78,9 @@ void Panel::draw(void){
         }
     }
 }
-bool Panel::handleEvent(GameEvent &event){
-    switch(event.m_eventName) {
+
+bool Panel::handleEvent(shared_ptr<Event> event){
+    switch(event->m_eventName) {
         case EventName::NextBackground:
             if (m_background) {
                 nextBackground();

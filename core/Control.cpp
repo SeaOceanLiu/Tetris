@@ -78,9 +78,9 @@ void ControlImpl::draw(void){
         child->draw();
     }
 }
-  //事件处理，返回值表示是否处理了该事件，true表示处理了，false表示未处理
-// 定义ControlImpl类的成员函数handleEvent，用于处理游戏事件
-bool ControlImpl::handleEvent(GameEvent &event){
+
+//事件处理，返回值表示是否处理了该事件，true表示处理了，false表示未处理
+bool ControlImpl::handleEvent(shared_ptr<Event> event){
     // 检查当前控件是否可见且启用
     if (m_visible && m_enable){
         // 逆向遍历当前控件的所有子控件，保证后添加的控件先处理事件，因为后添加的控件在屏幕上位于上层
@@ -226,9 +226,8 @@ SRect ControlImpl::mapToDrawRect(SRect rect){
     return {rect.left * m_xxScale + drawRect.left, rect.top * m_yyScale + drawRect.top, rect.width * m_xxScale, rect.height * m_yyScale};
 }
 
-void ControlImpl::triggerEvent(GameEvent event){
-    GameEvent *eventPtr = new GameEvent(event);
-    m_eventQueueInstance->pushEventIntoQueue(eventPtr);
+void ControlImpl::triggerEvent(shared_ptr<Event> event){
+    m_eventQueueInstance->pushEventIntoQueue(event);
 }
 
 void ControlImpl::inheritRenderer(void) {

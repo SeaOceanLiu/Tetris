@@ -74,7 +74,7 @@ Screen::Screen(Control *parent, SRect rect, SDL_Renderer *renderer, float xScale
                     .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
                     .setFont(FontName::Muyao_Softbrush)
                     .setFontSize(ConstDef::VERSION_FONT_SIZE)
-                    .setCaption(u8"单机版 V1.0.0")
+                    .setCaption(u8"单机版 V1.0.1")
                     .setAlignmentMode(AlignmentMode::AM_CENTER)
                     .setShadow(true)
                     .setShadowColor({255, 255, 255, SDL_ALPHA_OPAQUE})
@@ -173,13 +173,13 @@ Screen::Screen(Control *parent, SRect rect, SDL_Renderer *renderer, float xScale
     m_aboutDialog->hide();
 }
 
-void Screen::inputControl(GameEvent &event) {
-    if (event.m_eventName == m_lastAction.m_eventName){
+void Screen::inputControl(shared_ptr<Event> event) {
+    if (m_lastAction != nullptr && event->m_eventName == m_lastAction->m_eventName){
         if (SDL_GetTicks() < m_nextTick){
             return; // Todo: 这里直接返回会有内存泄漏，因为对于触控和鼠标事件来说，事件中还会带有在堆上分配的坐标点数据
         }
     }
-    if(event.isPositionEvent()){
+    if(EventQueue::isPositionEvent(event->m_eventName)){
         m_lastAction = event;
         m_nextTick = SDL_GetTicks() + ConstDef::DEFAULT_BTN_MS_INTERVAL;
     }
@@ -188,7 +188,7 @@ void Screen::inputControl(GameEvent &event) {
 }
 
 void Screen::update() {
-    switch(m_lastAction.m_eventName){
+    switch(m_lastAction->m_eventName){
         case EventName::FINGER_DOWN:
         case EventName::FINGER_MOTION:
         case EventName::MOUSE_LBUTTON_DOWN:
@@ -219,7 +219,8 @@ void Screen::onStart(shared_ptr<Button> btn) {
     m_startButton->hide();
     m_aboutLabel->hide();
     m_arena->show();
-    triggerEvent(GameEvent(EventName::Begin, 0));
+    triggerEvent(make_shared<Event>(EventName::Begin, 0));
+    SDL_Log("state = %d", m_arena->getState());
 }
 void Screen::onAbout(shared_ptr<Label> label){
     m_aboutDialog->show();

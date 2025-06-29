@@ -20,8 +20,8 @@ public:
     BrickPool(Control *parent, fs::path pathPrefix, float xScale=1.0f, float yScale=1.0f);
     ~BrickPool();
 
-    void draw(float x, float y, int brickIdx);
-    void draw(SPoint pos, int brickIdx);
+    void draw(float x, float y, int brickIdx, Uint8 alpha=SDL_ALPHA_OPAQUE);
+    void draw(SPoint pos, int brickIdx, Uint8 alpha=SDL_ALPHA_OPAQUE);
     shared_ptr<Actor> getBrick(int brickIdx);
     int getBrickCount(void);
     int getMinBrickIdx(void);

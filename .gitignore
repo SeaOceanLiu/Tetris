@@ -401,7 +401,7 @@ FodyWeavers.xsd
 *.sln.iml
 
 ## from Android.gitignore.  Get latest from https://github.com/github/gitignore/blob/main/Android.gitignore
-## 
+##
 
 # Gradle files
 .gradle/
@@ -436,3 +436,4 @@ google-services.json
 
 # Android Profiling
 *.hprof
+.vscode/settings.json

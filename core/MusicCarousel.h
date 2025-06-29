@@ -49,7 +49,7 @@ private:
 public:
     MusicCarousel(Control *parent);
     ~MusicCarousel();
-    bool handleEvent(GameEvent &event) override;
+    bool handleEvent(shared_ptr<Event> event) override;
     static void (SDLCALL musicFeedTheAudioStream)(void *userdata, SDL_AudioStream *astream, int additional_amount, int total_amount);
 
     void addMusicFile(fs::path path);

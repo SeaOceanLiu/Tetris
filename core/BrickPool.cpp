@@ -32,19 +32,19 @@ shared_ptr<Actor> BrickPool::getBrick(int brickIdx){
     }
 }
 
-void BrickPool::draw(float x, float y, int brickIdx){
+void BrickPool::draw(float x, float y, int brickIdx, Uint8 alpha){
     inheritRenderer();
 
     if (brickIdx >= 0 && brickIdx < m_bricks.size()){
         shared_ptr<Actor> brick = m_bricks[brickIdx];
-        brick->draw(x, y);
+        brick->draw(x, y, alpha);
     } else {
         SDL_Log("Invalid brick index: %d", brickIdx);
     }
 }
 
-void BrickPool::draw(SPoint pos, int brickIdx){
-    draw(pos.x, pos.y, brickIdx);
+void BrickPool::draw(SPoint pos, int brickIdx, Uint8 alpha){
+    draw(pos.x, pos.y, brickIdx, alpha);
 }
 
 int BrickPool::getBrickCount(void){

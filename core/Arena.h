@@ -113,7 +113,8 @@ public:
     int currentRow;
 };
 
-class Arena: public StateMachine<void *>, public Panel
+// class Arena: public StateMachine<void *>, public Panel
+class Arena: public StateMachine, public Panel
 {
 private:
     bool m_isDrawGrid;
@@ -193,15 +194,15 @@ public:
 
     // 状态中的事件处理函数
     // 注意这里的入参，不能直接使用Event的子类，需要使用基类
-    bool eventHandleInShowCoverState(Event<void*> &event);
-    bool eventHandleInRunningState(Event<void*> &event);
-    bool eventHandleInActingState(Event<void*> &event);
-    bool eventHandleInFailedState(Event<void*> &event);
-    bool eventHandleInPausedState(Event<void*> &event);
+    bool eventHandleInShowCoverState(shared_ptr<Event> event);
+    bool eventHandleInRunningState(shared_ptr<Event> event);
+    bool eventHandleInActingState(shared_ptr<Event> event);
+    bool eventHandleInFailedState(shared_ptr<Event> event);
+    bool eventHandleInPausedState(shared_ptr<Event> event);
 
     // void eventLoopEntry(void);
 
-    bool handleEvent(GameEvent &event) override;
+    bool handleEvent(shared_ptr<Event> event) override;
 
     void setDrawGrid(bool isDraw);
     void draw(void) override;

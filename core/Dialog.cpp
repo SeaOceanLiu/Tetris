@@ -67,7 +67,7 @@ void Dialog::draw(void){
     }
 }
 
-bool Dialog::handleEvent(GameEvent &event){
+bool Dialog::handleEvent(shared_ptr<Event> event){
     if(!m_visible || !m_enable) return false;
 
     ControlImpl::handleEvent(event);

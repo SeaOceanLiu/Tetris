@@ -21,8 +21,7 @@ public:
     static const int TEXT_LINE_COUNT = 13;
     Dialog(Control* parent, SRect rect, float xScale=1.0f, float yScale=1.0f);
 
-    bool handleEvent(GameEvent &event) override;
-
+    bool handleEvent(shared_ptr<Event> event) override;
 
     void onClose(shared_ptr<Button> btn);
     void onOk(shared_ptr<Button> btn);

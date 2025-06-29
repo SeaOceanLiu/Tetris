@@ -49,7 +49,7 @@ public:
     void resetBackground(void);
     void update(void) override;
     void draw(void) override;
-    bool handleEvent(GameEvent &event) override;
+    bool handleEvent(shared_ptr<Event> event) override;
 
     Panel& setBackground(shared_ptr<PhotoCarousel> background, int startFrom=0);
     Panel& addAnimation(float x, float y, shared_ptr<Animation> animation);

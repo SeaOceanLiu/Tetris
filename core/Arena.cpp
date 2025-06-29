@@ -402,8 +402,16 @@ void Arena::runningEnter(State lastState){
     // do something
     // SDL_Log("runningEnter %d", static_cast<State>(lastState));
 
-    if (lastState == State::PAUSED || lastState == State::ACTING){
-        return;
+    switch(lastState){
+        case State::PAUSED:
+            m_leftBtn->setEnable(true);
+            m_rightBtn->setEnable(true);
+            m_downBtn->setEnable(true);
+            m_rotateBtn->setEnable(true);
+        case State::ACTING:
+            return;
+        default:
+            break;
     }
     m_audioSuite[SoundId::Go]->play(false);
 
@@ -443,6 +451,13 @@ void Arena::runningExit(State nextState){
     // do something
     // SDL_Log("runningExit %d", static_cast<State>(nextState));
     // m_rotateBtnAnimation->pause();
+
+    if(nextState != State::ACTING){
+        m_leftBtn->setEnable(false);
+        m_rightBtn->setEnable(false);
+        m_downBtn->setEnable(false);
+        m_rotateBtn->setEnable(false);
+    }
 }
 void Arena::actingExit(State nextState){
     // do something
@@ -461,22 +476,22 @@ void Arena::pausedExit(State nextState){
     m_pauseBtn->show();
 }
 
-bool Arena::eventHandleInShowCoverState(Event<void *> &event){
+bool Arena::eventHandleInShowCoverState(shared_ptr<Event> event){
     // do something
     // SDL_Log("eventHandleInInitialState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
-    switch(event.m_eventName){
+    switch(event->m_eventName){
         case EventName::Begin:
             setState(State::RUNNING);
             return true;
         default:
             break;
     }
-    return Panel::handleEvent(static_cast<GameEvent &>(event));
+    return Panel::handleEvent(event);
 }
-bool Arena::eventHandleInRunningState(Event<void *> &event){
+bool Arena::eventHandleInRunningState(shared_ptr<Event> event){
     // do something
     // SDL_Log("eventHandleInRunningState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
-    switch(event.m_eventName){
+    switch(event->m_eventName){
         case EventName::GridOnOff:
             setDrawGrid(!m_isDrawGrid);
             return true;
@@ -523,12 +538,13 @@ bool Arena::eventHandleInRunningState(Event<void *> &event){
         default:
             break;
     }
-    return Panel::handleEvent(static_cast<GameEvent &>(event));
+    return Panel::handleEvent(event);
 }
-bool Arena::eventHandleInActingState(Event<void *> &event){
+
+bool Arena::eventHandleInActingState(shared_ptr<Event> event){
     // do something
     // SDL_Log("eventHandleInActingState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
-    switch(event.m_eventName){
+    switch(event->m_eventName){
         case EventName::Draw:
             draw();
             return true;
@@ -536,20 +552,23 @@ bool Arena::eventHandleInActingState(Event<void *> &event){
             update();
             return true;
         case EventName::AnimationEnded:
-            if (event.m_eventParam == m_blockAnimation.get()) {
-                setState(State::RUNNING);
-                return true;
+            if (event->m_eventParam.type() == typeid(Animation *)){
+                if (any_cast<Animation *>(event->m_eventParam ) == m_blockAnimation.get()) {
+                    setState(State::RUNNING);
+                    return true;
+                }
             }
             break;
         default:
             break;
     }
-    return Panel::handleEvent(static_cast<GameEvent &>(event));
+    return Panel::handleEvent(event);
 }
-bool Arena::eventHandleInFailedState(Event<void *> &event){
+
+bool Arena::eventHandleInFailedState(shared_ptr<Event> event){
     // do something
     // SDL_Log("eventHandleInFailedState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
-    switch(event.m_eventName){
+    switch(event->m_eventName){
         case EventName::Draw:
             draw();
             // m_fontSuite[FontId::Failed]->draw();
@@ -560,12 +579,13 @@ bool Arena::eventHandleInFailedState(Event<void *> &event){
         default:
             break;
     }
-    return Panel::handleEvent(static_cast<GameEvent &>(event));
+    return Panel::handleEvent(event);
 }
-bool Arena::eventHandleInPausedState(Event<void *> &event){
+
+bool Arena::eventHandleInPausedState(shared_ptr<Event> event){
     // do something
     // SDL_Log("eventHandleInPausedState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
-    switch(event.m_eventName){
+    switch(event->m_eventName){
         case EventName::Draw:
             draw();
             // m_fontSuite[FontId::Paused]->draw();
@@ -585,7 +605,7 @@ bool Arena::eventHandleInPausedState(Event<void *> &event){
         default:
             break;
     }
-    return Panel::handleEvent(static_cast<GameEvent &>(event));
+    return Panel::handleEvent(event);
 }
 
 void Arena::setDrawGrid(bool isDraw){
@@ -616,7 +636,7 @@ bool Arena:: notInDrawingState(void){
     return m_currentState == State::SHOW_COVER;
 }
 
-bool Arena::handleEvent(GameEvent &event){
+bool Arena::handleEvent(shared_ptr<Event> event){
     return stateEvent(event);
 }
 
@@ -848,7 +868,7 @@ void Arena::newBlock(int *newBlock, RotateAngle *newAngle, int *newColor){
 
 void Arena::onFrameCounter(void *userdata){
     // 计算帧率
-    triggerEvent({EventName::Timer, 0});
+    triggerEvent(make_shared<Event>(EventName::Timer, 0));
 }
 
 void Arena::saveToScreen(void){
@@ -1152,7 +1172,7 @@ bool Arena::moveDown(void){
     } else {
         saveToScreen();
         if (checkFull()){
-            GameEvent arenaEvent = {EventName::Fillfull, 0};
+            shared_ptr<Event> arenaEvent = make_shared<Event>(EventName::Fillfull, 0);
             stateEvent(arenaEvent);
         } else {
             int score = checkLine();
@@ -1193,7 +1213,7 @@ void Arena::speedUp(void){
 
     m_audioSuite[SoundId::LevelComplete]->play();
     m_audioSuite[SoundId::Speedup]->play();
-    triggerEvent({EventName::NextBackground, 0});
+    triggerEvent(make_shared<Event>(EventName::NextBackground, 0));
 }
 
 void Arena::update(void){
@@ -1207,8 +1227,7 @@ void Arena::update(void){
     }
     m_nextUpdateTick = SDL_GetTicks() + ConstDef::LEVEL_SPEED_MAPPING[m_speed ];    // Todo: 发生翻转时怎么处理？答：超过5.84亿年时间才会翻转，不用考虑
 
-    GameEvent arenaEvent = {EventName::MoveDown, 0};
-    stateEvent(arenaEvent);
+    stateEvent(make_shared<Event>(EventName::MoveDown, 0));
 }
 
 void Arena::clean(void){
@@ -1255,7 +1274,7 @@ void Arena::drawNextBlocks(void){
                 }
 
                 m_brick->draw((col + m_nextBlockColOffset) * ConstDef::SINGLE_BLOCK_SIZE.width + ConstDef::HINT_PLACE.left,
-                    row * ConstDef::SINGLE_BLOCK_SIZE.height + ConstDef::HINT_PLACE.top, iBlockIdx);
+                    row * ConstDef::SINGLE_BLOCK_SIZE.height + ConstDef::HINT_PLACE.top, iBlockIdx, 64);
 
             }
         }
@@ -1277,10 +1296,10 @@ void Arena::onBtnClick(shared_ptr<Button> button){
             rotate();
             break;
         case ButtonId::PauseBtn:
-            triggerEvent({EventName::Paused, 0});
+            triggerEvent(make_shared<Event>(EventName::Paused, 0));
             break;
         case ButtonId::PlayBtn:
-            triggerEvent({EventName::Paused, 0});
+            triggerEvent(make_shared<Event>(EventName::Paused, 0));
             break;
         default:
             break;

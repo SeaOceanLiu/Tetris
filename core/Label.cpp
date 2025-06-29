@@ -158,17 +158,17 @@ void Label::draw(void){
     ControlImpl::draw();
 }
 
-bool Label::handleEvent(GameEvent &event){
+bool Label::handleEvent(shared_ptr<Event> event){
     if(!m_enable || !m_visible) return false;
 
     if (ControlImpl::handleEvent(event)) return true;
 
-    if (event.isPositionEvent()){
-        SPoint *pos = (SPoint *)(event.m_eventParam);
+    if (EventQueue::isPositionEvent(event->m_eventName)){
+        shared_ptr<SPoint> pos = any_cast<shared_ptr<SPoint>>(event->m_eventParam);
         // SRect drawRect = getDrawRect(); // 获取当前控件的绘制区域
         SRect detectRect = mapToDrawRect(m_hotRect); // 将热区映射到绘制区域
         if (detectRect.contains(pos->x, pos->y)){
-            switch(event.m_eventName){
+            switch(event->m_eventName){
                 case EventName::FINGER_DOWN:
                 case EventName::FINGER_MOTION:
                     // Todo: 如果是触控，一般是要考虑连续触发，所以这里没有像下面MOUSE_LBUTTON_DOWN那样处理成判断按钮状态，但这里最好做成参数控制

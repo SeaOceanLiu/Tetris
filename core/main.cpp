@@ -103,7 +103,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     SDL_SetLogPriorities(SDL_LOG_PRIORITY_VERBOSE); //设置日志级别
     SDL_SetLogOutputFunction(debugTraceOutput, nullptr);
 
-    SDL_Log("SDL_AppInited......");
+    SDL_Log("SDL_App Initialed......");
 
     // 禁止触摸事件转换为鼠标事件，避免一次触摸同时产生一欠触摸和一欠鼠标事件
     SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
@@ -135,14 +135,14 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     const char* baseDirector = SDL_GetBasePath();
     SDL_Log("SDL_GetBasePath = %s", baseDirector);
 #ifdef SDL_PLATFORM_ANDROID
-    const char* interalDirector = SDL_GetAndroidInternalStoragePath();
-    SDL_Log("SDL_GetAndroidInternalStoragePath = %s", interalDirector);
+    const char* internalDirector = SDL_GetAndroidInternalStoragePath();
+    SDL_Log("SDL_GetAndroidInternalStoragePath = %s", internalDirector);
     const char* cacheDirector = SDL_GetAndroidCachePath();
     SDL_Log("SDL_GetAndroidCachePath = %s", cacheDirector);
 
     unique_ptr<TinyFS> fsystem = make_unique<TinyFS>();
-    auto flist = fsystem->getFileList(interalDirector, "");
-    SDL_Log("interalDirector file list total:%zu", flist.size());
+    auto flist = fsystem->getFileList(internalDirector, "");
+    SDL_Log("internalDirector file list total:%zu", flist.size());
     for (auto &f : flist) {
         SDL_Log("file name = %s", f.string().c_str());
     }
@@ -170,9 +170,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 /* This function runs when a new event (mouse input, keypresses, etc) occurs. */
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 {
-    // GameEvent arenaEvent;
-    GameEvent *gameEvent = nullptr;
-    SPoint *pos;
+    shared_ptr<Event> gameEvent = nullptr;
+    shared_ptr<SPoint> pos;
     int dx = 0;
     int dy = 0;
     switch(event->type) {
@@ -194,14 +193,14 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             in addition, you should set the render target to NULL, if you're using
             it, e.g. call SDL_SetRenderTarget(renderer, NULL).
             */
-            gameEvent = new GameEvent(EventName::Paused, 0);
-            g_screen->inputControl(*gameEvent);
+            gameEvent = make_shared<Event>(EventName::Paused, 0);
+            g_screen->inputControl(gameEvent);
             // g_eventQueue->pushEventIntoQueue(gameEvent);
             break;
         case SDL_EVENT_DID_ENTER_FOREGROUND:
             SDL_Log("Event------SDL_EVENT_DID_ENTER_FOREGROUND");
-            gameEvent = new GameEvent(EventName::Paused, 0);
-            g_screen->inputControl(*gameEvent);
+            gameEvent = make_shared<Event>(EventName::Paused, 0);
+            g_screen->inputControl(gameEvent);
             break;
         case SDL_EVENT_FINGER_DOWN:
         case SDL_EVENT_FINGER_UP:
@@ -214,103 +213,101 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             switch(event->type)
             {
                 case SDL_EVENT_FINGER_DOWN:
-                    pos = new SPoint(targetPos.x, targetPos.y);
-                    gameEvent = new GameEvent(EventName::FINGER_DOWN, pos);
+                    pos = make_shared<SPoint>(targetPos.x, targetPos.y);
+                    gameEvent = make_shared<Event>(EventName::FINGER_DOWN, pos);
                     break;
                 case SDL_EVENT_FINGER_UP:
-                    pos = new SPoint(targetPos.x, targetPos.y);
-                    gameEvent = new GameEvent(EventName::FINGER_UP, pos);
+                    pos = make_shared<SPoint>(targetPos.x, targetPos.y);
+                    gameEvent = make_shared<Event>(EventName::FINGER_UP, pos);
                     break;
                 case SDL_EVENT_FINGER_MOTION:
-                    pos = new SPoint(targetPos.x, targetPos.y);
-                    gameEvent = new GameEvent(EventName::FINGER_MOTION, pos);
+                    pos = make_shared<SPoint>(targetPos.x, targetPos.y);
+                    gameEvent = make_shared<Event>(EventName::FINGER_MOTION, pos);
                     break;
             }
             if (gameEvent != nullptr) {
-                g_screen->inputControl(*gameEvent);
+                g_screen->inputControl(gameEvent);
             }
             break;
         case SDL_EVENT_MOUSE_MOTION:        /**< Mouse moved */
-            pos = new SPoint(event->motion.x, event->motion.y);
-            gameEvent = new GameEvent(EventName::MOUSE_MOVING, pos);
-            g_screen->inputControl(*gameEvent);
+            pos = make_shared<SPoint>(event->motion.x, event->motion.y);
+            gameEvent = make_shared<Event>(EventName::MOUSE_MOVING, pos);
+            g_screen->inputControl(gameEvent);
             break;
         case SDL_EVENT_MOUSE_BUTTON_DOWN:   /**< Mouse button pressed */
-            pos = new SPoint(event->button.x, event->button.y);
+            pos = make_shared<SPoint>(event->button.x, event->button.y);
             SDL_Log("SDL_EVENT_MOUSE_BUTTON_DOWN @ {%f, %f}", event->button.x, event->button.y);
             switch(event->button.button){
                 case SDL_BUTTON_LEFT:       /**< Left mouse button */
-                    gameEvent = new GameEvent(EventName::MOUSE_LBUTTON_DOWN, pos);
+                    gameEvent = make_shared<Event>(EventName::MOUSE_LBUTTON_DOWN, pos);
                     break;
                 case SDL_BUTTON_RIGHT:      /**< Right mouse button */
-                    gameEvent = new GameEvent(EventName::MOUSE_RBUTTON_DOWN, pos);
+                    gameEvent = make_shared<Event>(EventName::MOUSE_RBUTTON_DOWN, pos);
                     break;
                 case SDL_BUTTON_MIDDLE:     /**< Middle (wheel) mouse button */
-                    gameEvent = new GameEvent(EventName::MOUSE_MBUTTON_DOWN, pos);
+                    gameEvent = make_shared<Event>(EventName::MOUSE_MBUTTON_DOWN, pos);
                     break;
                 default:
-                    delete pos;
                     break;
             }
             if (gameEvent != nullptr) {
-                g_screen->inputControl(*gameEvent);
+                g_screen->inputControl(gameEvent);
             }
             break;
         case SDL_EVENT_MOUSE_BUTTON_UP:     /**< Mouse button released */
-            pos = new SPoint(event->button.x, event->button.y);
+            pos = make_shared<SPoint>(event->button.x, event->button.y);
             SDL_Log("SDL_EVENT_MOUSE_BUTTON_UP @ {%f, %f}", event->button.x, event->button.y);
             switch(event->button.button){
                 case SDL_BUTTON_LEFT:       /**< Left mouse button */
-                    gameEvent = new GameEvent(EventName::MOUSE_LBUTTON_UP, pos);
+                    gameEvent = make_shared<Event>(EventName::MOUSE_LBUTTON_UP, pos);
                     break;
                 case SDL_BUTTON_RIGHT:      /**< Right mouse button */
-                    gameEvent = new GameEvent(EventName::MOUSE_RBUTTON_UP, pos);
+                    gameEvent = make_shared<Event>(EventName::MOUSE_RBUTTON_UP, pos);
                     break;
                 case SDL_BUTTON_MIDDLE:     /**< Middle (wheel) mouse button */
-                    gameEvent = new GameEvent(EventName::MOUSE_MBUTTON_UP, pos);
+                    gameEvent = make_shared<Event>(EventName::MOUSE_MBUTTON_UP, pos);
                     break;
                 default:
-                    delete pos;
                     break;
             }
             if (gameEvent != nullptr) {
-                g_screen->inputControl(*gameEvent);
+                g_screen->inputControl(gameEvent);
             }
             break;
 
         case SDL_EVENT_KEY_DOWN:
             switch(event->key.key){
                 case SDLK_DELETE:
-                    gameEvent = new GameEvent(EventName::GridOnOff, 0);
-                    g_screen->inputControl(*gameEvent);
+                    gameEvent = make_shared<Event>(EventName::GridOnOff, 0);
+                    g_screen->inputControl(gameEvent);
                     break;
                 case SDLK_S:
-                    gameEvent = new GameEvent(EventName::Begin, 0);
-                    g_screen->inputControl(*gameEvent);
+                    gameEvent = make_shared<Event>(EventName::Begin, 0);
+                    g_screen->inputControl(gameEvent);
                     break;
                 case SDLK_SPACE:
-                    gameEvent = new GameEvent(EventName::Rotate, 0);
-                    g_screen->inputControl(*gameEvent);
+                    gameEvent = make_shared<Event>(EventName::Rotate, 0);
+                    g_screen->inputControl(gameEvent);
                     break;
                 case SDLK_P:
-                    gameEvent = new GameEvent(EventName::Paused, 0);
-                    g_screen->inputControl(*gameEvent);
+                    gameEvent = make_shared<Event>(EventName::Paused, 0);
+                    g_screen->inputControl(gameEvent);
                     break;
                 case SDLK_DOWN:
-                    gameEvent = new GameEvent(EventName::MoveDown, 0);
-                    g_screen->inputControl(*gameEvent);
+                    gameEvent = make_shared<Event>(EventName::MoveDown, 0);
+                    g_screen->inputControl(gameEvent);
                     break;
                 case SDLK_LEFT:
-                    gameEvent = new GameEvent(EventName::MoveLeft, 0);
-                    g_screen->inputControl(*gameEvent);
+                    gameEvent = make_shared<Event>(EventName::MoveLeft, 0);
+                    g_screen->inputControl(gameEvent);
                     break;
                 case SDLK_RIGHT:
-                    gameEvent = new GameEvent(EventName::MoveRight, 0);
-                    g_screen->inputControl(*gameEvent);
+                    gameEvent = make_shared<Event>(EventName::MoveRight, 0);
+                    g_screen->inputControl(gameEvent);
                     break;
                 case SDLK_U:
-                    gameEvent = new GameEvent(EventName::SpeedUp, 0);
-                    g_screen->inputControl(*gameEvent);
+                    gameEvent = make_shared<Event>(EventName::SpeedUp, 0);
+                    g_screen->inputControl(gameEvent);
                 default:
                     break;
             }
@@ -325,12 +322,12 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 /* This function runs once per frame, and is the heart of the program. */
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
-    GameEvent arenaEvent;
+    shared_ptr<Event> arenaEvent;
     // ConstDef::CURRENT_MS_TIMESTAMP = SDL_GetTicks();
     g_screen->eventLoopEntry();
     g_screen->update();
 
-    arenaEvent = {EventName::Update, 0};
+    arenaEvent = make_shared<Event>(EventName::Update, 0);
     g_screen->handleEvent(arenaEvent);
 
     /* clear the window to the draw color. */

@@ -16,7 +16,7 @@ private:
     float m_M; // multiple of BG
 
     Uint64 m_nextTick;
-    GameEvent m_lastAction;
+    shared_ptr<Event> m_lastAction;
     SDL_AppResult m_isExiting;
 
     shared_ptr<Arena> m_arena;
@@ -30,7 +30,7 @@ private:
     shared_ptr<Dialog> m_aboutDialog;
 public:
     Screen(Control *parent, SRect rect, SDL_Renderer *renderer, float xScale=1.0f, float yScale=1.0f);
-    void inputControl(GameEvent &event);
+    void inputControl(shared_ptr<Event> event);
     void update(void) override;
     void onClose(shared_ptr<Button> btn);
     void onStart(shared_ptr<Button> btn);

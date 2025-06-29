@@ -1,21 +1,23 @@
 ﻿#ifndef StateMachineH
 #define StateMachineH
 
+#include <any>
 #include <functional>
 #include <unordered_map>
 
 #include <SDL3/SDL.h>
 
+using namespace std;
+
 enum class State: int;      // 使用时，需要重新定义该枚举值
 enum class EventName: int;  // 使用时，需要重新定义该枚举值
 
-template <typename T>
 class Event{
 public:
     EventName m_eventName;
-    T m_eventParam;
+    std::any m_eventParam;
 
-    Event(EventName eventName, T param):
+    Event(EventName eventName, std::any param):
         m_eventName(eventName),
         m_eventParam(param)
     {
@@ -49,11 +51,10 @@ public:
 };
 
 // StateMachine 模板类
-template <typename T>
 class StateMachine
 {
     using EnterLeaveHandler = std::function<void (State)>;
-    using EventHandler = std::function<bool(Event<T>&)>;
+    using EventHandler = std::function<bool(shared_ptr<Event>)>;
 
 protected:
     State m_currentState;
@@ -101,12 +102,12 @@ public:
     }
 
     // 触发状态事件
-    bool stateEvent(Event<T>& event) {
+    bool stateEvent(shared_ptr<Event> event) {
         auto it = m_stateEventHandlers.find(m_currentState);
         if (it != m_stateEventHandlers.end()) {
             return it->second(event);
         } else {
-            SDL_Log("No handler for event %d in state %d", static_cast<int>(event.m_eventName), static_cast<int>(m_currentState));
+            SDL_Log("No handler for event %d in state %d", static_cast<int>(event->m_eventName), static_cast<int>(m_currentState));
             return false;
         }
     }

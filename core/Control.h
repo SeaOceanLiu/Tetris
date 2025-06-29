@@ -15,7 +15,7 @@ public:
     virtual ~Control() = default;
     virtual void update(void) = 0;
     virtual void draw(void) = 0;
-    virtual bool handleEvent(GameEvent &event) = 0;  //事件处理，返回值表示是否处理了该事件，true表示处理了，false表示未处理
+    virtual bool handleEvent(shared_ptr<Event> event) = 0;  //事件处理，返回值表示是否处理了该事件，true表示处理了，false表示未处理
     // virtual shared_ptr<Control> addControl(shared_ptr<Control> child) = 0;
     virtual Control& addControl(shared_ptr<Control> child) = 0;
     virtual void removeControl(shared_ptr<Control> child) = 0;
@@ -61,7 +61,7 @@ public:
     ControlImpl& operator=(const ControlImpl& other);
     void update(void) override;
     void draw(void) override;
-    bool handleEvent(GameEvent &event) override;
+    bool handleEvent(shared_ptr<Event> event) override;
     // shared_ptr<Control> addControl(shared_ptr<Control> child) override;
     Control& addControl(shared_ptr<Control> child) override;
     void removeControl(shared_ptr<Control> child) override;
@@ -83,7 +83,7 @@ public:
     SRect getDrawRect(void) override;
     SRect mapToDrawRect(SRect rect) override;
 
-    void triggerEvent(GameEvent event);
+    void triggerEvent(shared_ptr<Event> event);
     void inheritRenderer(void);
 };
 
@@ -92,15 +92,10 @@ class TopControl: virtual public Control{
 public:
     TopControl(void){m_eventQueueInstance = EventQueue::getInstance();}
     void eventLoopEntry(void){
-        GameEvent *eventInQueue = m_eventQueueInstance->popEventFromQueue();
+        shared_ptr<Event> eventInQueue = m_eventQueueInstance->popEventFromQueue();
         while(eventInQueue != nullptr){
-            handleEvent(*eventInQueue);
-            // Todo: 目前只有PositionEvent需要释放内存，看下是否能优化为shared_ptr，避免内存泄漏
-            // if(eventInQueue->isPositionEvent()){
-            //     SPoint *pos = (SPoint*)eventInQueue->m_eventParam;
-            //     delete pos;
-            // }
-            delete eventInQueue;
+            handleEvent(eventInQueue);
+            // 改为使用shared_ptr后，不需要手动释放eventInQueue内存
             eventInQueue = m_eventQueueInstance->popEventFromQueue();
         }
     }

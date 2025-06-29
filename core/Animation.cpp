@@ -131,7 +131,7 @@ void Animation::update(void) {
             m_currentFrame = m_frames.size() - 1;
 
             // 发出动画结束事件
-            triggerEvent({EventName::AnimationEnded, this});
+            triggerEvent(make_shared<Event>(EventName::AnimationEnded, this));
         }
     }
 

@@ -20,19 +20,21 @@ MusicCarousel::~MusicCarousel(){
     SDL_free(m_silenceBuffer);
 }
 
-bool MusicCarousel::handleEvent(GameEvent &event){
-    if (event.m_eventName == EventName::NextMusic && event.m_eventParam == this){
-        // m_currentMusicIndex = (m_currentMusicIndex + 1) % m_musicFiles.size();
+bool MusicCarousel::handleEvent(shared_ptr<Event> event){
+    if (event->m_eventName == EventName::NextMusic && event->m_eventParam.type() == typeid(MusicCarousel *)){
+        if(any_cast<MusicCarousel *>(event->m_eventParam ) == this){
+            // m_currentMusicIndex = (m_currentMusicIndex + 1) % m_musicFiles.size();
 
-        // SDL_DestroyAudioStream(m_audioStream);
-        // m_audioStream = nullptr;
-        // SDL_free(m_audioBuffer);
-        // m_audioBuffer = nullptr;
+            // SDL_DestroyAudioStream(m_audioStream);
+            // m_audioStream = nullptr;
+            // SDL_free(m_audioBuffer);
+            // m_audioBuffer = nullptr;
 
-        // m_audioLength = 0;
-        // m_nextPlayPos = 0;
-        // play();
-        return true;
+            // m_audioLength = 0;
+            // m_nextPlayPos = 0;
+            // play();
+            return true;
+        }
     }
     return false;
 }

@@ -408,6 +408,9 @@ void Arena::runningEnter(State lastState){
             m_rightBtn->setEnable(true);
             m_downBtn->setEnable(true);
             m_rotateBtn->setEnable(true);
+
+            m_musicCarousel->resume();
+
         case State::ACTING:
             return;
         default:
@@ -440,6 +443,8 @@ void Arena::pausedEnter(State lastState){
     m_pauseLabel->show();
     m_playBtn->show();
     m_pauseBtn->hide();
+
+    m_musicCarousel->pause();
 }
 
 

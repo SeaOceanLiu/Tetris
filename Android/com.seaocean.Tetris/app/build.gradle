@@ -1,5 +1,5 @@
 plugins {
-     id 'com.android.application'
+    id 'com.android.application'
 }
 
 def buildWithCMake = project.hasProperty('BUILD_WITH_CMAKE');
@@ -8,6 +8,7 @@ android {
     namespace "com.seaocean.Tetris"
     compileSdkVersion 35
     defaultConfig {
+        ndkVersion '29.0.13113456'
         minSdkVersion 21
         targetSdkVersion 35
         versionCode 1

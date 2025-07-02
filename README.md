@@ -8,7 +8,7 @@ Tetris is a cross-platform game developed using SDL3, but now it can run on Wind
 
 ![cover](./doc/windows/cover.png)
 
-![My best scroe](./doc/windows/My best score.png)
+![My best score](./doc/windows/MyBestScore.png")
 
 ## Download and Installation
 
@@ -20,7 +20,7 @@ Run Tetris.exe directly after extracting the game to your disk. Use the keyboard
 
 ### Android
 
-The Android version needs to be installed before running, and there may be a long time black screen during loading, please be patient! 
+The Android version needs to be installed before running, and there may be a long time black screen during loading, please be patient!
 
 ## Build
 
@@ -28,42 +28,64 @@ We build this game on windows.
 
 ### for Windows
 
-Run ***x64 Native Tools Command Prompt for VS 2022*** from you start menu.
+Visual Studio 2022 is requied to be installed before compling the game. Run ***x64 Native Tools Command Prompt for VS 2022*** from you start menu. Then you can run the following commands to build the game.
 
 ```powershell
 cd ./VisualStudio/Tetris
 msbuild Tetris.sln -p:Configuration=Release
 ```
 
-The target files is located in ***./VisualStudio/Tetris/x64/Release***. You can change ***Release*** to ***Debug*** in the above command If you need debug version. You can use following command to clean the build target file.
+The target files is located in ***./VisualStudio/Tetris/x64/Release***. You can change ***Release*** to ***Debug*** in the above commands if you need debug version. The debug version will launch a debug window with the game loading.
+
+You can use following command to clean the build target file.
 
 ```powershell
 msbuild Tetris.sln -t:Clean
 ```
 
-
-
 ### for Android
 
+Since Android is compiled using SDL source code, it is necessary to download all the dependency libraries of SDL_ttf before executing the compilation command. Please run the following command from Windows PowerShell.
+
+```power
+cd ./Android/com.seaocean.Tetris/app/jni/SDL_ttf/external
+.\Get-GitModules.ps1
+```
+
+If prompted PowerShell script permissions, simply follow the prompts to do so.
+
+CMake is used to build this game based on ***ndkVersion 29.0.13113456***, to confirm this configuration in ***./Android/com.seaocean.Tetris/app/build.gradle***.
+
+![build.gradle](./doc/android/build.gradle.png")
+
+Also you need confirm the path to the Android NDK located in ***./Android/com.seaocean.Tetris/local.properties***.
+
+![local.properties](./doc/Android/local.properties.png")
+
+And the confirm your java.home config in ./Android/com.seaocean.Tetris/.gradle/config.properties.
+
+![config.properties](./doc/Android/config.properties.png")
+
+Use the following command to build the game.
 
 ```powershell
 cd ./AndroidStudio/Tetris/com.seaocean.Tetris
 ./gradlew build
 ```
 
-you can use following command to clean the build target file.
+The target files is located in ***./Android/com.seaocean.Tetris/app/build/outputs/apk***.
 
-``` powershell
+You can use following command to clean the build target file.
+
+```powershell
 ./gradlew clean
 ```
-
-
 
 ## Custom block expansion configuration
 
 The block configuration is defined in the file located as ***./core/assets/config/RBlock.jsonc***, this is a JSON format file whit comment. you can define your block in these sections:
 
-![config define](./doc/windows/config define.png)
+![config define](./doc/windows/ConfigDefine.png)
 
 ##### groupId
 
@@ -80,4 +102,3 @@ defines whether a block can be rotated, usually it should be ***true***, but if 
 ##### define
 
 It is a 5x5 two-dimensional matrix that defines the specific appearance of a block. A value of 0 in the matrix indicates that there is no block at that location, while a non-zero value indicates that there is a block at that location. The rotation of a block revolves around the center point of a 5x5 matrix, so the rotation center of the block should be placed at the center point of the 5x5 matrix.
-

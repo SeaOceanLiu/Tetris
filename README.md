@@ -56,7 +56,7 @@ If prompted PowerShell script permissions, simply follow the prompts to do so.
 
 CMake is used to build this game based on ***ndkVersion 29.0.13113456***, to confirm this configuration in ***./Android/com.seaocean.Tetris/app/build.gradle***.
 
-![build.gradle](./doc/android/gradle.jpg)
+![build.gradle](./doc/Android/gradle.jpg)
 
 Also you need confirm the path to the Android NDK located in ***./Android/com.seaocean.Tetris/local.properties***.
 

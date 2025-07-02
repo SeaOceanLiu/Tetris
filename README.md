@@ -8,7 +8,7 @@ Tetris is a cross-platform game developed using SDL3, but now it can run on Wind
 
 ![cover](./doc/windows/cover.jpg)
 
-![My best score](./doc/windows/Score.jpg")
+![My best score](./doc/windows/Score.jpg)
 
 ## Download and Installation
 
@@ -56,15 +56,15 @@ If prompted PowerShell script permissions, simply follow the prompts to do so.
 
 CMake is used to build this game based on ***ndkVersion 29.0.13113456***, to confirm this configuration in ***./Android/com.seaocean.Tetris/app/build.gradle***.
 
-![build.gradle](./doc/android/gradle.jpg")
+![build.gradle](./doc/android/gradle.jpg)
 
 Also you need confirm the path to the Android NDK located in ***./Android/com.seaocean.Tetris/local.properties***.
 
-![local.properties](./doc/Android/local.jpg")
+![local.properties](./doc/Android/local.jpg)
 
 And the confirm your java.home config in ./Android/com.seaocean.Tetris/.gradle/config.properties.
 
-![config.properties](./doc/Android/config.jpg")
+![config.properties](./doc/Android/config.jpg)
 
 Use the following command to build the game.
 

@@ -1,4 +1,4 @@
-#ifndef LabelH
+﻿#ifndef LabelH
 #define LabelH
 
 #include <SDL3_ttf/SDL_ttf.h>
@@ -6,6 +6,7 @@
 #include <string>
 #include "ConstDef.h"
 #include "Control.h"
+#include "ResourceLoader.h"
 
 // #include "FontSuite.h"
 enum class LabelState {
@@ -13,36 +14,7 @@ enum class LabelState {
     Hover,
     Pressed
 };
-enum class FontName {
-    Asul_Bold,
-    Asul_Regular,
-    HarmonyOS_Sans_Condensed_Regular,
-    HarmonyOS_Sans_Condensed_Thin,
-    HarmonyOS_Sans_SC_Black,
-    HarmonyOS_Sans_SC_Bold,
-    HarmonyOS_Sans_SC_Light,
-    HarmonyOS_Sans_SC_Medium,
-    HarmonyOS_Sans_SC_Regular,
-    HarmonyOS_Sans_SC_Thin,
-    MapleMono_NF_CN_Bold,
-    MapleMono_NF_CN_BoldItalic,
-    MapleMono_NF_CN_ExtraBold,
-    MapleMono_NF_CN_ExtraBoldItalic,
-    MapleMono_NF_CN_ExtraLight,
-    MapleMono_NF_CN_ExtraLightItalic,
-    MapleMono_NF_CN_Italic,
-    MapleMono_NF_CN_Light,
-    MapleMono_NF_CN_LightItalic,
-    MapleMono_NF_CN_Medium,
-    MapleMono_NF_CN_MediumItalic,
-    MapleMono_NF_CN_Regular,
-    MapleMono_NF_CN_SemiBold,
-    MapleMono_NF_CN_SemiBoldItalic,
-    MapleMono_NF_CN_Thin,
-    MapleMono_NF_CN_ThinItalic,
-    Muyao_Softbrush,
-    Quando_Regular
-};
+
 enum class AlignmentMode: int{
     AM_TOP_LEFT,
     AM_MID_LEFT,
@@ -87,9 +59,10 @@ private:
     LabelState m_state;
     int m_id;
 
-    static unordered_map<FontName, fs::path> m_fontFiles;
 private:
     void loadFromFile(void);
+    void loadFromResource(string resourceId);
+    void createTextEngine(void);
 
 public:
     Label(Control *parent, SRect rect, float xScale=1.0f, float yScale=1.0f);
@@ -98,6 +71,7 @@ public:
     void draw(void);
     bool handleEvent(shared_ptr<Event> event);
     int getId(void) const;
+    SRect getHotRect(void) const;
 
     Label& setNormalStateColor(SDL_Color color);
     Label& setHoverStateColor(SDL_Color color);

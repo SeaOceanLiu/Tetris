@@ -281,7 +281,7 @@ shared_ptr<Animation> Animation::build(void){
     newAnimation->setCalculateHandlerX(m_calculateHandlerX);
     newAnimation->setCalculateHandlerY(m_calculateHandlerY);
     newAnimation->setCalculateHandlerAlpha(m_calculateHandlerAlpha);
-    newAnimation->setStartFrame(m_currentFrame);
+    newAnimation->setStartFrame((int)m_currentFrame);
     newAnimation->setLoop(m_isLoop);
     newAnimation->setInitialPos(m_targetX, m_targetY);
     newAnimation->setInitialAlpha(m_targetAlpha);

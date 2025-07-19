@@ -59,6 +59,19 @@
     <uses-permission android:name="android.permission.INTERNET" />
     -->
 
+    <!-- 基础权限 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- 存储权限适配方案 --> <!-- Android 9.0 及以下 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- Android 10+ 媒体文件访问 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+    <!-- Android 13+ 细化权限（可选） -->
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
+
+
     <!-- Create a Java class extending SDLActivity and place it in a
          directory under app/src/main/java matching the package, e.g. app/src/main/java/com/gamemaker/game/MyGame.java
 

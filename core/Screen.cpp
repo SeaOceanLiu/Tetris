@@ -1,26 +1,15 @@
 ﻿#include "Screen.h"
 
-Screen::Screen(Control *parent, SRect rect, SDL_Renderer *renderer, float xScale, float yScale):
-    TopControl(),
-    Panel(parent, rect, xScale, yScale),
-    m_defaultArenaRect(SRect(SPoint(0, 0), ConstDef::DEFAULT_ARENA_SIZE)),
-    m_defaultBGRect(SRect(SPoint(0, 0), ConstDef::DEFAULT_BG_SIZE)),
-    m_isExiting(SDL_APP_CONTINUE),
-    m_arena(nullptr),
-    m_gameTitle(nullptr),
-    m_gameVersion(nullptr),
-    m_gameAuthor(nullptr),
-    m_aboutLabel(nullptr),
-    m_startButton(nullptr),
-    m_aboutDialog(nullptr)
-{
-    setRenderer(renderer);
-    setTransparent(true);
+SDL_EnumerationResult callback(void *userdata, const char *dirname, const char *fname) {
+    SDL_Log("  - %s (%s)", fname, dirname);
+    return SDL_ENUM_CONTINUE;
+}
 
-    addControl(ButtonBuilder(this, SRect(rect.width - 128, 0, 128, 128))
-                .setBtnNormalStateActor(    make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "cross_up.png", true))
-                .setBtnHoverStateActor(     make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "cross_over.png", true))
-                .setBtnPressedStateActor(   make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "cross_down.png", true))
+void Screen::initial(void){
+    addControl(ButtonBuilder(this, SRect(m_rect.width - 128, 0, 128, 128))
+                .setBtnNormalStateActor(    make_shared<Actor>(this, ResourceLoader::RID_cross_up_png, true))
+                .setBtnHoverStateActor(     make_shared<Actor>(this, ResourceLoader::RID_cross_over_png, true))
+                .setBtnPressedStateActor(   make_shared<Actor>(this, ResourceLoader::RID_cross_down_png, true))
                 .setOnClick(std::bind(&Screen::onClose, this, std::placeholders::_1))
                 .setTransparent(false)
                 .build());
@@ -38,71 +27,70 @@ Screen::Screen(Control *parent, SRect rect, SDL_Renderer *renderer, float xScale
     m_defaultBGRect.left = (m_rect.width - m_defaultBGRect.width * m_M) / 2;
     m_defaultBGRect.top = 0;
 
+    SDL_Log("Starting to load background images...");
     setBackground(PhotoCarouselBuilder(this, 4, m_defaultBGRect, m_M, m_M)
                     // .addPhotosInPath(ConstDef::pathPrefix / "images" / "background", ".jpg") // 尚未研究明白跑在Android下怎么遍历assets下的文件，所以暂不使用这种方式
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "2022_1204_15565500_mh1670141573251.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20200903_202237.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20200920_100257.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20200920_100819.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20201002_184914.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20201003_201713.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20201004_084644.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20201004_084801.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20201004_085622.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20201004_183444.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20201018_145828.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "IMG_20201025_180928.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "mmexport1599240022745.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "mmexport1599449092788.jpg", true)
-                    .addPhoto(ConstDef::pathPrefix / "images" / "background" / "mmexport1599449096347.jpg", true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE00_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE01_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE02_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE03_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE04_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE05_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE06_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE07_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE08_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE09_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE10_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE11_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE12_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE13_jpg, true)
+                    .addPhoto(ResourceLoader::RID_BACKGROUND_IMAGE14_jpg, true)
                     .build());
 
+    SDL_Log("Constructing game title string...");
     float labelHeight = ConstDef::VERSION_FONT_SIZE + ConstDef::FONT_MARGIN;
     float labelTop = (m_rect.height - labelHeight) / 2;
     addControl(m_gameTitle = LabelBuilder(this, {0, labelTop, m_rect. width, labelHeight})
                     .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
                     .setFont(FontName::Muyao_Softbrush)
-                    .setFontSize(ConstDef::VERSION_FONT_SIZE)
+                    .setFontSize((int)ConstDef::VERSION_FONT_SIZE)
                     .setCaption(u8"俄罗斯方块(Tetris)")  // 使用u8字符串时，应保证cpp源码使用UTF-8 with BOM编码保存
                     .setAlignmentMode(AlignmentMode::AM_CENTER)
                     .setShadow(true)
                     .setShadowColor({255, 255, 255, SDL_ALPHA_OPAQUE})
                     .build());
 
+    SDL_Log("Constructing game version information string...");
     labelTop = labelTop + labelHeight + ConstDef::FONT_MARGIN;
     addControl(m_gameVersion = LabelBuilder(this, {0, labelTop, m_rect. width, labelHeight})
                     .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
                     .setFont(FontName::Muyao_Softbrush)
-                    .setFontSize(ConstDef::VERSION_FONT_SIZE)
-                    .setCaption(u8"单机版 V1.0.1")
+                    .setFontSize((int)ConstDef::VERSION_FONT_SIZE)
+                    .setCaption(u8"单机版 V1.1.0")
                     .setAlignmentMode(AlignmentMode::AM_CENTER)
                     .setShadow(true)
                     .setShadowColor({255, 255, 255, SDL_ALPHA_OPAQUE})
                     .build());
 
+    SDL_Log("Constructing game auth string...");
     labelTop = labelTop + labelHeight * 2 + ConstDef::FONT_MARGIN;
     addControl(m_gameAuthor = LabelBuilder(this, {0, labelTop, m_rect. width, labelHeight})
                     .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
                     .setFont(FontName::HarmonyOS_Sans_SC_Regular)
-                    .setFontSize(ConstDef::COPYRIGHT_FONT_SIZE)
+                    .setFontSize((int)ConstDef::COPYRIGHT_FONT_SIZE)
                     .setCaption(u8"Copyright©2025 SeaOcean.\nAll rights reserved.")
                     .setAlignmentMode(AlignmentMode::AM_CENTER)
                     .setShadow(true)
                     .setShadowColor({255, 255, 255, SDL_ALPHA_OPAQUE})
                     .build());
 
-    m_startButton = ButtonBuilder(this, {(m_rect.width - 150) / 2, m_rect.height - 250, 150, 50})
-                    .setCaption("Start")
-                    .setCaptionSize(40)
-                    .setOnClick(std::bind(&Screen::onStart, this, std::placeholders::_1))
-                    .build();
-    addControl(m_startButton);
-
-    // 添加“关于”链接
-    m_aboutLabel = LabelBuilder(this, {0, 0, m_rect. width, m_rect.height - 100})
+    SDL_Log("Constructing about link label...");
+    // 先添加贴近屏幕底部的“关于”链接，采用了AlignmentMode::AM_BOTTOM_CENTER，所以只需要确定高度（m_rect.height - 100）即可
+    SRect aboutRect = {0, 0, m_rect.width, m_rect.height - 100};
+    m_aboutLabel = LabelBuilder(this, {0, 0, m_rect.width, m_rect.height - 100})
                         .setFont(FontName::Asul_Bold)
                         .setAlignmentMode(AlignmentMode::AM_BOTTOM_CENTER)
-                        .setFontSize(40)
+                        .setFontSize(50)
                         .setCaption("About")
                         .SetFontStyle(TTF_STYLE_UNDERLINE)
                         .setNormalStateColor({0, 0, 139, SDL_ALPHA_OPAQUE})
@@ -114,17 +102,46 @@ Screen::Screen(Control *parent, SRect rect, SDL_Renderer *renderer, float xScale
                         .build();
     addControl(m_aboutLabel);
 
+    SDL_Log("Constructing start button...");
+    // 根据“关于”链接的位置，向上移动添加“New game”按钮，位置是水平居中，垂直方向的底部与“关于”链接顶部相差150像素
+    SRect buttonRect = {(m_rect.width - 200) / 2, m_aboutLabel->getHotRect().top - 150, 200, 100};
+    m_startButton = ButtonBuilder(this, buttonRect)
+                    .setCaption("New game")
+                    .setCaptionSize(35)
+                    .setOnClick(std::bind(&Screen::onStart, this, std::placeholders::_1))
+                    .build();
+    addControl(m_startButton);
+
+    SDL_Log("Constructing Continue button...");
+    // 添加“Continue”按钮，位置是在“New game”按钮正上方
+    SRect continueBtnRect = {(m_rect.width - 200) / 2, buttonRect.top - 150, 200, 100};
+    m_continueButton = ButtonBuilder(this, continueBtnRect)
+                    .setCaption("Continue")
+                    .setCaptionSize(35)
+                    .setOnClick(std::bind(&Screen::onContinue, this, std::placeholders::_1))
+                    .build();
+    addControl(m_continueButton);
+
+    // 根据是否有临时存盘文件来决定是否显示“Continue”按钮
+    SDL_IOStream * saveidFileIO = ResourceLoader::getInstance()->openTempSavedFile('r');
+    if (!saveidFileIO) {
+        m_continueButton->hide();
+    }
+    ResourceLoader::getInstance()->closeTempSavedFile(saveidFileIO);
+
     // 计算游戏区域缩放比例和偏移
     Nw = /*2.0f * */m_rect.width / m_defaultArenaRect.width;
     Nh = /*2.0f * */m_rect.height / m_defaultArenaRect.height;
     float m_N = min(Nw, Nh);
 
+    SDL_Log("Constructing arena.....................................");
     // 下面这行的分子部分多了一个m_N，是因为Arena构造函数中会对位移量进行缩放，为保证背景图居中，需要先除以m_N
     m_defaultArenaRect.left = (m_rect.width - m_defaultArenaRect.width * m_N) / 2;
     m_arena = make_shared<Arena>(this, m_defaultArenaRect, m_N, m_N);
     addControl(m_arena);
     m_arena->hide();
 
+    SDL_Log("Constructing about dialog...");
     SSize dialogSize = {200, 150};
     SRect aboutDialogRect = {(m_rect.width - dialogSize.width * m_N) / 2, (m_rect.height - dialogSize.height * m_N) / 2, dialogSize.width, dialogSize.height};
     addControl(m_aboutDialog = DialogBuilder(this, aboutDialogRect, m_N, m_N)   //和Arena的缩放比例保持一致
@@ -171,14 +188,51 @@ Screen::Screen(Control *parent, SRect rect, SDL_Renderer *renderer, float xScale
                         .addText(u8"")
                         .build());
     m_aboutDialog->hide();
+
+    // 判断是否需要重写资源
+    // Todo: 后面考虑改成使用线程来重写资源
+    if (ResourceLoader::getInstance()->isRewriteNeeded()){
+        SDL_Log("Rewriting resources.....................................");
+        ResourceLoader::getInstance()->saveAllResourceToPrefPath();
+    }
+    m_isInitialed = true;
+    SDL_Log("Loading finished, waiting user starting game................................");
+}
+
+Screen::Screen(Control *parent, SRect rect, SDL_Renderer *renderer, float xScale, float yScale):
+    TopControl(),
+    Panel(parent, rect, xScale, yScale),
+    m_isLoading(true),
+    m_isInitialed(false),
+    m_defaultArenaRect(SRect(SPoint(0, 0), ConstDef::DEFAULT_ARENA_SIZE)),
+    m_defaultBGRect(SRect(SPoint(0, 0), ConstDef::DEFAULT_BG_SIZE)),
+    m_nextTick(0),
+    m_nextRepeatTick(0),
+    m_isExiting(SDL_APP_CONTINUE),
+    m_arena(nullptr),
+    m_gameTitle(nullptr),
+    m_gameVersion(nullptr),
+    m_gameAuthor(nullptr),
+    m_aboutLabel(nullptr),
+    m_startButton(nullptr),
+    m_aboutDialog(nullptr)
+{
+    setRenderer(renderer);
+    setTransparent(true);
+
+    SDL_Log("Loading resources.....................................");
+    // 将资源加载到内存中
+    ResourceLoader::getInstance()->loadConfig();
 }
 
 void Screen::inputControl(shared_ptr<Event> event) {
-    if (m_lastAction != nullptr && event->m_eventName == m_lastAction->m_eventName){
-        if (SDL_GetTicks() < m_nextTick){
-            return; // Todo: 这里直接返回会有内存泄漏，因为对于触控和鼠标事件来说，事件中还会带有在堆上分配的坐标点数据
+    if (m_eventJitter.find(event->m_eventName) != m_eventJitter.end()){
+        if (SDL_GetTicks() < m_eventJitter[event->m_eventName]){
+            return;
         }
+        m_eventJitter[event->m_eventName] = SDL_GetTicks() + ConstDef::DEFAULT_BTN_MS_INTERVAL;
     }
+
     if(EventQueue::isPositionEvent(event->m_eventName)){
         m_lastAction = event;
         m_nextTick = SDL_GetTicks() + ConstDef::DEFAULT_BTN_MS_INTERVAL;
@@ -187,20 +241,66 @@ void Screen::inputControl(shared_ptr<Event> event) {
     triggerEvent(event);
 }
 
-void Screen::update() {
-    switch(m_lastAction->m_eventName){
-        case EventName::FINGER_DOWN:
-        case EventName::FINGER_MOTION:
-        case EventName::MOUSE_LBUTTON_DOWN:
-        case EventName::MOUSE_MBUTTON_DOWN:
-        case EventName::MOUSE_RBUTTON_DOWN:
-            // SDL_Log("repeat input");
-            inputControl(m_lastAction);
-            break;
-        default:
-            break;
+void Screen::repeatTrigger(void){
+    if (m_lastAction != nullptr){
+        // if (SDL_GetTicks() < m_nextRepeatTick){
+        //     return;
+        // }
+        Uint64 currentTick = SDL_GetTicks();
+        if (currentTick < m_nextRepeatTick || currentTick < m_eventJitter[m_lastAction->m_eventName]){
+            return;
+        }
+
+        switch(m_lastAction->m_eventName){
+            case EventName::FINGER_DOWN:
+            case EventName::FINGER_MOTION:
+            case EventName::MOUSE_LBUTTON_DOWN:
+            case EventName::MOUSE_MBUTTON_DOWN:
+            case EventName::MOUSE_RBUTTON_DOWN:
+                triggerEvent(m_lastAction);
+                break;
+            default:
+                break;
+        }
+        m_nextRepeatTick = SDL_GetTicks() + ConstDef::DEFAULT_BTN_MS_REPEAT;
     }
-    Panel::update();
+}
+void Screen::update() {
+    if (m_isLoading){
+        if(ResourceLoader::getInstance()->getLoadingProgress() == 1.0f){
+            ResourceLoader::getInstance()->detachLoadingThread();
+            m_isLoading = false;
+            initial();
+        }
+    } else {
+        if (m_lastAction != nullptr){
+            repeatTrigger();
+        }
+        Panel::update();
+    }
+}
+void Screen::draw(void){
+    if(m_isLoading){
+        SRect rect = {0, m_rect.height / 2 - 50, m_rect.width, 100};
+        SRect percentRect = {0, m_rect.height / 2 - 50, m_rect.width * ResourceLoader::getInstance()->getLoadingProgress(), 100};
+
+        // 使用橙色（orange）画进度
+        if(!SDL_SetRenderDrawColor(getRenderer(), 255, 165, 0, SDL_ALPHA_OPAQUE)){
+            SDL_Log("Failed to set grid render color: %s", SDL_GetError());
+        }
+        if (!SDL_RenderFillRect(getRenderer(), percentRect.toSDLFRect())){
+            SDL_Log("Failed to fill render rect: %s", SDL_GetError());
+        }
+        // 使用灰色（gray）画进度条外框
+        if(!SDL_SetRenderDrawColor(getRenderer(), 128, 128, 128, SDL_ALPHA_OPAQUE)){
+            SDL_Log("Failed to set grid render color: %s", SDL_GetError());
+        }
+        if (!SDL_RenderRect(getRenderer(), rect.toSDLFRect())){
+            SDL_Log("Failed to fill render rect: %s", SDL_GetError());
+        }
+    }
+    // 绘制子控件
+    Panel::draw();
 }
 
 void Screen::onClose(shared_ptr<Button> btn) {
@@ -216,6 +316,7 @@ void Screen::onStart(shared_ptr<Button> btn) {
     m_gameVersion->hide();
     m_gameAuthor->hide();
 
+    m_continueButton->hide();
     m_startButton->hide();
     m_aboutLabel->hide();
     m_arena->show();
@@ -224,4 +325,26 @@ void Screen::onStart(shared_ptr<Button> btn) {
 }
 void Screen::onAbout(shared_ptr<Label> label){
     m_aboutDialog->show();
+}
+
+void Screen::loadAudioMusic(void){
+    m_arena->loadAudioMusic();
+}
+
+void Screen::onContinue(shared_ptr<Button> btn) {
+    SDL_Log("Continue button clicked");
+
+    onStart(nullptr);
+    m_arena->setState(State::PAUSED);
+
+    SDL_IOStream *fileStream = ResourceLoader::getInstance()->openTempSavedFile('r');
+    m_arena->loadFromStream(fileStream);
+    m_arena->forceSetArenaAfterLoadedFromStream();
+    ResourceLoader::getInstance()->closeTempSavedFile(fileStream);
+}
+
+void Screen::saveGame(void){
+    SDL_IOStream *fileStream = ResourceLoader::getInstance()->openTempSavedFile('w');
+    m_arena->saveToStream(fileStream);
+    ResourceLoader::getInstance()->closeTempSavedFile(fileStream);
 }

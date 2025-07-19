@@ -1,4 +1,4 @@
-#ifndef PhotoCarouselH
+﻿#ifndef PhotoCarouselH
 #define PhotoCarouselH
 
 #include <filesystem>
@@ -25,6 +25,7 @@ public:
     ~PhotoCarousel();
 
     PhotoCarousel& addPhoto(fs::path filePath, bool matchParentRect=false);
+    PhotoCarousel& addPhoto(string resourceId, bool matchParentRect=false);
     PhotoCarousel& addPhotosInPath(fs::path filePath, string extName, bool matchParentRect=false);
     shared_ptr<PhotoCarousel> build(void);
 
@@ -50,6 +51,7 @@ private:
 public:
     PhotoCarouselBuilder(Control *parent, Uint64 frameMSDuration, SRect targetRect, float xScale=1.0f, float yScale=1.0f);
     PhotoCarouselBuilder& addPhoto(fs::path filePath, bool matchParentRect=false);
+    PhotoCarouselBuilder& addPhoto(string resourceId, bool matchParentRect=false);
     PhotoCarouselBuilder& addPhotosInPath(fs::path filePath, string extName, bool matchParentRect=false);
     shared_ptr<PhotoCarousel> build(void);
 };

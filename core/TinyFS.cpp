@@ -1,4 +1,4 @@
-#include "TinyFS.h"
+﻿#include "TinyFS.h"
 
 vector<fs::path> TinyFS::getFileList(const fs::path dirName, const string& extName){
     vector<fs::path> result;

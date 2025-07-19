@@ -1,4 +1,4 @@
-#ifndef BrickPoolH
+﻿#ifndef BrickPoolH
 #define BrickPoolH
 #include <vector>
 #include <string>

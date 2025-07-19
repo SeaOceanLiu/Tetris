@@ -9,16 +9,15 @@
 #include <mutex>
 #include <SDL3/SDL.h>
 
+#include "nlohmann/json.hpp"
 #include "ConstDef.h"
 #include "EventQueue.h"
 #include "AudioSuite.h"
 #include "BrickPool.h"
 #include "BlockGroup.h"
 #include "Button.h"
-// #include "FontSuite.h"
 #include "Timer.h"
 #include "StateMachine.h"
-// #include "AnchorPoint.h"
 #include "Animation.h"
 #include "BlockMoveTracker.h"
 #include "PhotoCarousel.h"
@@ -241,6 +240,11 @@ public:
     void update(void) override;
     void onFrameCounter(void *userdata);
     void onBtnClick(shared_ptr<Button> button);
+    void loadAudioMusic(void);
+
+    void saveToStream(SDL_IOStream *fileStream);
+    void loadFromStream(SDL_IOStream *fileStream);
+    void forceSetArenaAfterLoadedFromStream(void);  // 从文件流中加载后，需要强制设置arena
 };
 
 #endif

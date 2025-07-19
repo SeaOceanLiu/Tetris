@@ -1,4 +1,4 @@
-#ifndef TinyFSH
+﻿#ifndef TinyFSH
 #define TinyFSH
 #include <vector>
 #include <filesystem>
@@ -15,12 +15,11 @@ private:
     vector<fs::path> m_recursionList;
     // vector<fs::path> m_result;
     string m_extName;
+    string m_orgName;
+    string m_appName;
 public:
-    // static FileEnum& getInstance(void){
-    //     static FileEnum instance; // 静态局部变量，程序运行期间只会被初始化一次
-    //     return instance;
-    // }
-    TinyFS(void){ m_extName = "";};
+    TinyFS(void):m_extName(""), m_orgName("SeaOcean.Ltd."), m_appName("Tetris"){};
+    TinyFS(string appName, string orgName):m_extName(""), m_orgName(orgName), m_appName(appName){}
     vector<fs::path> getFileList(const fs::path dirName, const string& extName="");
 // private:
     // typedef SDL_EnumerationResult (SDLCALL *SDL_EnumerateDirectoryCallback)(void *userdata, const char *dirname, const char *fname);

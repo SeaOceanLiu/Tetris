@@ -1,4 +1,4 @@
-#ifndef DialogH
+﻿#ifndef DialogH
 #define DialogH
 #include <memory>
 #include "Panel.h"
@@ -10,13 +10,14 @@ friend class DialogBuilder;
 private:
     string m_title;
     vector<string>m_texts;
-    int m_currentLine;
+    int m_currentPage;
     string m_onScreenText;
+    SRect m_clientRect;
 
     shared_ptr<Panel> m_titleBar;
     shared_ptr<Button> m_okButton;
     shared_ptr<Button> m_cancelButton;
-    shared_ptr<Label> m_screenText;
+    vector<shared_ptr<Label>> m_screenText;
 public:
     static const int TEXT_LINE_COUNT = 13;
     Dialog(Control* parent, SRect rect, float xScale=1.0f, float yScale=1.0f);

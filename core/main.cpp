@@ -12,7 +12,7 @@
 #include "AudioSuite.h"
 #include "Actor.h"
 #include "Screen.h"
-#include "TinyFS.h"
+// #include "TinyFS.h"
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 /*                                                       */
@@ -116,7 +116,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-    if (!SDL_CreateWindowAndRenderer("examples/renderer/clear", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN, &window, &renderer)) {
+    if (!SDL_CreateWindowAndRenderer("Tetris", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN, &window, &renderer)) {
         SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
@@ -135,17 +135,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     const char* baseDirector = SDL_GetBasePath();
     SDL_Log("SDL_GetBasePath = %s", baseDirector);
 #ifdef SDL_PLATFORM_ANDROID
-    const char* internalDirector = SDL_GetAndroidInternalStoragePath();
-    SDL_Log("SDL_GetAndroidInternalStoragePath = %s", internalDirector);
-    const char* cacheDirector = SDL_GetAndroidCachePath();
-    SDL_Log("SDL_GetAndroidCachePath = %s", cacheDirector);
-
-    unique_ptr<TinyFS> fsystem = make_unique<TinyFS>();
-    auto flist = fsystem->getFileList(internalDirector, "");
-    SDL_Log("internalDirector file list total:%zu", flist.size());
-    for (auto &f : flist) {
-        SDL_Log("file name = %s", f.string().c_str());
-    }
+    ConstDef::workforldPath = fs::path(std::string(SDL_GetPrefPath("SeaOcean.Ltd.", "Tetris")));
 #endif
 
     SDL_DisplayID displayId = SDL_GetPrimaryDisplay();
@@ -193,14 +183,15 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
             in addition, you should set the render target to NULL, if you're using
             it, e.g. call SDL_SetRenderTarget(renderer, NULL).
             */
+            g_screen->saveGame();
             gameEvent = make_shared<Event>(EventName::Paused, 0);
             g_screen->inputControl(gameEvent);
-            // g_eventQueue->pushEventIntoQueue(gameEvent);
             break;
         case SDL_EVENT_DID_ENTER_FOREGROUND:
             SDL_Log("Event------SDL_EVENT_DID_ENTER_FOREGROUND");
             gameEvent = make_shared<Event>(EventName::Paused, 0);
             g_screen->inputControl(gameEvent);
+            g_screen->loadAudioMusic();
             break;
         case SDL_EVENT_FINGER_DOWN:
         case SDL_EVENT_FINGER_UP:
@@ -290,6 +281,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
                     g_screen->inputControl(gameEvent);
                     break;
                 case SDLK_P:
+                    // g_screen->saveGame();
                     gameEvent = make_shared<Event>(EventName::Paused, 0);
                     g_screen->inputControl(gameEvent);
                     break;
@@ -349,6 +341,8 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
 
     // 这里要强制释放资源，因为要确保在后面调用TTF_Quit()之前，要把FontSuite打开的字体都关闭掉
     g_screen.reset();
+    // 线程需要显式detach，否则Android下会报泄漏
+    ResourceLoader::getInstance()->detachLoadingThread();
 
 #ifdef SDL_PLATFORM_WINDOWS
 #ifdef _DEBUG

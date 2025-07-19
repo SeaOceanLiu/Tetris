@@ -1,8 +1,9 @@
-#ifndef BlockGroupH
+﻿#ifndef BlockGroupH
 #define BlockGroupH
 
 #include "nlohmann/json.hpp"
 #include "BrickPool.h"
+#include "ResourceLoader.h"
 
 using json = nlohmann::json;
 
@@ -72,7 +73,10 @@ public:
     unordered_map<int, shared_ptr<SingleGroup>> m_blockGroups;  // map from groupId->SingleGroup
 
     BlockGroup(Control *parent, fs::path pathPrefix);
+    BlockGroup(Control *parent, string resourceId);
     ~BlockGroup();
+
+    void loadFromStream(SDL_IOStream *stream);
 
     int getColCount(void);
     int getRowCount(void);

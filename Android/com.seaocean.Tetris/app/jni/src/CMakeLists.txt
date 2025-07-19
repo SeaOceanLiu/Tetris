@@ -97,6 +97,7 @@ set(TETRIS_CORE_SRC_LIST
         ../../../../../core/MusicCarousel.cpp
         ../../../../../core/Panel.cpp
         ../../../../../core/PhotoCarousel.cpp
+        ../../../../../core/ResourceLoader.cpp
         ../../../../../core/Screen.cpp
         ../../../../../core/Timer.cpp
         ../../../../../core/TinyFS.cpp)

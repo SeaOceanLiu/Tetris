@@ -1,4 +1,4 @@
-#include "EventQueue.h"
+﻿#include "EventQueue.h"
 
 std::mutex EventQueue::m_mtxForEventQueue; // 定义静态成员变量
 

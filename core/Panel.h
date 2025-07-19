@@ -1,4 +1,4 @@
-#ifndef PanelH
+﻿#ifndef PanelH
 #define PanelH
 
 #include <functional>
@@ -11,20 +11,6 @@
 
 using namespace std;
 
-// template <typename T>
-// struct PtrHash {
-//     size_t operator()(const std::shared_ptr<T>& ptr) const {
-//         return std::hash<T*>()(ptr.get());
-//     }
-// };
-
-// template <typename T>
-// struct PtrEqual {
-//     bool operator()(const std::shared_ptr<T>& lhs, const std::shared_ptr<T>& rhs) const {
-//         return lhs.get() == rhs.get();
-//     }
-// };
-
 class Panel: public ControlImpl {
     friend class PanelBuilder;
     using OnClickHandler = std::function<void (shared_ptr<Control>)>;
@@ -36,10 +22,6 @@ private:
 
 
     shared_ptr<PhotoCarousel> m_background;
-
-    // unordered_map<shared_ptr<Animation>, SPoint, PtrHash<Animation>, PtrEqual<Animation>> m_animations;
-    // unordered_map<shared_ptr<Actor>, SPoint, PtrHash<Actor>, PtrEqual<Actor>> m_actors;
-    // unordered_map<shared_ptr<FontSuite>, SPoint, PtrHash<FontSuite>, PtrEqual<FontSuite>> m_texts;
 
     unordered_map<shared_ptr<Animation>, SPoint> m_animations;
     unordered_map<shared_ptr<Actor>, SPoint> m_actors;

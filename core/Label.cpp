@@ -1,34 +1,4 @@
-#include "Label.h"
-unordered_map<FontName, fs::path> Label::m_fontFiles = {
-{FontName::Asul_Bold, "Asul-Bold.ttf"},
-// {FontName::Asul_Regular, "Asul-Regular.ttf"},   // 未使用
-// {FontName::HarmonyOS_Sans_Condensed_Regular, "HarmonyOS_Sans_Condensed_Regular.ttf"},    // 未使用
-// {FontName::HarmonyOS_Sans_Condensed_Thin, "HarmonyOS_Sans_Condensed_Thin.ttf"}, // 未使用
-// {FontName::HarmonyOS_Sans_SC_Black, "HarmonyOS_Sans_SC_Black.ttf"},  // 未使用
-// {FontName::HarmonyOS_Sans_SC_Bold, "HarmonyOS_Sans_SC_Bold.ttf"},    // 未使用
-// {FontName::HarmonyOS_Sans_SC_Light, "HarmonyOS_Sans_SC_Light.ttf"}, // 未使用
-// {FontName::HarmonyOS_Sans_SC_Medium, "HarmonyOS_Sans_SC_Medium.ttf"},   // 未使用
-{FontName::HarmonyOS_Sans_SC_Regular, "HarmonyOS_Sans_SC_Regular.ttf"},
-{FontName::HarmonyOS_Sans_SC_Thin, "HarmonyOS_Sans_SC_Thin.ttf"},
-// {FontName::MapleMono_NF_CN_Bold, "MapleMono-NF-CN-Bold.ttf"},   // 未使用
-// {FontName::MapleMono_NF_CN_BoldItalic, "MapleMono-NF-CN-BoldItalic.ttf"},   // 未使用
-// {FontName::MapleMono_NF_CN_ExtraBold, "MapleMono-NF-CN-ExtraBold.ttf"},   // 未使用
-// {FontName::MapleMono_NF_CN_ExtraBoldItalic, "MapleMono-NF-CN-ExtraBoldItalic.ttf"}, // 未使用
-// {FontName::MapleMono_NF_CN_ExtraLight, "MapleMono-NF-CN-ExtraLight.ttf"},   // 未使用
-// {FontName::MapleMono_NF_CN_ExtraLightItalic, "MapleMono-NF-CN-ExtraLightItalic.ttf"},   // 未使用
-// {FontName::MapleMono_NF_CN_Italic, "MapleMono-NF-CN-Italic.ttf"},    // 未使用
-// {FontName::MapleMono_NF_CN_Light, "MapleMono-NF-CN-Light.ttf"},   // 未使用
-// {FontName::MapleMono_NF_CN_LightItalic, "MapleMono-NF-CN-LightItalic.ttf"},   // 未使用
-// {FontName::MapleMono_NF_CN_Medium, "MapleMono-NF-CN-Medium.ttf"},    // 未使用
-// {FontName::MapleMono_NF_CN_MediumItalic, "MapleMono-NF-CN-MediumItalic.ttf"},    // 未使用
-{FontName::MapleMono_NF_CN_Regular, "MapleMono-NF-CN-Regular.ttf"},
-// {FontName::MapleMono_NF_CN_SemiBold, "MapleMono-NF-CN-SemiBold.ttf"},    // 未使用
-// {FontName::MapleMono_NF_CN_SemiBoldItalic, "MapleMono-NF-CN-SemiBoldItalic.ttf"},   // 未使用
-// {FontName::MapleMono_NF_CN_Thin, "MapleMono-NF-CN-Thin.ttf"},   // 未使用
-// {FontName::MapleMono_NF_CN_ThinItalic, "MapleMono-NF-CN-ThinItalic.ttf"},    // 未使用
-{FontName::Muyao_Softbrush, "Muyao-Softbrush.ttf"},
-{FontName::Quando_Regular, "Quando-Regular.ttf"}
-};
+﻿#include "Label.h"
 
 Label::Label(Control *parent, SRect rect, float xScale, float yScale):
     ControlImpl(parent, xScale, yScale),
@@ -47,7 +17,7 @@ Label::Label(Control *parent, SRect rect, float xScale, float yScale):
     m_AlignmentMode(AlignmentMode::AM_MID_LEFT),
     m_fontSize(10),
     m_fontName(FontName::HarmonyOS_Sans_Condensed_Thin),
-    m_fontFile(m_fontFiles[m_fontName]),
+    m_fontFile(ResourceLoader::m_fontFiles[m_fontName]),
     m_caption("Label"),
     m_shadowEnabled(false),
     m_hotRect({0, 0, 0, 0}),
@@ -86,15 +56,7 @@ Label::~Label(void){
         m_hoverCursor = nullptr;
     }
 }
-
-void Label::loadFromFile(void){
-    fs::path fullPath = ConstDef::pathPrefix / "fonts" / m_fontFile;
-    m_font = TTF_OpenFont(fullPath.string().c_str(), m_fontSize * getScaleXX());
-    if (m_font == nullptr) {
-        SDL_Log("Failed to load font: %s", SDL_GetError());
-        throw "Failed to load font: %s", SDL_GetError();
-    }
-
+void Label::createTextEngine(void){
     SetFontStyle(m_fontStyle);
 
     if (m_textEngin != nullptr) {
@@ -106,6 +68,40 @@ void Label::loadFromFile(void){
         SDL_Log("Failed to create text engine: %s", SDL_GetError());
         return;
     }
+}
+void Label::loadFromFile(void){
+    fs::path fullPath = ConstDef::pathPrefix / m_fontFile;
+    m_font = TTF_OpenFont(fullPath.string().c_str(), m_fontSize * getScaleXX());
+    if (m_font == nullptr) {
+        SDL_Log("Failed to load font: %s", SDL_GetError());
+        throw "Failed to load font: %s", SDL_GetError();
+        return;
+    }
+
+    createTextEngine();
+}
+
+void Label::loadFromResource(string resourceId){
+    shared_ptr<Resource> resource = ResourceLoader::getInstance()->getResource(resourceId);
+    if (resource == nullptr || resource->resourceType != ResourceLoader::RT_FONTS
+        || resource->pMem == nullptr) {
+
+        SDL_Log("LoadFromResource Error: '%s' is not a font\n", resourceId.c_str());
+        return;
+    }
+    SDL_IOStream *resourceStream = SDL_IOFromConstMem(resource->pMem.get(), resource->resourceSize);
+    if (resourceStream == nullptr) {
+        SDL_Log("Failed to create IO stream for: %s", resourceId.c_str());
+        return;
+    }
+    m_font = TTF_OpenFontIO(resourceStream, true, m_fontSize * getScaleXX());
+    if (m_font == nullptr) {
+        SDL_Log("Failed to load font: %s", SDL_GetError());
+        throw "Failed to load font: %s", SDL_GetError();
+        return;
+    }
+
+    createTextEngine();
 }
 
 void Label::update(void){
@@ -212,6 +208,10 @@ int Label::getId(void) const{
     return m_id;
 }
 
+SRect Label::getHotRect(void) const{
+    return m_hotRect;
+}
+
 /*********************************************************for Builder mode**********************************************************/
 
 Label& Label::setNormalStateColor(SDL_Color color){
@@ -236,11 +236,13 @@ Label& Label::setCaption(string caption){
         if (m_ttfText == nullptr) {
             SDL_Log("Failed to create static text: %s", SDL_GetError());
             throw "Failed to create static text: %s", SDL_GetError();
+            return *this;
         }
     } else {
         if(!TTF_SetTextString(m_ttfText, caption.c_str(), caption.length())) {
             SDL_Log("Failed to set text string: %s", SDL_GetError());
             throw "Failed to set text string: %s", SDL_GetError();
+            return *this;
         }
     }
 
@@ -248,6 +250,7 @@ Label& Label::setCaption(string caption){
     if (!TTF_GetTextSize(m_ttfText, &width, &height)){
         SDL_Log("Failed to get text size: %s", SDL_GetError());
         throw "Failed to get text size: %s", SDL_GetError();
+        return *this;
     }
     m_textSize = {static_cast<float>(width / getScaleXX()), static_cast<float>(height / getScaleYY())};  // 除以倍率获得原始大小，后续用来计算对齐时才能正确计算;
 
@@ -257,7 +260,7 @@ Label& Label::setCaption(string caption){
 }
 Label& Label::setFont(FontName fontName){
     m_fontName = fontName;
-    m_fontFile = m_fontFiles[fontName];
+    m_fontFile = fs::path(ResourceLoader::m_fontFiles[fontName]);
     return *this;
 }
 Label& Label::setAlignmentMode(AlignmentMode Alignment){
@@ -305,6 +308,7 @@ Label& Label::setFontSize(int fontSize){
     if(!TTF_SetFontSize(m_font, fontSize * getScaleXX())) {
         SDL_Log("Failed to set font size: %s", SDL_GetError());
         throw "Failed to set font size: %s", SDL_GetError();
+        return *this;
     }
 
     // Todo: 下面需要对已经生成的参数重新计算一遍
@@ -345,7 +349,7 @@ shared_ptr<Label> Label::build(void){
     auto newLabel = make_shared<Label>(this->getParent(), m_rect, m_xScale, m_yScale);
     newLabel->setFontSize(m_fontSize);
     newLabel->setFont(m_fontName);
-    newLabel->loadFromFile();
+    newLabel->loadFromResource(m_fontFile.string());
     newLabel->setNormalStateColor(m_normalStateColor);
     newLabel->setHoverStateColor(m_hoverStateColor);
     newLabel->setPressedStateColor(m_pressedStateColor);
@@ -384,7 +388,7 @@ LabelBuilder& LabelBuilder::setCaption(string caption){
 }
 LabelBuilder& LabelBuilder::setFont(FontName fontName){
     m_label->setFont(fontName);
-    m_label->loadFromFile();
+    m_label->loadFromResource(m_label->m_fontFile.string());
     return *this;
 }
 LabelBuilder& LabelBuilder::setAlignmentMode(AlignmentMode Alignment){

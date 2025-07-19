@@ -1,4 +1,4 @@
-#ifndef ControlH
+﻿#ifndef ControlH
 #define ControlH
 #include <vector>
 #include <SDL3/SDL.h>

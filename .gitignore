@@ -405,10 +405,13 @@ FodyWeavers.xsd
 
 # Gradle files
 .gradle/
+# Added by SeaOcean: 让用户clone代码后能直接修改该文件进行编译，避免手动创建
+!.gradle/config.properties
 build/
 
 # Local configuration file (sdk path, etc)
-local.properties
+# comment out by SeaOcean: 让用户clone代码后能直接修改该文件进行编译，避免手动创建
+# local.properties
 
 # Log/OS Files
 *.log
@@ -436,4 +439,3 @@ google-services.json
 
 # Android Profiling
 *.hprof
-.vscode/settings.json

@@ -191,6 +191,7 @@ xcopy /y "$(OutputPath)\..\..\..\..\core\LibsAndDlls\*.dll" "$(OutputPath)"
     <ClCompile Include="..\..\core\MusicCarousel.cpp" />
     <ClCompile Include="..\..\core\Panel.cpp" />
     <ClCompile Include="..\..\core\PhotoCarousel.cpp" />
+    <ClCompile Include="..\..\core\ResourceLoader.cpp" />
     <ClCompile Include="..\..\core\Screen.cpp" />
     <ClCompile Include="..\..\core\Timer.cpp" />
     <ClCompile Include="..\..\core\TinyFS.cpp" />
@@ -215,10 +216,12 @@ xcopy /y "$(OutputPath)\..\..\..\..\core\LibsAndDlls\*.dll" "$(OutputPath)"
     <ClInclude Include="..\..\core\MusicCarousel.h" />
     <ClInclude Include="..\..\core\Panel.h" />
     <ClInclude Include="..\..\core\PhotoCarousel.h" />
+    <ClInclude Include="..\..\core\ResourceLoader.h" />
     <ClInclude Include="..\..\core\Screen.h" />
     <ClInclude Include="..\..\core\StateMachine.h" />
     <ClInclude Include="..\..\core\Timer.h" />
     <ClInclude Include="..\..\core\TinyFS.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\core\LibsAndDlls\SDL3.lib" />
@@ -227,6 +230,12 @@ xcopy /y "$(OutputPath)\..\..\..\..\core\LibsAndDlls\*.dll" "$(OutputPath)"
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\core\LibsAndDlls\SDL3.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tetris.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\core\assets\images\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

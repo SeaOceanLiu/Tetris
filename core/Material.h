@@ -1,4 +1,4 @@
-#ifndef MaterialH
+﻿#ifndef MaterialH
 #define MaterialH
 #include <filesystem>
 #include <SDL3/SDL.h>
@@ -6,6 +6,7 @@
 #include "ConstDef.h"
 
 #include "Control.h"
+#include "ResourceLoader.h"
 
 namespace fs = std::filesystem;
 
@@ -37,6 +38,8 @@ public:
     ~Material() override;
 
     virtual void loadFromFile(fs::path filePath) = 0;
+    virtual void loadFromResource(string resourceId) = 0;
+
 
     void draw(void) override;
     void draw(SPoint pos, Uint8 alpha=SDL_ALPHA_OPAQUE);

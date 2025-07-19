@@ -109,21 +109,21 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
     addControl(m_fpsLabel = LabelBuilder(this, ConstDef::FPS_TEXT_POS)
                     .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
                     .setFont(FontName::HarmonyOS_Sans_SC_Thin)
-                    .setFontSize(ConstDef::GAME_BAR_TEXT_FONT_SIZE)
+                    .setFontSize((int)ConstDef::GAME_BAR_TEXT_FONT_SIZE)
                     .setCaption("FPS: 0")
                     .setAlignmentMode(AlignmentMode::AM_MID_LEFT)
                     .build());
     addControl(m_speedLabel = LabelBuilder(this, ConstDef::SPEED_TEXT_POS)
                     .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
                     .setFont(FontName::HarmonyOS_Sans_SC_Thin)
-                    .setFontSize(ConstDef::GAME_BAR_TEXT_FONT_SIZE)
+                    .setFontSize((int)ConstDef::GAME_BAR_TEXT_FONT_SIZE)
                     .setCaption("Speed: 1")
                     .setAlignmentMode(AlignmentMode::AM_BOTTOM_RIGHT)
                     .build());
     addControl(m_scoreLabel = LabelBuilder(this, ConstDef::SCORE_TEXT_POS)
                     .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
                     .setFont(FontName::HarmonyOS_Sans_SC_Thin)
-                    .setFontSize(ConstDef::GAME_BAR_TEXT_FONT_SIZE)
+                    .setFontSize((int)ConstDef::GAME_BAR_TEXT_FONT_SIZE)
                     .setCaption("Score: 0")
                     .setAlignmentMode(AlignmentMode::AM_BOTTOM_CENTER)
                     .build());
@@ -133,7 +133,7 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
                     .setShadowColor({255, 255, 255, SDL_ALPHA_OPAQUE})
                     .setShadow(true)
                     .setFont(FontName::Quando_Regular)
-                    .setFontSize(ConstDef::PAUSED_TEXT_FONT_SIZE)
+                    .setFontSize((int)ConstDef::PAUSED_TEXT_FONT_SIZE)
                     .setCaption("Paused")
                     .setAlignmentMode(AlignmentMode::AM_CENTER)
                     .build());
@@ -144,7 +144,7 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
                     .setShadowColor({255, 255, 255, SDL_ALPHA_OPAQUE})
                     .setShadow(true)
                     .setFont(FontName::Quando_Regular)
-                    .setFontSize(ConstDef::FAILED_TEXT_FONT_SIZE)
+                    .setFontSize((int)ConstDef::FAILED_TEXT_FONT_SIZE)
                     .setCaption("You failed!")
                     .setAlignmentMode(AlignmentMode::AM_CENTER)
                     .build());
@@ -156,7 +156,7 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
                     .setShadow(true)
                     .setShadowOffset({1, 1})
                     .setFont(FontName::HarmonyOS_Sans_SC_Thin)
-                    .setFontSize(ConstDef::DEBUG_INFO_FONT_SIZE)
+                    .setFontSize((int)ConstDef::DEBUG_INFO_FONT_SIZE)
                     .setCaption(u8"下落速度(ms): " + std::to_string(ConstDef::LEVEL_SPEED_MAPPING[m_speed]))
                     .setAlignmentMode(AlignmentMode::AM_MID_LEFT)
                     .build());
@@ -164,139 +164,138 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
 
     /**************************************************** 添加界面按钮 *****************************************************/
     addControl(m_leftBtn = ButtonBuilder(this, ConstDef::LEFT_BUTTON_POS)//SRect(0, 505, 48, 48))
-                .setBtnNormalStateActor(    make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "left.png"))
-                .setBtnHoverStateActor(     make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "left_hover.png"))
-                .setBtnPressedStateActor(   make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "left_pressed.png"))
+                .setBtnNormalStateActor(    make_shared<Actor>(this, ResourceLoader::RID_left_png))
+                .setBtnHoverStateActor(     make_shared<Actor>(this, ResourceLoader::RID_left_hover_png))
+                .setBtnPressedStateActor(   make_shared<Actor>(this, ResourceLoader::RID_left_pressed_png))
                 .setOnClick(std::bind(&Arena::onBtnClick, this, std::placeholders::_1))
                 .setTransparent(true)
                 .setId(static_cast<int>(ButtonId::LeftBtn))
                 .build());
     addControl(m_rightBtn = ButtonBuilder(this, ConstDef::RIGHT_BUTTON_POS)//SRect(48 + 5, 505, 48, 48))
-                .setBtnNormalStateActor(    make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "right.png"))
-                .setBtnHoverStateActor(     make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "right_hover.png"))
-                .setBtnPressedStateActor(   make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "right_pressed.png"))
+                .setBtnNormalStateActor(    make_shared<Actor>(this, ResourceLoader::RID_right_png))
+                .setBtnHoverStateActor(     make_shared<Actor>(this, ResourceLoader::RID_right_hover_png))
+                .setBtnPressedStateActor(   make_shared<Actor>(this, ResourceLoader::RID_right_pressed_png))
                 .setOnClick(std::bind(&Arena::onBtnClick, this, std::placeholders::_1))
                 .setTransparent(true)
                 .setId(static_cast<int>(ButtonId::RightBtn))
                 .build());
     addControl(m_downBtn = ButtonBuilder(this, ConstDef::DOWN_BUTTON_POS)//SRect((48 + 5)/2, 48 + 510, 48, 48))
-                .setBtnNormalStateActor(    make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "down.png"))
-                .setBtnHoverStateActor(     make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "down_hover.png"))
-                .setBtnPressedStateActor(   make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "down_pressed.png"))
+                .setBtnNormalStateActor(    make_shared<Actor>(this, ResourceLoader::RID_down_png))
+                .setBtnHoverStateActor(     make_shared<Actor>(this, ResourceLoader::RID_down_hover_png))
+                .setBtnPressedStateActor(   make_shared<Actor>(this, ResourceLoader::RID_down_pressed_png))
                 .setOnClick(std::bind(&Arena::onBtnClick, this, std::placeholders::_1))
                 .setTransparent(true)
                 .setId(static_cast<int>(ButtonId::DownBtn))
                 .build());
     addControl(m_rotateBtn = ButtonBuilder(this, ConstDef::ROTATE_BUTTON_POS)
                 .setAnimation(AnimationBuilder(this, 33)
-                                // .addPhotosInPathAsFrames(ConstDef::pathPrefix / "images" / "rotate", ".png", true)  // 尚未研究明白跑在Android下怎么遍历assets下的文件，所以暂不使用这种方式
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate000.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate000_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate005.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate005_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate010.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate010_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate015.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate015_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate020.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate020_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate025.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate025_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate030.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate030_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate035.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate035_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate040.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate040_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate045.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate045_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate050.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate050_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate055.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate055_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate060.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate060_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate065.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate065_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate070.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate070_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate075.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate075_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate080.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate080_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate085.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate085_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate090.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate090_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate095.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate095_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate100.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate100_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate105.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate105_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate110.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate110_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate115.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate115_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate120.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate120_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate125.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate125_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate130.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate130_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate135.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate135_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate140.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate140_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate145.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate145_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate150.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate150_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate155.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate155_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate160.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate160_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate165.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate165_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate170.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate170_png, true))
                                             .build())
                                 .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "rotate" / "rotate175.png", true))
+                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate175_png, true))
                                             .build())
                                 .setLoop(true)
                                 .setStartFrame(0)
@@ -306,14 +305,14 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
                 .setId(static_cast<int>(ButtonId::RotateBtn))
                 .build());
     addControl(m_playBtn = ButtonBuilder(this, ConstDef::PLAY_PAUSE_BUTTON_POS)
-                .setBtnNormalStateActor(make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "play.png", true))
+                .setBtnNormalStateActor(make_shared<Actor>(this, ResourceLoader::RID_play_png, true))
                 .setOnClick(std::bind(&Arena::onBtnClick, this, std::placeholders::_1))
                 .setTransparent(true)
                 .setId(static_cast<int>(ButtonId::PlayBtn))
                 .build());
     m_playBtn->hide();
     addControl(m_pauseBtn = ButtonBuilder(this, ConstDef::PLAY_PAUSE_BUTTON_POS)
-                .setBtnNormalStateActor(make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "pause.png", true))
+                .setBtnNormalStateActor(make_shared<Actor>(this, ResourceLoader::RID_pause_png, true))
                 .setOnClick(std::bind(&Arena::onBtnClick, this, std::placeholders::_1))
                 .setTransparent(true)
                 .setId(static_cast<int>(ButtonId::PauseBtn))
@@ -321,41 +320,14 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
     m_pauseBtn->show();
 
     /**************************************************** 初始化方块移动动画 *****************************************************/
-    m_blockAnimation = make_shared<Animation>(this, 2);
+    m_blockAnimation = make_shared<Animation>(this, 5);
     m_blockMoveTracker = make_shared<BlockMoveTracker>(nullptr, SPoint(ConstDef::SINGLE_BLOCK_SIZE.width, ConstDef::SINGLE_BLOCK_SIZE.height));
     m_blockAnimation->setTracker(m_blockMoveTracker);
     SDL_Log("Animation(%p)::setTracker %p", (void *)m_blockAnimation.get(), (void *)m_blockMoveTracker.get());
 
-    /******************************************************* 添加游戏音效 ********************************************************/
-    m_audioSuite[SoundId::Move   ]          = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "Move.wav");
-    m_audioSuite[SoundId::Bomb   ]          = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "Bomb.wav");
-    m_audioSuite[SoundId::Pierce ]          = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "Pierce.wav");
-    m_audioSuite[SoundId::Save   ]          = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "Save.wav");
-    m_audioSuite[SoundId::Speedup]          = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "Speedup.wav");
-    m_audioSuite[SoundId::LevelComplete]    = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "LevelComplete.wav");
-    m_audioSuite[SoundId::Excellent]        = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "Excellent.wav");
-    m_audioSuite[SoundId::GameOver]         = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "GameOver.wav");
-    m_audioSuite[SoundId::CantDo]           = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "CantDo.wav");
-    m_audioSuite[SoundId::Go]               = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "Go.wav");
-    m_audioSuite[SoundId::Good]             = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "Good.wav");
-    m_audioSuite[SoundId::Warning]          = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "Warning.wav");
-    m_audioSuite[SoundId::Bombexplode]      = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "BombExplode.wav");
-    m_audioSuite[SoundId::Multishot]        = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "sounds" / "MultiShot.wav");
+    /***************************************************** 添加游戏音效和背景音乐 ******************************************************/
+    loadAudioMusic();
 
-    // m_audioSuite[SoundId::BGM1] = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "music" / "mainmenu.wav");
-    // m_audioSuite[SoundId::BGM2] = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "music" / "the flowbots drum and bass.wav");
-
-    /******************************************************* 添加游戏背景音乐 *******************************************************/
-    m_musicCarousel = make_shared<MusicCarousel>(this);
-    // m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "mainmenu.wav");
-    // m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "the flowbots drum and bass.wav");
-
-    m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "3 am West End.wav");
-    m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "Beat One.wav");
-    m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "Fright Night Twist.wav");
-    m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "Goodnightmare.wav");
-    m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "Palm and Soul.wav");
-    m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "Take the Ride.wav");
     addControl(m_musicCarousel);
 
     /******************************************************** 创建帧率统计定时器 ********************************************************/
@@ -389,17 +361,13 @@ Arena::~Arena()
         delete m_frameCounter;
         m_frameCounter = nullptr;
     }
-
-    // m_actors.clear();
     m_audioSuite.clear();
 }
 
 void Arena::showCoverEnter(State lastState){
-    // do something
     SDL_Log("showCoverEnter %d", static_cast<State>(lastState));
 }
 void Arena::runningEnter(State lastState){
-    // do something
     // SDL_Log("runningEnter %d", static_cast<State>(lastState));
 
     switch(lastState){
@@ -409,6 +377,7 @@ void Arena::runningEnter(State lastState){
             m_downBtn->setEnable(true);
             m_rotateBtn->setEnable(true);
 
+            m_musicCarousel->play();
             m_musicCarousel->resume();
 
         case State::ACTING:
@@ -420,25 +389,21 @@ void Arena::runningEnter(State lastState){
 
     clean();
     getNextBlock();
-    // m_audioSuite[SoundId::BGM1]->play(false);
     m_musicCarousel->play();
 
     m_frameCounter->start(std::bind(&Arena::onFrameCounter, this, std::placeholders::_1), this, 1000, true);
     resetBackground();
 }
 void Arena::actingEnter(State lastState){
-    // do something
     // SDL_Log("actingEnter %d", static_cast<State>(lastState));
 }
 void Arena::failedEnter(State lastState){
-    // do something
     SDL_Log("failedEnter %d", static_cast<State>(lastState));
     m_audioSuite[SoundId::Warning]->pause();
     m_audioSuite[SoundId::GameOver]->play(false);
     m_failedLabel->show();
 }
 void Arena::pausedEnter(State lastState){
-    // do something
     SDL_Log("pausedEnter %d", static_cast<State>(lastState));
     m_pauseLabel->show();
     m_playBtn->show();
@@ -449,14 +414,10 @@ void Arena::pausedEnter(State lastState){
 
 
 void Arena::showCoverExit(State nextState){
-    // do something
     SDL_Log("showCoverExit %d", static_cast<State>(nextState));
 }
 void Arena::runningExit(State nextState){
-    // do something
     // SDL_Log("runningExit %d", static_cast<State>(nextState));
-    // m_rotateBtnAnimation->pause();
-
     if(nextState != State::ACTING){
         m_leftBtn->setEnable(false);
         m_rightBtn->setEnable(false);
@@ -465,16 +426,13 @@ void Arena::runningExit(State nextState){
     }
 }
 void Arena::actingExit(State nextState){
-    // do something
     // SDL_Log("actingExit %d", static_cast<State>(nextState));
 }
 void Arena::failedExit(State nextState){
-    // do something
     SDL_Log("failedExit %d", static_cast<State>(nextState));
     m_failedLabel->hide();
 }
 void Arena::pausedExit(State nextState){
-    // do something
     SDL_Log("pausedExit %d", static_cast<State>(nextState));
     m_pauseLabel->hide();
     m_playBtn->hide();
@@ -482,7 +440,6 @@ void Arena::pausedExit(State nextState){
 }
 
 bool Arena::eventHandleInShowCoverState(shared_ptr<Event> event){
-    // do something
     // SDL_Log("eventHandleInInitialState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
     switch(event->m_eventName){
         case EventName::Begin:
@@ -494,7 +451,6 @@ bool Arena::eventHandleInShowCoverState(shared_ptr<Event> event){
     return Panel::handleEvent(event);
 }
 bool Arena::eventHandleInRunningState(shared_ptr<Event> event){
-    // do something
     // SDL_Log("eventHandleInRunningState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
     switch(event->m_eventName){
         case EventName::GridOnOff:
@@ -530,13 +486,6 @@ bool Arena::eventHandleInRunningState(shared_ptr<Event> event){
             m_frameCount = 0;
             return true;
         case EventName::AudioEnded:
-            // if (event.m_eventParam == m_audioSuite[SoundId::BGM1].get()){
-            //     m_audioSuite[SoundId::BGM2]->play(false);
-            //     return true;
-            // } else if (event.m_eventParam == m_audioSuite[SoundId::BGM2].get()){
-            //     m_audioSuite[SoundId::BGM1]->play(false);
-            //     return true;
-            // }
             break;
         case EventName::SpeedUp:
             speedUp();
@@ -547,7 +496,6 @@ bool Arena::eventHandleInRunningState(shared_ptr<Event> event){
 }
 
 bool Arena::eventHandleInActingState(shared_ptr<Event> event){
-    // do something
     // SDL_Log("eventHandleInActingState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
     switch(event->m_eventName){
         case EventName::Draw:
@@ -571,7 +519,6 @@ bool Arena::eventHandleInActingState(shared_ptr<Event> event){
 }
 
 bool Arena::eventHandleInFailedState(shared_ptr<Event> event){
-    // do something
     // SDL_Log("eventHandleInFailedState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
     switch(event->m_eventName){
         case EventName::Draw:
@@ -588,24 +535,16 @@ bool Arena::eventHandleInFailedState(shared_ptr<Event> event){
 }
 
 bool Arena::eventHandleInPausedState(shared_ptr<Event> event){
-    // do something
     // SDL_Log("eventHandleInPausedState handle event:%d, param:%d", static_cast<int>(event.m_eventName), event.m_eventParam);
     switch(event->m_eventName){
         case EventName::Draw:
             draw();
-            // m_fontSuite[FontId::Paused]->draw();
             return true;
         case EventName::Paused:
             setState(State::RUNNING);
             return true;
         case EventName::AudioEnded:
-            // if (event.m_eventParam == m_audioSuite[SoundId::BGM1].get()){
-            //     m_audioSuite[SoundId::BGM2]->play(false);
-            //     return true;
-            // } else if (event.m_eventParam == m_audioSuite[SoundId::BGM2].get()){
-            //     m_audioSuite[SoundId::BGM1]->play(false);
-            //     return true;
-            // }
+
             break;
         default:
             break;
@@ -1309,4 +1248,124 @@ void Arena::onBtnClick(shared_ptr<Button> button){
         default:
             break;
     }
+}
+
+void Arena::loadAudioMusic(void){
+    /******************************************************* 添加游戏音效 ********************************************************/
+    m_audioSuite[SoundId::Move   ]          = make_unique<AudioSuite>(this, ResourceLoader::RID_Move_wav);
+    m_audioSuite[SoundId::Bomb   ]          = make_unique<AudioSuite>(this, ResourceLoader::RID_Bomb_wav);
+    m_audioSuite[SoundId::Pierce ]          = make_unique<AudioSuite>(this, ResourceLoader::RID_Pierce_wav);
+    m_audioSuite[SoundId::Save   ]          = make_unique<AudioSuite>(this, ResourceLoader::RID_Save_wav);
+    m_audioSuite[SoundId::Speedup]          = make_unique<AudioSuite>(this, ResourceLoader::RID_Speedup_wav);
+    m_audioSuite[SoundId::LevelComplete]    = make_unique<AudioSuite>(this, ResourceLoader::RID_LevelComplete_wav);
+    m_audioSuite[SoundId::Excellent]        = make_unique<AudioSuite>(this, ResourceLoader::RID_Excellent_wav);
+    m_audioSuite[SoundId::GameOver]         = make_unique<AudioSuite>(this, ResourceLoader::RID_GameOver_wav);
+    m_audioSuite[SoundId::CantDo]           = make_unique<AudioSuite>(this, ResourceLoader::RID_CantDo_wav);
+    m_audioSuite[SoundId::Go]               = make_unique<AudioSuite>(this, ResourceLoader::RID_Go_wav);
+    m_audioSuite[SoundId::Good]             = make_unique<AudioSuite>(this, ResourceLoader::RID_Good_wav);
+    m_audioSuite[SoundId::Warning]          = make_unique<AudioSuite>(this, ResourceLoader::RID_Warning_wav);
+    m_audioSuite[SoundId::Bombexplode]      = make_unique<AudioSuite>(this, ResourceLoader::RID_BombExplode_wav);
+    m_audioSuite[SoundId::Multishot]        = make_unique<AudioSuite>(this, ResourceLoader::RID_MultiShot_wav);
+
+    // m_audioSuite[SoundId::BGM1] = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "music" / "mainmenu.wav");
+    // m_audioSuite[SoundId::BGM2] = make_unique<AudioSuite>(this, ConstDef::pathPrefix / "music" / "the flowbots drum and bass.wav");
+
+    /******************************************************* 添加游戏背景音乐 *******************************************************/
+    m_musicCarousel = make_shared<MusicCarousel>(this);
+    // m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "mainmenu_wav);
+    // m_musicCarousel->addMusicFile(ConstDef::pathPrefix / "music" / "the flowbots drum and bass_wav);
+
+    m_musicCarousel->addMusicResource(ResourceLoader::RID_3_am_West_End_wav);
+    m_musicCarousel->addMusicResource(ResourceLoader::RID_Beat_One_wav);
+    m_musicCarousel->addMusicResource(ResourceLoader::RID_Fright_Night_Twist_wav);
+    m_musicCarousel->addMusicResource(ResourceLoader::RID_Goodnightmare_wav);
+    m_musicCarousel->addMusicResource(ResourceLoader::RID_Palm_and_Soul_wav);
+    m_musicCarousel->addMusicResource(ResourceLoader::RID_Take_the_Ride_wav);
+    m_musicCarousel->play();
+    m_musicCarousel->pause();
+}
+
+void Arena::loadFromStream(SDL_IOStream *fileStream){
+    size_t fileSize = SDL_GetIOSize(fileStream);
+    if (fileSize < 0) {
+        SDL_Log("Get config file size error: %s", SDL_GetError());
+        return;
+    }
+
+    shared_ptr<char[]> pJsonFileContent = shared_ptr<char[]>(new char[fileSize + 1]);    // json file content
+    if (SDL_ReadIO(fileStream, (void *)pJsonFileContent.get(), fileSize) != fileSize) {
+        SDL_Log("Read saved file content error: %s", SDL_GetError());
+        return;
+    }
+
+    pJsonFileContent[fileSize] = '\0';
+    json jsonObject = json::parse(pJsonFileContent.get(), nullptr, false, true);  // json
+
+    // string timestamp = jsonObject["timestamp"].get<string>();
+    m_totalScore = jsonObject["totalScore"].get<int>();
+    m_speed = jsonObject["speed"].get<int>();
+
+    m_blockPos.currentCol = jsonObject["blockPos"]["currentCol"].get<int>();
+    m_blockPos.currentRow = jsonObject["blockPos"]["currentRow"].get<int>();
+
+    m_currentBlockGroup = jsonObject["currentBlockGroup"].get<int>();
+    m_nextBlockGroup = jsonObject["nextBlockGroup"].get<int>();
+
+    m_currentBlockColor = jsonObject["currentBlockColor"].get<int>();
+    m_nextBlockColor = jsonObject["nextBlockColor"].get<int>();
+
+    m_currentBlockAngle = static_cast<RotateAngle>(jsonObject["currentBlockAngle"].get<int>());
+    m_nextBlockAngle = static_cast<RotateAngle>(jsonObject["nextBlockAngle"].get<int>());
+
+    m_nextBlockColOffset = jsonObject["nextBlockColOffset"].get<int>();
+
+    for( int row = 0; row < ConstDef::PG.height; row++) {
+        for (int col = 0; col < ConstDef::PG.width; col++) {
+            m_screenBuffer[row][col] = jsonObject["screenBuffer"][row][col].get<int>();
+        }
+    }
+}
+void Arena::saveToStream(SDL_IOStream *fileStream){
+    json jsonObject;
+    // jsonObject["timestamp"] = SDL_GetTimestamp();
+    jsonObject["totalScore"] = m_totalScore;
+    jsonObject["speed"] = m_speed;
+
+    jsonObject["blockPos"]["currentCol"] = m_blockPos.currentCol;
+    jsonObject["blockPos"]["currentRow"] = m_blockPos.currentRow;
+
+    jsonObject["currentBlockGroup"] = m_currentBlockGroup;
+    jsonObject["nextBlockGroup"] = m_nextBlockGroup;
+
+    jsonObject["currentBlockColor"] = m_currentBlockColor;
+    jsonObject["nextBlockColor"] = m_nextBlockColor;
+
+    jsonObject["currentBlockAngle"] = static_cast<int>(m_currentBlockAngle);
+    jsonObject["nextBlockAngle"] = static_cast<int>(m_nextBlockAngle);
+
+    jsonObject["nextBlockColOffset"] = m_nextBlockColOffset;
+    for( int row = 0; row < ConstDef::PG.height; row++) {
+        for (int col = 0; col < ConstDef::PG.width; col++) {
+            jsonObject["screenBuffer"][row][col] = m_screenBuffer[row][col];
+        }
+    }
+    string jsonString = jsonObject.dump(4);
+    for (char c : jsonString) {
+        SDL_WriteU8(fileStream, (Uint8)c);
+    }
+}
+
+void Arena::forceSetArenaAfterLoadedFromStream(void){
+    refreshBlockMoveAnimationActorGroup();
+    m_musicCarousel->play();    // 先通过play()加载音乐
+    m_musicCarousel->pause();   // 再通过pause()暂停音乐，满足暂停状态下暂停背景音乐，继续游戏时继续背景音乐的要求
+    m_frameCounter->start(std::bind(&Arena::onFrameCounter, this, std::placeholders::_1), this, 1000, true);
+    resetBackground();
+
+    std::string strSpeed = "Speed: " + std::to_string(m_speed + 1);
+    m_speedLabel->setCaption(strSpeed.c_str());
+    m_debugLabel->setCaption(u8"下落速度(ms): " + std::to_string(ConstDef::LEVEL_SPEED_MAPPING[m_speed]));
+
+    std::string strScore = "Score: " + std::to_string(m_totalScore);
+    m_scoreLabel->setCaption(strScore.c_str());
 }

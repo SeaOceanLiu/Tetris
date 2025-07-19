@@ -1,4 +1,4 @@
-#include "MusicCarousel.h"
+﻿#include "MusicCarousel.h"
 
 MusicCarousel::MusicCarousel(Control* parent) :
     ControlImpl(parent),
@@ -10,7 +10,8 @@ MusicCarousel::MusicCarousel(Control* parent) :
     m_silenceBuffer = (Uint8 *)SDL_malloc(1024);    // allocate a 1K buffer of silence
     if (!m_silenceBuffer) {
         SDL_Log("Failed to allocate silence buffer, error: %s", SDL_GetError());
-        throw std::runtime_error("Failed to allocate silence buffer, error: " + string(SDL_GetError()));
+        // throw std::runtime_error("Failed to allocate silence buffer, error: " + string(SDL_GetError()));
+        return;
     }
     SDL_memset(m_silenceBuffer, 0, 1024);            // fill it with silence
 }
@@ -23,16 +24,6 @@ MusicCarousel::~MusicCarousel(){
 bool MusicCarousel::handleEvent(shared_ptr<Event> event){
     if (event->m_eventName == EventName::NextMusic && event->m_eventParam.type() == typeid(MusicCarousel *)){
         if(any_cast<MusicCarousel *>(event->m_eventParam ) == this){
-            // m_currentMusicIndex = (m_currentMusicIndex + 1) % m_musicFiles.size();
-
-            // SDL_DestroyAudioStream(m_audioStream);
-            // m_audioStream = nullptr;
-            // SDL_free(m_audioBuffer);
-            // m_audioBuffer = nullptr;
-
-            // m_audioLength = 0;
-            // m_nextPlayPos = 0;
-            // play();
             return true;
         }
     }
@@ -74,8 +65,8 @@ void SDLCALL MusicCarousel::musicFeedTheAudioStream(void *userdata, SDL_AudioStr
     musicCarouselInst->m_nextPlayPos += feedDataLength;
 }
 
-void MusicCarousel::addMusicFile(fs::path path){
-    m_musics.push_back(make_shared<MusicData>(path));
+void MusicCarousel::addMusicResource(string resourceId){
+    m_musics.push_back(make_shared<MusicData>(resourceId));
 }
 
 void MusicCarousel::play(void) {
@@ -90,15 +81,29 @@ void MusicCarousel::play(void) {
 
     if (m_musics[m_currentMusicIndex]->m_audioStream == nullptr){
         // 未加载过该音乐文件
-        if (!SDL_LoadWAV(m_musics[m_currentMusicIndex]->m_musicFile.string().c_str(),
+        shared_ptr<Resource> resource = ResourceLoader::getInstance()->getResource(m_musics[m_currentMusicIndex]->m_musicResourceId);
+        if (resource == nullptr || resource->resourceType != ResourceLoader::RT_MUSIC
+            || resource->pMem == nullptr) {
+
+            SDL_Log("LoadFromResource Error: '%s' is not a music\n", m_musics[m_currentMusicIndex]->m_musicResourceId.c_str());
+            return;
+        }
+
+        SDL_IOStream *resourceStream = SDL_IOFromConstMem(resource->pMem.get(), resource->resourceSize);
+        if( resourceStream == nullptr){
+            SDL_Log("Create IOStream Error: %s\n", SDL_GetError());
+            return;
+        }
+
+        if (!SDL_LoadWAV_IO(resourceStream, true,
                         &m_musics[m_currentMusicIndex]->m_audioSpec,
                         &m_musics[m_currentMusicIndex]->m_audioBuffer,
                         &m_musics[m_currentMusicIndex]->m_audioLength))
         {
-            SDL_Log("Couldn't load %s: %s", m_musics[m_currentMusicIndex]->m_musicFile.string().c_str(), SDL_GetError());
+            SDL_Log("Couldn't load %s: %s", m_musics[m_currentMusicIndex]->m_musicResourceId.c_str(), SDL_GetError());
             return;
         }
-        SDL_Log("Loaded wave file: %s, music buffer address = %0x", m_musics[m_currentMusicIndex]->m_musicFile.string().c_str(), m_musics[m_currentMusicIndex]->m_audioBuffer);
+        SDL_Log("Loaded wave resource: %s, music buffer address = %0x", m_musics[m_currentMusicIndex]->m_musicResourceId.c_str(), m_musics[m_currentMusicIndex]->m_audioBuffer);
         SDL_Log("audio length = %d", m_musics[m_currentMusicIndex]->m_audioLength);
     }
 

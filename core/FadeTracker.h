@@ -1,4 +1,4 @@
-#ifndef FadeTrackerH
+﻿#ifndef FadeTrackerH
 #define FadeTrackerH
 
 #include <SDL3/SDL.h>

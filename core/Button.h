@@ -1,4 +1,4 @@
-#ifndef ButtonH
+﻿#ifndef ButtonH
 #define ButtonH
 #include <functional>
 #include "Control.h"

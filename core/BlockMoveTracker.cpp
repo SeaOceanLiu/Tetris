@@ -1,4 +1,4 @@
-#include "BlockMoveTracker.h"
+﻿#include "BlockMoveTracker.h"
 
 BlockMoveTracker::BlockMoveTracker(shared_ptr<Tracker> tracker, SPoint maxOffset):
     TrackerDecorator(tracker),

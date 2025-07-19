@@ -1,4 +1,4 @@
-#ifndef TimerH
+﻿#ifndef TimerH
 #define TimerH
 #include <functional> // std::function
 #include <SDL3/SDL.h>

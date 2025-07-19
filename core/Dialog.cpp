@@ -5,7 +5,7 @@ Dialog::Dialog(Control* parent, SRect rect, float xScale, float yScale):
     // 调用父类的构造函数，初始化Panel对象
     Panel(parent, rect, xScale, yScale),
     m_title("Dialog"),
-    m_currentLine(0),
+    m_currentPage(0),
     m_titleBar(nullptr),
     m_okButton(nullptr),
     m_cancelButton(nullptr)
@@ -15,9 +15,12 @@ Dialog::Dialog(Control* parent, SRect rect, float xScale, float yScale):
 
     // 添加右上角关闭按钮
     addControl(ButtonBuilder(this, SRect(m_rect.width - ConstDef::WINDOW_TITLE_HEIGHT, 0, ConstDef::WINDOW_TITLE_HEIGHT, ConstDef::WINDOW_TITLE_HEIGHT))
-                .setBtnNormalStateActor(    make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "cross_up.png", true))
-                .setBtnHoverStateActor(     make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "cross_over.png", true))
-                .setBtnPressedStateActor(   make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "cross_down.png", true))
+                // .setBtnNormalStateActor(    make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "cross_up.png", true))
+                // .setBtnHoverStateActor(     make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "cross_over.png", true))
+                // .setBtnPressedStateActor(   make_shared<Actor>(this, ConstDef::pathPrefix / "images" / "cross_down.png", true))
+                .setBtnNormalStateActor(    make_shared<Actor>(this, ResourceLoader::RID_cross_up_png, true))
+                .setBtnHoverStateActor(     make_shared<Actor>(this, ResourceLoader::RID_cross_over_png, true))
+                .setBtnPressedStateActor(   make_shared<Actor>(this, ResourceLoader::RID_cross_down_png, true))
                 .setOnClick(std::bind(&Dialog::onClose, this, std::placeholders::_1))
                 .setTransparent(false)
                 .build());
@@ -48,22 +51,16 @@ Dialog::Dialog(Control* parent, SRect rect, float xScale, float yScale):
                 .setCaptionSize(8)
                 .setOnClick(std::bind(&Dialog::onOk, this, std::placeholders::_1))
                 .build());
-    SRect clientRect = {ConstDef::FONT_MARGIN,
+    m_clientRect = {ConstDef::FONT_MARGIN,
                         titleRect.height + ConstDef::FONT_MARGIN,
                         m_rect.width - ConstDef::FONT_MARGIN * 2,
                         cancelRect.top - titleRect.height - ConstDef::FONT_MARGIN * 2};
-    addControl(m_screenText = LabelBuilder(this, clientRect)
-                .setFontSize(6)
-                .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
-                .setAlignmentMode(AlignmentMode::AM_TOP_LEFT)
-                .setFont(FontName::MapleMono_NF_CN_Regular)
-                .setCaption("Text")
-                .build());
 }
 
 void Dialog::draw(void){
     if (m_visible){
         Panel::draw();
+        m_screenText[m_currentPage]->draw();
     }
 }
 
@@ -77,17 +74,15 @@ bool Dialog::handleEvent(shared_ptr<Event> event){
 }
 
 void Dialog::onClose(shared_ptr<Button> btn) {
+    m_screenText[m_currentPage]->hide();
     hide();
 }
 void Dialog::onOk(shared_ptr<Button> btn){
-    if (m_currentLine + Dialog::TEXT_LINE_COUNT < m_texts.size()) {
-        m_currentLine += Dialog::TEXT_LINE_COUNT;
-        m_onScreenText = "";
+    m_screenText[m_currentPage]->hide();
 
-        for (int i = m_currentLine; i < m_currentLine + Dialog::TEXT_LINE_COUNT && i < m_texts.size(); i++) {
-            m_onScreenText += m_texts[i] + "\n";
-        }
-        m_screenText->setCaption(m_onScreenText);
+    if (m_currentPage + 1 < m_screenText.size()) {
+        m_currentPage++;
+        m_screenText[m_currentPage]->show();
     } else {
         hide();
     }
@@ -97,12 +92,8 @@ void Dialog::onCancel(shared_ptr<Button> btn){
 }
 
 void Dialog::show(void){
-    m_currentLine = 0;
-    m_onScreenText = "";
-    for (int i = m_currentLine; i < m_currentLine + Dialog::TEXT_LINE_COUNT && i < m_texts.size(); i++) {
-        m_onScreenText += m_texts[i] + "\n";
-    }
-    m_screenText->setCaption(m_onScreenText);
+    m_currentPage = 0;
+    m_screenText[m_currentPage]->show();
 
     Panel::show();
 
@@ -132,7 +123,7 @@ DialogBuilder& DialogBuilder::setTitle(string title){
     }
     m_dialog->addControl(m_dialog->m_titleBar = PanelBuilder(m_dialog.get(), SRect(0, 0, m_dialog->m_rect.width - ConstDef::WINDOW_TITLE_HEIGHT, ConstDef::WINDOW_TITLE_HEIGHT))
                                                     .addControl(LabelBuilder(m_dialog->m_titleBar.get(), SRect(0, 0, m_dialog->m_rect.width - ConstDef::WINDOW_TITLE_HEIGHT, ConstDef::WINDOW_TITLE_HEIGHT))
-                                                                    .setFontSize(ConstDef::WINDOW_TITLE_HEIGHT - 4)
+                                                                    .setFontSize((int)ConstDef::WINDOW_TITLE_HEIGHT - 4)
                                                                     .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
                                                                     .setAlignmentMode(AlignmentMode::AM_CENTER)
                                                                     .setFont(FontName::HarmonyOS_Sans_SC_Regular)
@@ -149,5 +140,24 @@ DialogBuilder& DialogBuilder::addText(string text){
 }
 
 shared_ptr<Dialog> DialogBuilder::build(void){
+    int currentLine = 0;
+    string onePageText;
+
+    while (currentLine + Dialog::TEXT_LINE_COUNT <= m_dialog->m_texts.size()) {
+        onePageText = "";
+        for (int i = currentLine; i < currentLine + Dialog::TEXT_LINE_COUNT && i < m_dialog->m_texts.size(); i++) {
+            onePageText += m_dialog->m_texts[i] + "\n";
+        }
+        currentLine += Dialog::TEXT_LINE_COUNT;
+        shared_ptr<Label> onePage = LabelBuilder(m_dialog.get(), m_dialog->m_clientRect)
+                    .setFontSize(6)
+                    .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
+                    .setAlignmentMode(AlignmentMode::AM_TOP_LEFT)
+                    .setFont(FontName::MapleMono_NF_CN_Regular)
+                    .setCaption(onePageText)
+                    .build();
+        onePage->hide();
+        m_dialog->m_screenText.push_back(onePage);
+    }
     return m_dialog;
 }

@@ -1,4 +1,4 @@
-#ifndef ActorH
+﻿#ifndef ActorH
 #define ActorH
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
@@ -13,10 +13,13 @@ protected:
 public:
     Actor(Control *parent, float xScale=1.0f, float yScale=1.0f);
     Actor(Control *parent, fs::path filePath, bool matchParentRect=false, float xScale=1.0f, float yScale=1.0f);
+    Actor(Control *parent, string resourceId, bool matchParentRect=false, float xScale=1.0f, float yScale=1.0f);
     Actor(const Actor& other);
     Actor& operator=(const Actor& other);
     void loadFromFile(fs::path filePath) override;
+    void loadFromResource(string resourceId) override;
     void setParent(Control *parent) override;   // 由于要考虑匹配父控件绘图区域大小，所以需要重载该函数，以使其在设备父控件时匹配父控件绘图区域大小
+    void loadTextureFromSurface(SDL_Surface *surface);
 };
 
 class ActorBuilder{

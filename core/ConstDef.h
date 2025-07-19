@@ -150,7 +150,8 @@ class ConstDef{
 public:
     static SSize  DEFAULT_ARENA_SIZE;
     static SSize  DEFAULT_BG_SIZE;
-    static fs::path pathPrefix; // 资源文件路径前缀
+    static fs::path pathPrefix;     // 资源文件路径前缀
+    static fs::path workforldPath;  // 可读写的工作目录路径
 
     static float  DEFAULT_SPACE_BETWEEN_PG_AND_HINT ;   // 提示方块与游戏区域之间的间距
     static float  DEFAULT_FONT_MARGIN               ;   // 字体与边框之间的间距
@@ -203,7 +204,8 @@ public:
     static int    HINT_PLACE_END_COL         ;  // 提示方块结束列
 
     static Uint64 DEFAULT_UPDATE_MS_INTERVAL ;   // update的时间间隔，单位毫秒
-    static Uint64 DEFAULT_BTN_MS_INTERVAL    ;   // 按钮速度时间间隔，单位毫秒
+    static Uint64 DEFAULT_BTN_MS_INTERVAL    ;   // 按钮去抖动的时间间隔，单位毫秒
+    static Uint64 DEFAULT_BTN_MS_REPEAT      ;   // 按钮自动重复的时间间隔，单位毫秒
     static Uint64 CURRENT_MS_TIMESTAMP       ;   // 当前时间戳，单位毫秒
 
     static int    CMB_DRAW_BIT               ;   // define CHECK_MASK_BIT

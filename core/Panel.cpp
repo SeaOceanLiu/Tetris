@@ -1,4 +1,4 @@
-#include "Panel.h"
+﻿#include "Panel.h"
 
 Panel::Panel(Control *parent, SRect rect, float xScale, float yScale):
     ControlImpl(parent, xScale, yScale),

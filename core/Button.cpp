@@ -1,4 +1,4 @@
-#include "Button.h"
+﻿#include "Button.h"
 Button::Button(Control *parent, SRect rect, float xScale, float yScale):
     ControlImpl(parent, xScale, yScale),
     m_state(ButtonState::Normal),
@@ -180,7 +180,7 @@ Button& Button::setCaption(string caption){
         m_caption = LabelBuilder(this, {0, 0, m_rect.width, m_rect.height})
                             .setFont(FontName::HarmonyOS_Sans_SC_Regular)
                             .setAlignmentMode(AlignmentMode::AM_CENTER)
-                            .setFontSize(m_captionSize)
+                            .setFontSize((int)m_captionSize)
                             .setCaption(m_captionText)
                             .build();
     }
@@ -189,7 +189,7 @@ Button& Button::setCaption(string caption){
 Button& Button::setCaptionSize(float size){
     m_captionSize = size;
     if (m_caption != nullptr){
-        m_caption->setFontSize(m_captionSize);
+        m_caption->setFontSize((int)m_captionSize);
     }
     return *this;
 }

@@ -1,4 +1,4 @@
-#include "PhotoCarousel.h"
+﻿#include "PhotoCarousel.h"
 
 PhotoCarousel::PhotoCarousel(Control *parent, Uint64 frameMSDuration, SRect targetRect, float xScale, float yScale):
     ControlImpl(parent, xScale, yScale),
@@ -42,6 +42,18 @@ PhotoCarousel& PhotoCarousel::addPhoto(fs::path filePath, bool matchParentRect){
                         .build());
     return *this;
 }
+PhotoCarousel& PhotoCarousel::addPhoto(string resourceId, bool matchParentRect){
+    m_photos.push_back(Animation(this, m_frameMSDuration)
+                        .addFrame(ActorGroup(this)
+                                        .addActor({0, 0}, make_shared<Actor>(this, resourceId, matchParentRect))
+                                        .build())
+                        .setTracker(m_fadeTracker)
+                        .setFrameMSDuration(m_frameMSDuration)
+                        .setInitialPos(0, 0)
+                        .build());
+    return *this;
+}
+
 PhotoCarousel& PhotoCarousel::addPhotosInPath(fs::path filePath, string extName, bool matchParentRect){
     unique_ptr<TinyFS> fsystem = make_unique<TinyFS>();
     auto flist = fsystem->getFileList(filePath, extName);
@@ -86,12 +98,6 @@ shared_ptr<PhotoCarousel> PhotoCarousel::build(void){
     newPhotoCarouse->setFadeTracker(getFadeTracker());
     return newPhotoCarouse;
 }
-
-// void PhotoCarousel::setRect(SRect rect) {
-//     for(auto animation : m_photos){
-//         animation->setRect(rect);
-//     }
-// }
 
 void PhotoCarousel::start(void){
     if (m_photos.empty()) return;
@@ -147,7 +153,7 @@ void PhotoCarousel::next(void){
 
 void PhotoCarousel::previous(void){
     m_fadeTracker->setFadeOperation(FadeOperation::FadeOut);
-    m_nextIdx = (m_currentIdx - 1 + m_photos.size()) % m_photos.size();
+    m_nextIdx = (m_currentIdx - 1 + (int)m_photos.size()) % m_photos.size();
 }
 
 
@@ -158,6 +164,10 @@ PhotoCarouselBuilder::PhotoCarouselBuilder(Control *parent, Uint64 frameMSDurati
 }
 PhotoCarouselBuilder& PhotoCarouselBuilder::addPhoto(fs::path filePath, bool matchParentRect){
     m_photoCarousel->addPhoto(filePath, matchParentRect);
+    return *this;
+}
+PhotoCarouselBuilder& PhotoCarouselBuilder::addPhoto(string resourceId, bool matchParentRect){
+    m_photoCarousel->addPhoto(resourceId, matchParentRect);
     return *this;
 }
 PhotoCarouselBuilder& PhotoCarouselBuilder::addPhotosInPath(fs::path filePath, string extName, bool matchParentRect){

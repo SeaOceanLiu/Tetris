@@ -1,4 +1,4 @@
-#include "BrickPool.h"
+﻿#include "BrickPool.h"
 
 BrickPool::BrickPool(Control *parent, fs::path pathPrefix, float xScale, float yScale):
     ControlImpl(parent, xScale, yScale),
@@ -6,8 +6,8 @@ BrickPool::BrickPool(Control *parent, fs::path pathPrefix, float xScale, float y
     m_maxBrickIdx(0)
 {
     for(int brickIdx = 1; brickIdx < 10; brickIdx++){
-        std::string brickPath = (pathPrefix / "images" / "bitmap").string() + std::to_string(brickIdx) + ".bmp";
-        shared_ptr<Actor> brick = make_shared<Actor>(this, brickPath.c_str(), false, xScale, yScale);
+        string brickResourceId = "images/bitmap" + to_string(brickIdx) + ".bmp";
+        shared_ptr<Actor> brick = make_shared<Actor>(this, brickResourceId, false, xScale, yScale);
         brick->setAnchorPointTopLeft();
         m_bricks.push_back(brick);
     }
@@ -48,7 +48,7 @@ void BrickPool::draw(SPoint pos, int brickIdx, Uint8 alpha){
 }
 
 int BrickPool::getBrickCount(void){
-    return m_bricks.size();
+    return (int)m_bricks.size();
 }
 
 int BrickPool::getMinBrickIdx(void){

@@ -1,0 +1,135 @@
+{
+    // 资源版本号或SHA256值
+    "resourceVersion": "1.0.0",
+
+    // 方块配置
+    "blockDefine": "config/RBlock.jsonc",
+
+    // 字体
+    "fonts": [
+        "fonts/Asul-Bold.ttf",
+        "fonts/HarmonyOS_Sans_SC_Regular.ttf",
+        "fonts/HarmonyOS_Sans_SC_Thin.ttf",
+        "fonts/MapleMono-NF-CN-Regular.ttf",
+        "fonts/Muyao-Softbrush.ttf",
+        "fonts/Quando-Regular.ttf"
+    ],
+
+    // 图片
+    "images": [
+        "images/bitmap1.bmp",
+        "images/bitmap2.bmp",
+        "images/bitmap3.bmp",
+        "images/bitmap4.bmp",
+        "images/bitmap5.bmp",
+        "images/bitmap6.bmp",
+        "images/bitmap7.bmp",
+        "images/bitmap8.bmp",
+        "images/bitmap9.bmp",
+        "images/cross_down.png",
+        "images/cross_over.png",
+        "images/cross_up.png",
+        "images/down.png",
+        "images/down_hover.png",
+        "images/down_pressed.png",
+        "images/icon.ico",
+        "images/icon.png",
+        "images/left.png",
+        "images/left_hover.png",
+        "images/left_pressed.png",
+        "images/pause.png",
+        "images/play.png",
+        "images/rblock.png",
+        "images/right.png",
+        "images/right_hover.png",
+        "images/right_pressed.png"
+    ],
+
+    // 背景
+    "background": [
+        "background/2022_1204_15565500_mh1670141573251.jpg",
+        "background/IMG_20200903_202237.jpg",
+        "background/IMG_20200920_100257.jpg",
+        "background/IMG_20200920_100819.jpg",
+        "background/IMG_20201002_184914.jpg",
+        "background/IMG_20201003_201713.jpg",
+        "background/IMG_20201004_084644.jpg",
+        "background/IMG_20201004_084801.jpg",
+        "background/IMG_20201004_085622.jpg",
+        "background/IMG_20201004_183444.jpg",
+        "background/IMG_20201018_145828.jpg",
+        "background/IMG_20201025_180928.jpg",
+        "background/mmexport1599240022745.jpg",
+        "background/mmexport1599449092788.jpg",
+        "background/mmexport1599449096347.jpg"
+    ],
+
+    // 动画
+    "animations": [
+        "animations/rotate/rotate000.png",
+        "animations/rotate/rotate005.png",
+        "animations/rotate/rotate010.png",
+        "animations/rotate/rotate015.png",
+        "animations/rotate/rotate020.png",
+        "animations/rotate/rotate025.png",
+        "animations/rotate/rotate030.png",
+        "animations/rotate/rotate035.png",
+        "animations/rotate/rotate040.png",
+        "animations/rotate/rotate045.png",
+        "animations/rotate/rotate050.png",
+        "animations/rotate/rotate055.png",
+        "animations/rotate/rotate060.png",
+        "animations/rotate/rotate065.png",
+        "animations/rotate/rotate070.png",
+        "animations/rotate/rotate075.png",
+        "animations/rotate/rotate080.png",
+        "animations/rotate/rotate085.png",
+        "animations/rotate/rotate090.png",
+        "animations/rotate/rotate095.png",
+        "animations/rotate/rotate100.png",
+        "animations/rotate/rotate105.png",
+        "animations/rotate/rotate110.png",
+        "animations/rotate/rotate115.png",
+        "animations/rotate/rotate120.png",
+        "animations/rotate/rotate125.png",
+        "animations/rotate/rotate130.png",
+        "animations/rotate/rotate135.png",
+        "animations/rotate/rotate140.png",
+        "animations/rotate/rotate145.png",
+        "animations/rotate/rotate150.png",
+        "animations/rotate/rotate155.png",
+        "animations/rotate/rotate160.png",
+        "animations/rotate/rotate165.png",
+        "animations/rotate/rotate170.png",
+        "animations/rotate/rotate175.png",
+        "animations/rotate/rotate180.png"
+    ],
+
+    // 背景音乐
+    "music": [
+        "music/3 am West End.wav",
+        "music/Beat One.wav",
+        "music/Fright Night Twist.wav",
+        "music/Goodnightmare.wav",
+        "music/Palm and Soul.wav",
+        "music/Take the Ride.wav"
+    ],
+
+    // 音效
+    "sounds": [
+        "sounds/Bomb.wav",
+        "sounds/BombExplode.wav",
+        "sounds/CantDo.wav",
+        "sounds/Excellent.wav",
+        "sounds/GameOver.wav",
+        "sounds/Go.wav",
+        "sounds/Good.wav",
+        "sounds/LevelComplete.wav",
+        "sounds/Move.wav",
+        "sounds/MultiShot.wav",
+        "sounds/Pierce.wav",
+        "sounds/Save.wav",
+        "sounds/Speedup.wav",
+        "sounds/Warning.wav"
+    ]
+}

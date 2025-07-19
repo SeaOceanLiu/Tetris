@@ -23,6 +23,17 @@ AudioSuite::AudioSuite(Control *parent, fs::path wavFilePath, float xScale, floa
 {
     setFile(wavFilePath);
 }
+AudioSuite::AudioSuite(Control *parent, string resourceId, float xScale, float yScale):
+    ControlImpl(parent, xScale, yScale),
+    m_isLoaded(false),
+    m_isPlaying(false),
+    m_audioStream(nullptr),
+    m_nextPlayPos(0),
+    m_audioLength(0),
+    m_audioBuffer(nullptr)
+{
+    setResource(resourceId);
+}
 AudioSuite::~AudioSuite() {
     if (m_isPlaying) {
         SDL_PauseAudioStreamDevice(m_audioStream);
@@ -111,6 +122,34 @@ void AudioSuite::setFile(fs::path wavFilePath) {
     SDL_Log("audio length = %d", m_audioLength);
 }
 
+void AudioSuite::setResource(string resourceId){
+    shared_ptr<Resource> resource = ResourceLoader::getInstance()->getResource(resourceId);
+    if (resource == nullptr || resource->resourceType != ResourceLoader::RT_SOUNDS
+        || resource->pMem == nullptr) {
+
+        SDL_Log("LoadFromResource Error: '%s' is not an images\n", resourceId.c_str());
+        return;
+    }
+
+    if (m_isLoaded) {
+        if (m_audioBuffer) {
+            SDL_free(m_audioBuffer);
+            m_audioBuffer = nullptr;
+        }
+        m_isLoaded = false;
+    }
+
+    SDL_IOStream *resourceStream = SDL_IOFromConstMem(resource->pMem.get(), resource->resourceSize);
+    m_isLoaded = SDL_LoadWAV_IO(resourceStream, true, &m_audioSpec, &m_audioBuffer, &m_audioLength);
+    if (!m_isLoaded)
+    {
+        SDL_Log("Couldn't load %s: %s", resourceId.c_str(), SDL_GetError());
+        return;
+    }
+    SDL_Log("Loaded resource wave file: %s, audio buffer address = %0x", resourceId.c_str(), m_audioBuffer);
+    SDL_Log("audio length = %d", m_audioLength);
+}
+
 void SDLCALL AudioSuite::sharedFeedTheAudioStream(void *userdata, SDL_AudioStream *astream, int additional_amount, int total_amount) {
     /*
     total_amount:       how much data the audio stream is eating right now
@@ -145,26 +184,3 @@ void SDLCALL AudioSuite::sharedFeedTheAudioStream(void *userdata, SDL_AudioStrea
         audioSuiteInst->m_nextPlayPos += additional_amount;
     }
 }
-
-// void AudioSuite::SDLCALL FeedTheAudioStreamMore(void *userdata, SDL_AudioStream *astream, int additional_amount, int total_amount) {
-//     /*
-//     total_amount:       how much data the audio stream is eating right now
-//     additional_amount:  how much more it needs than what it currently has queued (which might be zero!). You can supply any amount of data here;
-//                         it will take what it needs and use the extra later.
-//                         If you don't give it enough, it will take everything and then feed silence to the hardware for the rest.
-//                         Ideally, though, we always give it what it needs and no extra, so we aren't buffering more than necessary.
-//     */
-//     AudioSuite *audioSuiteInst = (AudioSuite *)userdata;
-//     if (audioSuiteInst->m_nextPlayPos >= audioSuiteInst->m_audioLength) {
-//         audioSuiteInst->m_isPlaying = SDL_PauseAudioStreamDevice(astream);
-//     }
-//     if (audioSuiteInst->m_nextPlayPos + additional_amount >= audioSuiteInst->m_audioLength) {
-//         /* we've reached the end of the audio data. Stop feeding the stream. */
-//         SDL_PutAudioStreamData(astream, audioSuiteInst->m_audioBuffer + audioSuiteInst->m_nextPlayPos, audioSuiteInst->m_audioLength - audioSuiteInst->m_nextPlayPos);
-//         audioSuiteInst->m_nextPlayPos = audioSuiteInst->m_audioLength;
-//     } else {
-//         /* we still have more audio data to feed. */
-//         SDL_PutAudioStreamData(astream, audioSuiteInst->m_audioBuffer + audioSuiteInst->m_nextPlayPos, additional_amount);
-//         audioSuiteInst->m_nextPlayPos += additional_amount;
-//     }
-// }

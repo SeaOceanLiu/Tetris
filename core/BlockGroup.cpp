@@ -1,29 +1,42 @@
-#include "BlockGroup.h"
+﻿#include "BlockGroup.h"
 
-BlockGroup::BlockGroup(Control *parent, fs::path pathPrefix):
+BlockGroup::BlockGroup(Control *parent, string resourceId):
     ControlImpl(parent),
     m_pJsonFileContent(nullptr),
     m_iRowCount(0),
     m_iColCount(0)
 {
-    fs::path filePath = pathPrefix / "config" / "RBlock.jsonc";
-    SDL_Log("Open json file: %s", filePath.string().c_str());
-    SDL_IOStream *jsonFIleStream = SDL_IOFromFile(filePath.string().c_str(), "r");
-    if (jsonFIleStream == nullptr) {
-        SDL_Log("Open json file error: %s", SDL_GetError());
-        throw "Open xml file error";
+    shared_ptr<Resource> resource = ResourceLoader::getInstance()->getResource(resourceId);
+    if (resource == nullptr || resource->resourceType != ResourceLoader::RT_CONFIG
+        || resource->pMem == nullptr) {
+
+        SDL_Log("LoadFromResource Error: '%s' is not a config file\n", resourceId.c_str());
+        return;
+    }
+    SDL_IOStream *jsonResourceStream = SDL_IOFromConstMem(resource->pMem.get(), resource->resourceSize);
+
+    loadFromStream(jsonResourceStream);
+
+    SDL_CloseIO(jsonResourceStream);
+}
+void BlockGroup::loadFromStream(SDL_IOStream *stream){
+    if (stream == nullptr) {
+        SDL_Log("LoadFromStream Error: stream is nullptr\n");
+        return;
     }
 
-    size_t iFileLen = SDL_GetIOSize(jsonFIleStream);
+    size_t iFileLen = SDL_GetIOSize(stream);
     if (iFileLen <= 0) {
-        SDL_Log("Get xml file size error: %s", SDL_GetError());
-        throw "Get xml file size error";
+        SDL_Log("Get RBlock.jsonc file size error: %s", SDL_GetError());
+        throw "Get RBlock.jsonc file size error";
+        return;
     }
     m_pJsonFileContent = new char[iFileLen + 1];
     m_pJsonFileContent[iFileLen] = '\0';
-    if (SDL_ReadIO(jsonFIleStream, (void *)m_pJsonFileContent, iFileLen) != iFileLen) {
-        SDL_Log("Read xml file content error: %s", SDL_GetError());
-        throw "Read xml file content error";
+    if (SDL_ReadIO(stream, (void *)m_pJsonFileContent, iFileLen) != iFileLen) {
+        SDL_Log("Read RBlock.jsonc file content error: %s", SDL_GetError());
+        throw "Read RBlock.jsonc file content error";
+        return;
     }
     m_jsonBLockGroup = json::parse(m_pJsonFileContent, nullptr, false, true);
 
@@ -86,6 +99,25 @@ BlockGroup::BlockGroup(Control *parent, fs::path pathPrefix):
         m_blockGroups[groupId] = newBlockGroup;
     }
     SDL_Log("Total loaded %zu block group", m_blockGroups.size());
+}
+BlockGroup::BlockGroup(Control *parent, fs::path pathPrefix):
+    ControlImpl(parent),
+    m_pJsonFileContent(nullptr),
+    m_iRowCount(0),
+    m_iColCount(0)
+{
+    fs::path filePath = pathPrefix / "config" / "RBlock.jsonc";
+    SDL_Log("Open json file: %s", filePath.string().c_str());
+    SDL_IOStream *jsonFIleStream = SDL_IOFromFile(filePath.string().c_str(), "r");
+    if (jsonFIleStream == nullptr) {
+        SDL_Log("Open RBlock.jsonc file error: %s", SDL_GetError());
+        throw "Open RBlock.jsonc file error";
+        return;
+    }
+
+    loadFromStream(jsonFIleStream);
+
+    SDL_CloseIO(jsonFIleStream);
 }
 BlockGroup::~BlockGroup() {
     if (m_pJsonFileContent != nullptr) {
@@ -151,7 +183,7 @@ void BlockGroup::generateRoteateBody(shared_ptr<BlockBodyInfo> sourceBodyInfo, s
 
 int BlockGroup::getBlockCount(void)
 {
-    return m_blockGroups.size();
+    return (int)m_blockGroups.size();
 }
 
 int BlockGroup::getRowCount(void)

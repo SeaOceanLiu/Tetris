@@ -1,4 +1,4 @@
-#ifndef BlockMoveTrackerH
+﻿#ifndef BlockMoveTrackerH
 #define BlockMoveTrackerH
 
 #include <SDL3/SDL.h>

@@ -1,4 +1,4 @@
-#include "Control.h"
+﻿#include "Control.h"
 ControlImpl::ControlImpl(Control *parent, float xScale, float yScale):
     // m_weakThis(this),
     // m_sharedThis(nullptr),
@@ -96,23 +96,6 @@ bool ControlImpl::handleEvent(shared_ptr<Event> event){
     return false;
 }
 
-// shared_ptr<Control> ControlImpl::addControl(shared_ptr<Control> child){
-//     if (child == nullptr) return child;
-
-//     // 如果控件已经存在，则直接返回
-//     if (std::find(m_children.begin(), m_children.end(), child) != m_children.end()){
-//         return child;
-//     }
-//     m_children.push_back(child);
-
-//     child->setParent(this);
-//     child->setRenderer(getRenderer());
-//     child->setScaleX(m_xScale);
-//     child->setScaleY(m_yScale);
-
-//     return child;
-// }
-
 Control& ControlImpl::addControl(shared_ptr<Control> child){
     if (child == nullptr) return *this;
 
@@ -192,7 +175,9 @@ SDL_Renderer* ControlImpl::getRenderer(void){
     if (m_parent != nullptr){
         m_renderer = m_parent->getRenderer();
     } else {
-        throw std::runtime_error("No renderer found!");
+        SDL_Log("No renderer found!");
+        // throw std::runtime_error("No renderer found!");
+        return nullptr;
     }
     return m_renderer;
 }
@@ -234,7 +219,8 @@ void ControlImpl::inheritRenderer(void) {
     if (m_renderer == nullptr){
         if (m_parent == nullptr) {
             SDL_Log("ControlImpl::draw() Error: m_renderer is nullptr and can't get it from m_parent for is's nullptr too!");
-            throw("ControlImpl::draw() Error: m_renderer is nullptr and can't get it from m_parent for is's nullptr too!");
+            // throw("ControlImpl::draw() Error: m_renderer is nullptr and can't get it from m_parent for is's nullptr too!");
+            return;
         }
         m_renderer = m_parent->getRenderer();
     }

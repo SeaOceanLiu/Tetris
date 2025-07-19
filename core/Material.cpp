@@ -1,4 +1,4 @@
-#include "Material.h"
+﻿#include "Material.h"
 
 Material::Material(Control *parent, float xScale, float yScale):
     ControlImpl(parent, xScale, yScale),
@@ -66,6 +66,7 @@ void Material::draw(float posx, float posy, Uint8 alpha){
 
     if(!SDL_RenderTexture(getRenderer(), m_texture, nullptr, &drawRectF)){
         SDL_Log("SDL_RenderTexture Error: %s", SDL_GetError());
+        throw(SDL_GetError());
     }
 }
 

@@ -1,10 +1,12 @@
-#include "ConstDef.h"
+﻿#include "ConstDef.h"
 SSize ConstDef::DEFAULT_ARENA_SIZE = {200, 606};
 SSize ConstDef::DEFAULT_BG_SIZE = {720, 1280};
 #ifndef SDL_PLATFORM_WINDOWS
 fs::path ConstDef::pathPrefix;
+fs::path ConstDef::workforldPath = ConstDef::pathPrefix;
 #else
 fs::path ConstDef::pathPrefix = fs::path(std::string(SDL_GetBasePath()) + "assets");
+fs::path ConstDef::workforldPath = ConstDef::pathPrefix;
 #endif
 
 
@@ -122,8 +124,9 @@ int      ConstDef::MAX_FAST_SPEED              = 19;
 int      ConstDef::PG_START_ROW                = 5;
 int      ConstDef::HINT_PLACE_START_COL        = 3;
 int      ConstDef::HINT_PLACE_END_COL          = 7;
-Uint64   ConstDef::DEFAULT_UPDATE_MS_INTERVAL  =  200;  // 方块下落的最小时间片，单位毫秒
-Uint64   ConstDef::DEFAULT_BTN_MS_INTERVAL     = 100;   // 按钮响应的时间间隔，单位毫秒
+Uint64   ConstDef::DEFAULT_UPDATE_MS_INTERVAL  = 200;   // 方块下落的最小时间片，单位毫秒
+Uint64   ConstDef::DEFAULT_BTN_MS_INTERVAL     = 200;   // 按钮去抖动的时间间隔，单位毫秒
+Uint64   ConstDef::DEFAULT_BTN_MS_REPEAT       =  50;   // 按钮自动重复的时间间隔，单位毫秒
 Uint64   ConstDef::CURRENT_MS_TIMESTAMP        = 0;     // 当前时间戳，单位毫秒
 int      ConstDef::CMB_DRAW_BIT                = 0x01;
 int      ConstDef::CMB_CHECK_DOWN              = 0x02;

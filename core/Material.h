@@ -42,8 +42,8 @@ public:
 
 
     void draw(void) override;
-    void draw(SPoint pos, Uint8 alpha=SDL_ALPHA_OPAQUE);
-    void draw(float x, float y, Uint8 alpha=SDL_ALPHA_OPAQUE);
+    virtual void draw(SPoint pos, Uint8 alpha=SDL_ALPHA_OPAQUE);
+    virtual void draw(float x, float y, Uint8 alpha=SDL_ALPHA_OPAQUE);
 
     void setAnchorPoint(float x, float y);
     void setAnchorPoint(SPoint &anchorPoint);

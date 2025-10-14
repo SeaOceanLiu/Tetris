@@ -7,6 +7,13 @@ Actor::Actor(Control *parent, float xScale, float yScale):
     setParent(parent);
 }
 
+Actor::Actor(Control *parent, bool matchParentRect, float xScale, float yScale):
+    Material(parent, xScale, yScale),
+    m_matchParentRect(matchParentRect)
+{
+    // setParent(parent);
+}
+
 Actor::Actor(Control *parent, fs::path filePath, bool matchParentRect, float xScale, float yScale):
     Material(parent, filePath, xScale, yScale),
     m_matchParentRect(matchParentRect)
@@ -61,7 +68,7 @@ void Actor::loadFromResource(string resourceId) {
         SDL_Log("Create IOStream Error: %s\n", SDL_GetError());
         return;
     }
-    m_surface = IMG_Load_IO(resourceStream, true);
+    m_surface = IMG_Load_IO(resourceStream, true);  // 这里传递了true给closeio参数，所以完成图片载入后，会自动关闭resourceStream
     if (m_surface == nullptr) {
         SDL_Log("loadFromResource Error: %s\n", SDL_GetError());
         return;

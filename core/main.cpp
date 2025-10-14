@@ -9,6 +9,7 @@
 #ifdef SDL_PLATFORM_WINDOWS
     #include "DebugTrace.h"
 #endif
+#include "MainWindow.h"
 #include "AudioSuite.h"
 #include "Actor.h"
 #include "Screen.h"
@@ -46,23 +47,9 @@
     #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR , LOG_TAG, __VA_ARGS__)
 #endif
 
-#define INITIAL_WIDTH  200 //横向像素个数
-#define INITIAL_HEIGHT 606 //纵向像素个数
 
-#define INITIAL_BG_WIDTH  720 //横向像素个数
-#define INITIAL_BG_HEIGHT 1280 //纵向像素个数
-
-// #define SCREEN_WIDTH  200 //横向像素个数
-// #define SCREEN_HEIGHT 606 //纵向像素个数
-#define SCREEN_WIDTH  720 //横向像素个数
-#define SCREEN_HEIGHT 1280 //纵向像素个数
-// #define SCREEN_WIDTH  1344 //横向像素个数
-// #define SCREEN_HEIGHT 2772 //纵向像素个数
-// #define SCREEN_WIDTH  896 //横向像素个数
-// #define SCREEN_HEIGHT 1848 //纵向像素个数
-
-float g_displayWidth = SCREEN_WIDTH;
-float g_displayHeight = SCREEN_HEIGHT;
+// float g_displayWidth = SCREEN_WIDTH;
+// float g_displayHeight = SCREEN_HEIGHT;
 
 #ifdef SDL_PLATFORM_WINDOWS
 #ifdef _DEBUG
@@ -84,10 +71,10 @@ void debugTraceOutput(void *userdata, int category, SDL_LogPriority priority, co
 #endif
 }
 /* We will use this renderer to draw into this window every frame. */
-static SDL_Window *window = NULL;
-static SDL_Renderer *renderer = NULL;
+// static SDL_Window *window = NULL;
+// static SDL_Renderer *renderer = NULL;
 static SDL_FPoint targetPos = {0, 0};
-static const SDL_DisplayMode *displayMode = nullptr;
+// static const SDL_DisplayMode *displayMode = nullptr;
 
 EventQueue *g_eventQueue = nullptr;
 unique_ptr<Screen> g_screen = nullptr;
@@ -116,43 +103,18 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-    if (!SDL_CreateWindowAndRenderer("Tetris", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_FULLSCREEN, &window, &renderer)) {
-        SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
-        return SDL_APP_FAILURE;
-    }
-    SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED); //设置窗口位置
-    // // 开启垂直同步
-    // if(!SDL_SetRenderVSync(renderer, 1)){
-    //     SDL_Log("Couldn't set vsync: %s", SDL_GetError());
-    // }
+    // MainWindow::getInstance()必须在SDL_Init之后，TTF_Init之前调用
+    SSize displaySize = MainWindow::getInstance()->getDisplaySize();
 
     if (!TTF_Init()) {
         SDL_Log("Couldn't initialise SDL_ttf: %s\n", SDL_GetError());
         return SDL_APP_FAILURE;
     }
-    char* currentDirector = SDL_GetCurrentDirectory();
-    SDL_Log("SDL_GetCurrentDirectory = %s", currentDirector);
-    const char* baseDirector = SDL_GetBasePath();
-    SDL_Log("SDL_GetBasePath = %s", baseDirector);
 #ifdef SDL_PLATFORM_ANDROID
     ConstDef::workforldPath = fs::path(std::string(SDL_GetPrefPath("SeaOcean.Ltd.", "Tetris")));
 #endif
 
-    SDL_DisplayID displayId = SDL_GetPrimaryDisplay();
-    if (displayId == 0) {
-        SDL_Log("SDL_GetPrimaryDisplay Error: %s\n", SDL_GetError());
-        return SDL_APP_FAILURE;
-    }
-
-    displayMode = SDL_GetCurrentDisplayMode(displayId);
-    if (displayMode == nullptr) {
-        SDL_Log("SDL_GetCurrentDisplayMode Error: %s\n", SDL_GetError());
-        return SDL_APP_FAILURE;
-    }
-    g_displayWidth = (float)displayMode->w * displayMode->pixel_density;
-    g_displayHeight = (float)displayMode->h * displayMode->pixel_density;
-
-    g_screen = make_unique<Screen>(nullptr, SRect(0, 0, g_displayWidth, g_displayHeight), renderer);
+    g_screen = make_unique<Screen>(nullptr, SRect(0, 0, displaySize.width, displaySize.height), MainWindow::getInstance()->getRenderer());
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
 }
@@ -197,8 +159,8 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         case SDL_EVENT_FINGER_UP:
         // case SDL_EVENT_FINGER_MOTION:
         // case SDL_EVENT_FINGER_CANCELED:
-            targetPos.x = event->tfinger.x * g_displayWidth * displayMode->pixel_density;
-            targetPos.y = event->tfinger.y * g_displayHeight * displayMode->pixel_density;
+            targetPos.x = event->tfinger.x * MainWindow::getInstance()->getDisplayWidth();
+            targetPos.y = event->tfinger.y * MainWindow::getInstance()->getDisplayHeight();
 
             // 转为FINGER_DOWN等位置事件
             switch(event->type)
@@ -323,13 +285,13 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     g_screen->handleEvent(arenaEvent);
 
     /* clear the window to the draw color. */
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(MainWindow::getInstance()->getRenderer(), 0, 0, 0, 255);
+    SDL_RenderClear(MainWindow::getInstance()->getRenderer());
 
     g_screen->draw();
 
     /* put the newly-cleared rendering on the screen. */
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(MainWindow::getInstance()->getRenderer());
 
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */

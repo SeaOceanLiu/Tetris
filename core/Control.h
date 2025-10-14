@@ -3,6 +3,7 @@
 #include <vector>
 #include <SDL3/SDL.h>
 #include "ConstDef.h"
+#include "MainWindow.h"
 #include "EventQueue.h"
 
 using namespace std;
@@ -13,6 +14,8 @@ protected:
     EventQueue *m_eventQueueInstance;
 public:
     virtual ~Control() = default;
+    virtual Control& setId(int id) = 0;
+    virtual int getId(void) const = 0;
     virtual void update(void) = 0;
     virtual void draw(void) = 0;
     virtual bool handleEvent(shared_ptr<Event> event) = 0;  //事件处理，返回值表示是否处理了该事件，true表示处理了，false表示未处理
@@ -40,6 +43,7 @@ public:
 
 class ControlImpl: virtual public Control, public enable_shared_from_this<ControlImpl>{
 protected:
+    int m_id;
     bool m_visible;
     bool m_enable;
     float m_xScale;
@@ -58,6 +62,8 @@ public:
     ControlImpl(Control *parent, float xScale=1.0f, float yScale=1.0f);
     ControlImpl(const ControlImpl& other);
     ~ControlImpl() = default;
+    ControlImpl& setId(int id) override { m_id = id; return *this; }
+    int getId(void) const override { return m_id; }
     ControlImpl& operator=(const ControlImpl& other);
     void update(void) override;
     void draw(void) override;

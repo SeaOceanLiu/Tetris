@@ -5,6 +5,7 @@
 #include "Actor.h"
 #include "Animation.h"
 #include "Label.h"
+#include "LuotiAni.h"
 
 enum class ButtonState {
     Normal,
@@ -21,6 +22,7 @@ private:
     shared_ptr<Actor> m_pressedActor;
     shared_ptr<Label> m_caption;
     shared_ptr<Animation> m_animation;
+    shared_ptr<LuotiAni>m_luotiAni;
 
     string m_captionText;
     float m_captionSize;
@@ -28,24 +30,21 @@ private:
     OnClickHandler m_onClick;
     ButtonState m_state;
     bool m_isTransparent;
-    int m_id;
 public:
     Button(Control *parent, SRect rect, float xScale=1.0f, float yScale=1.0f);
     void update(void) override;
     void draw(void) override;
     bool handleEvent(shared_ptr<Event> event) override;
-    int getId(void) const;
 
-    Button& setBtnNormalStateActor(shared_ptr<Actor> actor);
-    Button& setBtnHoverStateActor(shared_ptr<Actor> actor);
-    Button& setBtnPressedStateActor(shared_ptr<Actor> actor);
-    Button& setCaption(string caption);
-    Button& setCaptionSize(float size);
-    Button& setAnimation(shared_ptr<Animation> animation);
-    Button& setOnClick(OnClickHandler onClick);
-    Button& setTransparent(bool isTransparent);
-    Button& setId(int id);
-    shared_ptr<Button> build(void);
+    void setBtnNormalStateActor(shared_ptr<Actor> actor);
+    void setBtnHoverStateActor(shared_ptr<Actor> actor);
+    void setBtnPressedStateActor(shared_ptr<Actor> actor);
+    void setCaption(string caption);
+    void setCaptionSize(float size);
+    void setAnimation(shared_ptr<Animation> animation);
+    void setLuotiAni(shared_ptr<LuotiAni>luotiAni);
+    void setOnClick(OnClickHandler onClick);
+    void setTransparent(bool isTransparent);
 };
 
 class ButtonBuilder {
@@ -59,6 +58,8 @@ public:
     ButtonBuilder& setCaption(string caption);
     ButtonBuilder& setCaptionSize(float size);
     ButtonBuilder& setAnimation(shared_ptr<Animation> animation);
+    ButtonBuilder& setLuotiAni(shared_ptr<LuotiAni> luotiAni);
+    ButtonBuilder& addControl(shared_ptr<Control> child);
     ButtonBuilder& setOnClick(Button::OnClickHandler onClick);
     ButtonBuilder& setTransparent(bool isTransparent);
     ButtonBuilder& setId(int id);

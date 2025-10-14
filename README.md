@@ -69,7 +69,7 @@ And the confirm your java.home config in ./Android/com.seaocean.Tetris/.gradle/c
 Use the following command to build the game.
 
 ```powershell
-cd ./AndroidStudio/Tetris/com.seaocean.Tetris
+cd ./Android/com.seaocean.Tetris
 ./gradlew build
 ```
 

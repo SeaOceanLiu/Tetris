@@ -42,14 +42,15 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
     m_failed(false),
     m_musicCarousel(nullptr),
     m_frameCount(0),
+    m_aniTriggerInterval(5),
     m_frameCounter(nullptr),
     m_rotateBtnAnimation(nullptr),
     m_blockMoveTracker(nullptr),
-    m_bgColor({192, 192,192, 128}), // 使用半透明背景色
+    m_bgColor({255, 255, 255, 100}), // {192, 192,192, 128}使用半透明背景色
     m_hintPlaceBgColor({168, 168, 168, 128}), // 使用半透明背景色
     m_gridColor({128, 128, 128, SDL_ALPHA_OPAQUE}),
     m_borderColor({255, 255, 255, SDL_ALPHA_OPAQUE}),
-    m_screenBuffer((int)ConstDef::PG.height, vector<int>((int)ConstDef::PG.width, ConstDef::SCREEN_EMPTY_COLOR)),
+    // m_screenBuffer((int)ConstDef::PG.height, vector<int>((int)ConstDef::PG.width, nullptr)),
     m_brick(nullptr),
     m_blockData(nullptr),
     m_currentBlockColor(-1),
@@ -80,6 +81,13 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
     // 初始化随机数生成器
     m_rng = RandomNumberGenerator::getInstance();
 
+    for (int row = 0; row < ConstDef::PG.height; row++){
+        vector<shared_ptr<LuotiInstance>> screenRow;
+        for (int col = 0; col < ConstDef::PG.width; col++){
+            screenRow.push_back(nullptr);
+        }
+        m_screenBuffer.push_back(screenRow);
+    }
     if (!SDL_SetRenderDrawBlendMode(getRenderer(), SDL_BLENDMODE_BLEND)) {
         SDL_Log("Failed to set blend mode: %s", SDL_GetError());
     }
@@ -87,8 +95,8 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
     SDL_Log("Loading Brick actor......");
     m_brick = make_shared<BrickPool>(this, ConstDef::pathPrefix);
 
-    SRect brickRect = m_brick->getBrick(0)->getRect();
-    ConstDef::SINGLE_BLOCK_SIZE = {brickRect.width, brickRect.height};
+    // SRect brickRect = m_brick->getBrick(0)->getRect();
+    ConstDef::SINGLE_BLOCK_SIZE = {20, 20};//{brickRect.width, brickRect.height};
     SDL_Log("Setting orig ConstDef::SINGLE_BLOCK_SIZE to (%f, %f)......", ConstDef::SINGLE_BLOCK_SIZE.width, ConstDef::SINGLE_BLOCK_SIZE.height);
 
     m_playground = mapToDrawRect({ConstDef::PG.left * m_xScale, ConstDef::PG.top * m_yScale,
@@ -188,117 +196,11 @@ Arena::Arena(Control *parent, SRect bgRect, float xScale, float yScale):
                 .setId(static_cast<int>(ButtonId::DownBtn))
                 .build());
     addControl(m_rotateBtn = ButtonBuilder(this, ConstDef::ROTATE_BUTTON_POS)
-                .setAnimation(AnimationBuilder(this, 33)
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate000_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate005_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate010_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate015_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate020_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate025_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate030_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate035_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate040_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate045_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate050_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate055_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate060_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate065_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate070_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate075_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate080_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate085_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate090_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate095_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate100_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate105_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate110_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate115_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate120_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate125_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate130_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate135_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate140_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate145_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate150_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate155_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate160_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate165_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate170_png, true))
-                                            .build())
-                                .addFrame(ActorGroupBuilder(this)
-                                            .addActor({0, 0}, make_shared<Actor>(this, ResourceLoader::RID_rotate175_png, true))
-                                            .build())
-                                .setLoop(true)
-                                .setStartFrame(0)
+                .addControl(LuotiAniBuilder(this)
+                                .setRect({0,0,ConstDef::ROTATE_BUTTON_POS.width, ConstDef::ROTATE_BUTTON_POS.height})
+                                .loadAniDesc(ResourceLoader::RID_rotateBtn_jsonc)
+                                .prepare()
+                                .setAutoStart()
                                 .build())
                 .setOnClick(std::bind(&Arena::onBtnClick, this, std::placeholders::_1))
                 .setTransparent(true)
@@ -622,9 +524,7 @@ void Arena::drawScreen(void){
     // 画已落到地面的方块
     for (int row = 0; row < ConstDef::PG.height; row++){
         for (int col = 0; col < ConstDef::PG.width; col++){
-            if (m_screenBuffer[row][col] != ConstDef::SCREEN_EMPTY_COLOR){
-                drawBrick(row, col, m_screenBuffer[row][col]);
-            }
+            drawBrick(row, col);
         }
     }
 }
@@ -637,7 +537,7 @@ void Arena::refreshBlockMoveAnimationActorGroup(void){
 
     // auto actorGroup = make_shared<ActorGroup>(this);
     auto actorGroup = ActorGroupBuilder(this).build();
-    shared_ptr<Actor> newBrick;
+    shared_ptr<LuotiInstance> newBrick;
 
     float offsetX = 0;
     float offsetY = 0;
@@ -650,12 +550,16 @@ void Arena::refreshBlockMoveAnimationActorGroup(void){
                 offsetY = row * ConstDef::SINGLE_BLOCK_SIZE.height;
                 switch(singleGroup->getType()){
                     case BlockType::BOMB:
-                        actorGroup->addActor({offsetX, offsetY}, m_brick->getBrick(ConstDef::SCREEN_BOMB_COLOR));
+                        newBrick = m_brick->getBrick(ConstDef::SCREEN_BOMB_COLOR);
+                        newBrick->play();
+                        actorGroup->addActor({offsetX, offsetY}, newBrick);
                         m_currentBlockColor = ConstDef::SCREEN_BOMB_COLOR;
                         m_toPlaySoundId = SoundId::Bomb;
                         break;
                     case BlockType::PIERCE:
-                        actorGroup->addActor({offsetX, offsetY}, m_brick->getBrick(ConstDef::SCREEN_CROSS_COLOR));
+                        newBrick = m_brick->getBrick(ConstDef::SCREEN_CROSS_COLOR);
+                        newBrick->play();
+                        actorGroup->addActor({offsetX, offsetY}, newBrick);
                         m_currentBlockColor = ConstDef::SCREEN_CROSS_COLOR;
                         m_toPlaySoundId = SoundId::Pierce;
                         break;
@@ -718,15 +622,15 @@ void Arena::drawLine(float x1, float y1, float x2, float y2){
 }
 
 // 在playground上以行列的形式画指定的一个方块
-void Arena::drawBrick(int row, int col, int blockId){
+void Arena::drawBrick(int row, int col){
     if(row < 0 || col < 0 || row >= ConstDef::PG.height || col >= ConstDef::PG.width){
         return;
     }
+    if (m_screenBuffer[row][col] == nullptr) return;
+
     float x = col * ConstDef::SINGLE_BLOCK_SIZE.width;
     float y = row * ConstDef::SINGLE_BLOCK_SIZE.height;
-    if (y >= 0 && x >= 0){
-        m_brick->draw(x, y, blockId);
-    }
+    m_screenBuffer[row][col]->draw(x, y);
 }
 
 // 在playground上以行列的形式，用指定的颜色索引画指定的一组方块
@@ -813,6 +717,25 @@ void Arena::newBlock(int *newBlock, RotateAngle *newAngle, int *newColor){
 void Arena::onFrameCounter(void *userdata){
     // 计算帧率
     triggerEvent(make_shared<Event>(EventName::Timer, 0));
+
+    m_aniTriggerInterval++;
+    if (m_aniTriggerInterval >= 1){
+        m_aniTriggerInterval = 0;
+
+        // 随机触发屏幕上某个砖块的动画
+        vector<shared_ptr<LuotiInstance>> allAniOnScreen;
+        for (int row = 0; row < ConstDef::PG.height; row++){
+            for (int col = 0; col < ConstDef::PG.width; col++){
+                if (isBrickExistOnScreen(row, col)){
+                    allAniOnScreen.push_back(m_screenBuffer[row][col]);
+                }
+            }
+        }
+        if (allAniOnScreen.size() > 0){
+            int randomIdx = m_rng->generate(0, allAniOnScreen.size() - 1);
+            allAniOnScreen[randomIdx]->play();
+        }
+    }
 }
 
 void Arena::saveToScreen(void){
@@ -832,7 +755,10 @@ void Arena::saveToScreen(void){
                 int screenCol = m_blockPos.currentCol + col;
                 int screenRow = m_blockPos.currentRow + row;
                 if(isInScreen(screenRow, screenCol)){
-                    m_screenBuffer[screenRow][screenCol] = m_currentBlockColor;
+                    m_screenBuffer[screenRow][screenCol] = m_brick->getBrick(m_currentBlockColor);
+                    if (m_screenBuffer[screenRow][screenCol]->getUserId() == ConstDef::SCREEN_CROSS_COLOR){
+                        m_screenBuffer[screenRow][screenCol]->play();
+                    }
                 }
             }
         }
@@ -867,7 +793,7 @@ bool Arena::isInScreen(int row, int col){
 }
 // 检测屏幕上是否有砖块
 bool Arena::isBrickExistOnScreen(int row, int col){
-    if (isInScreen(row, col) && m_screenBuffer[row][col] != ConstDef::SCREEN_EMPTY_COLOR){
+    if (isInScreen(row, col) && m_screenBuffer[row][col] != nullptr){
         return true;
     }
     return false;
@@ -880,7 +806,7 @@ bool Arena::isExistUnderfill(int row, int col){
     }
 
     for (int screenRow = row + 1; screenRow < ConstDef::PG.height; screenRow++){
-        if (m_screenBuffer[screenRow][col] == ConstDef::SCREEN_EMPTY_COLOR){
+        if (m_screenBuffer[screenRow][col] == nullptr){
             return true;
         }
     }
@@ -1012,11 +938,11 @@ int Arena::checkLine(void){
                 isLineFull = false;
             }
             // 对炸弹特殊处理
-            if (m_screenBuffer[screenRow][screenCol] == ConstDef::SCREEN_BOMB_COLOR) {
+            if (m_screenBuffer[screenRow][screenCol] != nullptr && m_screenBuffer[screenRow][screenCol]->getUserId() == ConstDef::SCREEN_BOMB_COLOR) {
                 for (int bombCol = screenCol - 1; bombCol < screenCol + 2; bombCol++){
                     for (int bombRow = screenRow - 1; bombRow < screenRow + 2; bombRow++){
                         if(isBrickExistOnScreen(bombRow, bombCol)){
-                            m_screenBuffer[bombRow][bombCol] = ConstDef::SCREEN_EMPTY_COLOR;
+                            m_screenBuffer[bombRow][bombCol] = nullptr;
                             bombedCount++;
                         }
                     }
@@ -1035,7 +961,7 @@ int Arena::checkLine(void){
                 }
             }
             for (int col = 0; col < ConstDef::PG.width; col++){
-                m_screenBuffer[0][col] = ConstDef::SCREEN_EMPTY_COLOR;
+                m_screenBuffer[0][col] = nullptr;
             }
         } else {
             screenRow--;
@@ -1164,6 +1090,14 @@ void Arena::update(void){
     Panel::update();
 
     m_blockAnimation->update();
+    for (int row = 0; row < ConstDef::PG.height; row++){
+        for (int col = 0; col < ConstDef::PG.width; col++){
+            if (isBrickExistOnScreen(row, col)){
+                m_screenBuffer[row][col]->update();
+            }
+        }
+    }
+    m_brick->update();
 
 
     if(SDL_GetTicks() < m_nextUpdateTick){
@@ -1182,7 +1116,7 @@ void Arena::clean(void){
 
     for(int row = 0; row < ConstDef::PG.height; row++){
         for(int col = 0; col < ConstDef::PG.width; col++){
-            m_screenBuffer[row][col] = ConstDef::SCREEN_EMPTY_COLOR;
+            m_screenBuffer[row][col] = nullptr;
         }
     }
 
@@ -1321,7 +1255,7 @@ void Arena::loadFromStream(SDL_IOStream *fileStream){
 
     for( int row = 0; row < ConstDef::PG.height; row++) {
         for (int col = 0; col < ConstDef::PG.width; col++) {
-            m_screenBuffer[row][col] = jsonObject["screenBuffer"][row][col].get<int>();
+            m_screenBuffer[row][col] = m_brick->getBrick(jsonObject["screenBuffer"][row][col].get<int>());
         }
     }
 }
@@ -1346,7 +1280,7 @@ void Arena::saveToStream(SDL_IOStream *fileStream){
     jsonObject["nextBlockColOffset"] = m_nextBlockColOffset;
     for( int row = 0; row < ConstDef::PG.height; row++) {
         for (int col = 0; col < ConstDef::PG.width; col++) {
-            jsonObject["screenBuffer"][row][col] = m_screenBuffer[row][col];
+            jsonObject["screenBuffer"][row][col] = m_screenBuffer[row][col]->getUserId();
         }
     }
     string jsonString = jsonObject.dump(4);

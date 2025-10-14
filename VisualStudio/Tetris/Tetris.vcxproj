@@ -212,6 +212,8 @@ xcopy /y "$(OutputPath)\..\..\..\..\core\LibsAndDlls\*.dll" "$(OutputPath)"
     <ClInclude Include="..\..\core\EventQueue.h" />
     <ClInclude Include="..\..\core\FadeTracker.h" />
     <ClInclude Include="..\..\core\Label.h" />
+    <ClInclude Include="..\..\core\LuotiAni.h" />
+    <ClInclude Include="..\..\core\MainWindow.h" />
     <ClInclude Include="..\..\core\Material.h" />
     <ClInclude Include="..\..\core\MusicCarousel.h" />
     <ClInclude Include="..\..\core\Panel.h" />

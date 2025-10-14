@@ -66,7 +66,7 @@ void Screen::initial(void){
                     .setNormalStateColor({0, 0, 0, SDL_ALPHA_OPAQUE})
                     .setFont(FontName::Muyao_Softbrush)
                     .setFontSize((int)ConstDef::VERSION_FONT_SIZE)
-                    .setCaption(u8"单机版 V1.1.0")
+                    .setCaption(ConstDef::VERSION_TEXT)
                     .setAlignmentMode(AlignmentMode::AM_CENTER)
                     .setShadow(true)
                     .setShadowColor({255, 255, 255, SDL_ALPHA_OPAQUE})
@@ -195,6 +195,7 @@ void Screen::initial(void){
         SDL_Log("Rewriting resources.....................................");
         ResourceLoader::getInstance()->saveAllResourceToPrefPath();
     }
+
     m_isInitialed = true;
     SDL_Log("Loading finished, waiting user starting game................................");
 }

@@ -131,6 +131,12 @@
     <ClInclude Include="..\..\core\Label.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\core\LuotiAni.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\core\MainWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\core\Material.h">
       <Filter>头文件</Filter>
     </ClInclude>

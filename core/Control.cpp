@@ -2,6 +2,7 @@
 ControlImpl::ControlImpl(Control *parent, float xScale, float yScale):
     // m_weakThis(this),
     // m_sharedThis(nullptr),
+    m_id(INT_MAX),
     m_parent(parent),
     m_enable(true),
     m_visible(true),
@@ -217,11 +218,12 @@ void ControlImpl::triggerEvent(shared_ptr<Event> event){
 
 void ControlImpl::inheritRenderer(void) {
     if (m_renderer == nullptr){
-        if (m_parent == nullptr) {
-            SDL_Log("ControlImpl::draw() Error: m_renderer is nullptr and can't get it from m_parent for is's nullptr too!");
-            // throw("ControlImpl::draw() Error: m_renderer is nullptr and can't get it from m_parent for is's nullptr too!");
-            return;
-        }
-        m_renderer = m_parent->getRenderer();
+        // if (m_parent == nullptr) {
+        //     SDL_Log("ControlImpl::draw() Error: m_renderer is nullptr and can't get it from m_parent for is's nullptr too!");
+        //     // throw("ControlImpl::draw() Error: m_renderer is nullptr and can't get it from m_parent for is's nullptr too!");
+        //     return;
+        // }
+        // m_renderer = m_parent->getRenderer();
+        m_renderer = MainWindow::getInstance()->getRenderer();
     }
 }

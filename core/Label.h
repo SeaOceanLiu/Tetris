@@ -57,7 +57,6 @@ private:
 
     OnClickHandler m_onClick;
     LabelState m_state;
-    int m_id;
 
 private:
     void loadFromFile(void);
@@ -70,7 +69,6 @@ public:
     void update(void);
     void draw(void);
     bool handleEvent(shared_ptr<Event> event);
-    int getId(void) const;
     SRect getHotRect(void) const;
 
     Label& setNormalStateColor(SDL_Color color);
@@ -84,7 +82,6 @@ public:
     Label& setShadowColor(SDL_Color color);
     Label& setShadowOffset(SPoint offset);
     Label& setOnClick(OnClickHandler handler);
-    Label& setId(int id);
 
     Label& SetFontStyle(TTF_FontStyleFlags fontStyle);
 

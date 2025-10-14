@@ -8,8 +8,8 @@ Button::Button(Control *parent, SRect rect, float xScale, float yScale):
     m_pressedActor(nullptr),
     m_caption(nullptr),
     m_animation(nullptr),
+    m_luotiAni(nullptr),
     m_isTransparent(false),
-    m_id(INT_MAX),
     m_captionSize(ConstDef::BUTTON_CAPTION_SIZE)
 {
     m_rect = rect;
@@ -85,6 +85,9 @@ void Button::draw(void){
     if(m_animation != nullptr){
         m_animation->draw();
     }
+    if(m_luotiAni != nullptr){
+        m_luotiAni->draw();
+    }
 
     // 3. 绘制当前控件的标题
     if (m_caption != nullptr){
@@ -138,38 +141,32 @@ bool Button::handleEvent(shared_ptr<Event> event){
     return false;
 }
 
-int Button::getId(void) const{
-    return m_id;
-}
 
 /*********************************************************for Builder mode**********************************************************/
 
-Button& Button::setBtnNormalStateActor(shared_ptr<Actor> actor){
-    if (actor == nullptr) return *this;
+void Button::setBtnNormalStateActor(shared_ptr<Actor> actor){
+    if (actor == nullptr) return;
 
     actor->setRect({0, 0, m_rect.width, m_rect.height});
     actor->setParent(this);
     m_actor = actor;
-    return *this;
 }
-Button& Button::setBtnHoverStateActor(shared_ptr<Actor> actor){
-    if (actor == nullptr) return *this;
+void Button::setBtnHoverStateActor(shared_ptr<Actor> actor){
+    if (actor == nullptr) return;
 
     actor->setRect({0, 0, m_rect.width, m_rect.height});
     actor->setParent(this);
     m_hoverActor = actor;
-    return *this;
 }
 
-Button& Button::setBtnPressedStateActor(shared_ptr<Actor> actor){
-    if (actor == nullptr) return *this;
+void Button::setBtnPressedStateActor(shared_ptr<Actor> actor){
+    if (actor == nullptr) return;
 
     actor->setRect({0, 0, m_rect.width, m_rect.height});
     actor->setParent(this);
     m_pressedActor = actor;
-    return *this;
 }
-Button& Button::setCaption(string caption){
+void Button::setCaption(string caption){
     m_captionText = caption;
 
     if (m_caption != nullptr){
@@ -184,16 +181,14 @@ Button& Button::setCaption(string caption){
                             .setCaption(m_captionText)
                             .build();
     }
-    return *this;
 }
-Button& Button::setCaptionSize(float size){
+void Button::setCaptionSize(float size){
     m_captionSize = size;
     if (m_caption != nullptr){
         m_caption->setFontSize((int)m_captionSize);
     }
-    return *this;
 }
-Button& Button::setAnimation(shared_ptr<Animation> animation){
+void Button::setAnimation(shared_ptr<Animation> animation){
     m_animation = animation;
 
     if (m_animation != nullptr){
@@ -207,32 +202,21 @@ Button& Button::setAnimation(shared_ptr<Animation> animation){
         }
         m_animation->resume();
     }
-    return *this;
 }
-Button& Button::setOnClick(OnClickHandler onClick){
+void Button::setLuotiAni(shared_ptr<LuotiAni>luotiAni){
+    m_luotiAni = luotiAni;
+    if (m_luotiAni != nullptr){
+        // 设置动画的父控件为当前控件
+        m_luotiAni->setParent(this);
+    }
+}
+void Button::setOnClick(OnClickHandler onClick){
     m_onClick = onClick;
-    return *this;
 }
-Button& Button::setTransparent(bool isTransparent){
+void Button::setTransparent(bool isTransparent){
     m_isTransparent = isTransparent;
-    return *this;
 }
-Button& Button::setId(int id){
-    m_id = id;
-    return *this;
-}
-shared_ptr<Button> Button::build(void){
-    auto newBtn = make_shared<Button>(this->getParent(), m_rect, m_xScale, m_yScale);
-    newBtn->setBtnNormalStateActor(m_actor);
-    newBtn->setBtnHoverStateActor(m_hoverActor);
-    newBtn->setBtnPressedStateActor(m_pressedActor);
-    newBtn->setCaption(m_captionText);
-    newBtn->setAnimation(m_animation);
-    newBtn->setOnClick(m_onClick);
-    newBtn->setTransparent(m_isTransparent);
-    newBtn->setId(m_id);
-    return newBtn;
-}
+
 
 ButtonBuilder::ButtonBuilder(Control *parent, SRect rect, float xScale, float yScale):
     m_button(nullptr)
@@ -261,6 +245,14 @@ ButtonBuilder& ButtonBuilder::setCaptionSize(float size){
 }
 ButtonBuilder& ButtonBuilder::setAnimation(shared_ptr<Animation> animation){
     m_button->setAnimation(animation);
+    return *this;
+}
+ButtonBuilder& ButtonBuilder::setLuotiAni(shared_ptr<LuotiAni>luotiAni){
+    m_button->setLuotiAni(luotiAni);
+    return *this;
+}
+ButtonBuilder& ButtonBuilder::addControl(shared_ptr<Control> child){
+    m_button->addControl(child);
     return *this;
 }
 ButtonBuilder& ButtonBuilder::setOnClick(Button::OnClickHandler onClick){

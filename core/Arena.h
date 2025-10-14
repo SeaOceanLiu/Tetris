@@ -133,7 +133,7 @@ private:
     SDL_Color m_gridColor;
     SDL_Color m_borderColor; // 边框颜色
 
-    vector<vector<int>> m_screenBuffer;
+    vector<vector<shared_ptr<LuotiInstance>>> m_screenBuffer;
     shared_ptr<BlockGroup>m_blockData;
     BlockPos m_blockPos;
     // 方块色号
@@ -156,6 +156,7 @@ private:
     shared_ptr<MusicCarousel> m_musicCarousel;
     Timer *m_frameCounter;
     int m_frameCount; // 帧计数器
+    int m_aniTriggerInterval;
 
     shared_ptr<Animation> m_rotateBtnAnimation;
     shared_ptr<Animation> m_blockAnimation;
@@ -210,7 +211,8 @@ public:
     void drawPlayGround(void);
     void drawGrid(void);
     void getNextBlock(void);
-    void drawBrick(int row, int col, int blockId);
+    // void drawBrick(int row, int col, int blockId);
+    void drawBrick(int row, int col);
     void drawNextBlocks(void);
     void setColor(SDL_Color color);
     void drawRect(float x, float y, float w, float h);

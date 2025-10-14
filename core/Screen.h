@@ -5,6 +5,7 @@
 #include "Arena.h"
 #include "Label.h"
 #include "Dialog.h"
+#include "LuotiAni.h"
 
 class Screen: public Panel, public TopControl
 {

@@ -15,13 +15,18 @@ void ActorGroup::freeActors(Control *newParent){
     }
     clear();
 }
+void ActorGroup::update(void){
+    for (auto &actor : m_actors){
+        actor->update();
+    }
+}
 void ActorGroup::draw(float x, float y, Uint8 alpha){
     for (int i = 0; i < m_actors.size(); i++){
         m_actors[i]->draw(x + m_offsets[i].x, y + m_offsets[i].y, alpha);
     }
 }
 
-ActorGroup& ActorGroup::addActor(SPoint offset, shared_ptr<Actor>actor){
+ActorGroup& ActorGroup::addActor(SPoint offset, shared_ptr<Material>actor){
     m_offsets.push_back({offset.x, offset.y});
     m_actors.push_back(actor);
     return *this;
@@ -40,7 +45,7 @@ ActorGroupBuilder::ActorGroupBuilder(Control *parent, float xScale, float yScale
     m_actorGroup(make_shared<ActorGroup>(parent, xScale, yScale))
 {
 }
-ActorGroupBuilder& ActorGroupBuilder::addActor(SPoint offset, shared_ptr<Actor>actor)
+ActorGroupBuilder& ActorGroupBuilder::addActor(SPoint offset, shared_ptr<Material>actor)
 {
     m_actorGroup->addActor(offset, actor);
     return *this;
@@ -118,6 +123,9 @@ void Animation::update(void) {
 
     if (!m_isPlaying){
         return;
+    }
+    for(auto &frame : m_frames){
+        frame->update();
     }
     Uint64 currentTick = SDL_GetTicks();
     if (currentTick < m_nextFrameMsTick) {

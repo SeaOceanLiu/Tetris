@@ -13,18 +13,19 @@ class ActorGroup: public ControlImpl{
 friend class ActorGroupBuilder;
 private:
     std::vector<SPoint> m_offsets;  // Offsets(x, y) of the actors
-    std::vector<shared_ptr<Actor>> m_actors;
+    std::vector<shared_ptr<Material>> m_actors;
 
 public:
     ActorGroup(Control *parent, float xScale=1.0f, float yScale=1.0f);
-    // ActorGroup(Control *parent, SPoint offset, shared_ptr<Actor>actor, float xScale=1.0f, float yScale=1.0f);
+    // ActorGroup(Control *parent, SPoint offset, shared_ptr<Material>actor, float xScale=1.0f, float yScale=1.0f);
 
     void clear(void);
+    virtual void update(void) override;
     virtual void draw(float x, float y, Uint8 alpha=SDL_ALPHA_OPAQUE);
-    vector<shared_ptr<Actor>> getActors(void) { return m_actors; };
+    vector<shared_ptr<Material>> getActors(void) { return m_actors; };
     void freeActors(Control *newParent);
 
-    ActorGroup& addActor(SPoint offset, shared_ptr<Actor>actor);
+    ActorGroup& addActor(SPoint offset, shared_ptr<Material>actor);
     shared_ptr<ActorGroup> build(void);
 };
 
@@ -33,7 +34,7 @@ private:
     shared_ptr<ActorGroup> m_actorGroup;
 public:
     ActorGroupBuilder(Control *parent, float xScale=1.0f, float yScale=1.0f);
-    ActorGroupBuilder& addActor(SPoint offset, shared_ptr<Actor>actor);
+    ActorGroupBuilder& addActor(SPoint offset, shared_ptr<Material>actor);
     shared_ptr<ActorGroup> build(void);
 };
 

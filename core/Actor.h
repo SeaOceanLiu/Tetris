@@ -12,6 +12,7 @@ protected:
     bool m_matchParentRect; //是否强制使用目标矩形
 public:
     Actor(Control *parent, float xScale=1.0f, float yScale=1.0f);
+    Actor(Control *parent, bool matchParentRect=false, float xScale=1.0f, float yScale=1.0f);
     Actor(Control *parent, fs::path filePath, bool matchParentRect=false, float xScale=1.0f, float yScale=1.0f);
     Actor(Control *parent, string resourceId, bool matchParentRect=false, float xScale=1.0f, float yScale=1.0f);
     Actor(const Actor& other);

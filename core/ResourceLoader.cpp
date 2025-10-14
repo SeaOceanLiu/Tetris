@@ -17,15 +17,6 @@ const string ResourceLoader::RID_MapleMono_NF_CN_Regular_ttf    = "fonts/MapleMo
 const string ResourceLoader::RID_Muyao_Softbrush_ttf            = "fonts/Muyao-Softbrush.ttf";
 const string ResourceLoader::RID_Quando_Regular_ttf             = "fonts/Quando-Regular.ttf";
 // 图片
-const string ResourceLoader::RID_bitmap1_bmp                    = "images/bitmap1.bmp";
-const string ResourceLoader::RID_bitmap2_bmp                    = "images/bitmap2.bmp";
-const string ResourceLoader::RID_bitmap3_bmp                    = "images/bitmap3.bmp";
-const string ResourceLoader::RID_bitmap4_bmp                    = "images/bitmap4.bmp";
-const string ResourceLoader::RID_bitmap5_bmp                    = "images/bitmap5.bmp";
-const string ResourceLoader::RID_bitmap6_bmp                    = "images/bitmap6.bmp";
-const string ResourceLoader::RID_bitmap7_bmp                    = "images/bitmap7.bmp";
-const string ResourceLoader::RID_bitmap8_bmp                    = "images/bitmap8.bmp";
-const string ResourceLoader::RID_bitmap9_bmp                    = "images/bitmap9.bmp";
 const string ResourceLoader::RID_cross_down_png                 = "images/cross_down.png";
 const string ResourceLoader::RID_cross_over_png                 = "images/cross_over.png";
 const string ResourceLoader::RID_cross_up_png                   = "images/cross_up.png";
@@ -59,44 +50,36 @@ const string ResourceLoader::RID_BACKGROUND_IMAGE11_jpg         = "background/IM
 const string ResourceLoader::RID_BACKGROUND_IMAGE12_jpg         = "background/mmexport1599240022745.jpg";
 const string ResourceLoader::RID_BACKGROUND_IMAGE13_jpg         = "background/mmexport1599449092788.jpg";
 const string ResourceLoader::RID_BACKGROUND_IMAGE14_jpg         = "background/mmexport1599449096347.jpg";
-// 旋转动画
-const string ResourceLoader::RID_rotate000_png                  = "animations/rotate/rotate000.png";
-const string ResourceLoader::RID_rotate005_png                  = "animations/rotate/rotate005.png";
-const string ResourceLoader::RID_rotate010_png                  = "animations/rotate/rotate010.png";
-const string ResourceLoader::RID_rotate015_png                  = "animations/rotate/rotate015.png";
-const string ResourceLoader::RID_rotate020_png                  = "animations/rotate/rotate020.png";
-const string ResourceLoader::RID_rotate025_png                  = "animations/rotate/rotate025.png";
-const string ResourceLoader::RID_rotate030_png                  = "animations/rotate/rotate030.png";
-const string ResourceLoader::RID_rotate035_png                  = "animations/rotate/rotate035.png";
-const string ResourceLoader::RID_rotate040_png                  = "animations/rotate/rotate040.png";
-const string ResourceLoader::RID_rotate045_png                  = "animations/rotate/rotate045.png";
-const string ResourceLoader::RID_rotate050_png                  = "animations/rotate/rotate050.png";
-const string ResourceLoader::RID_rotate055_png                  = "animations/rotate/rotate055.png";
-const string ResourceLoader::RID_rotate060_png                  = "animations/rotate/rotate060.png";
-const string ResourceLoader::RID_rotate065_png                  = "animations/rotate/rotate065.png";
-const string ResourceLoader::RID_rotate070_png                  = "animations/rotate/rotate070.png";
-const string ResourceLoader::RID_rotate075_png                  = "animations/rotate/rotate075.png";
-const string ResourceLoader::RID_rotate080_png                  = "animations/rotate/rotate080.png";
-const string ResourceLoader::RID_rotate085_png                  = "animations/rotate/rotate085.png";
-const string ResourceLoader::RID_rotate090_png                  = "animations/rotate/rotate090.png";
-const string ResourceLoader::RID_rotate095_png                  = "animations/rotate/rotate095.png";
-const string ResourceLoader::RID_rotate100_png                  = "animations/rotate/rotate100.png";
-const string ResourceLoader::RID_rotate105_png                  = "animations/rotate/rotate105.png";
-const string ResourceLoader::RID_rotate110_png                  = "animations/rotate/rotate110.png";
-const string ResourceLoader::RID_rotate115_png                  = "animations/rotate/rotate115.png";
-const string ResourceLoader::RID_rotate120_png                  = "animations/rotate/rotate120.png";
-const string ResourceLoader::RID_rotate125_png                  = "animations/rotate/rotate125.png";
-const string ResourceLoader::RID_rotate130_png                  = "animations/rotate/rotate130.png";
-const string ResourceLoader::RID_rotate135_png                  = "animations/rotate/rotate135.png";
-const string ResourceLoader::RID_rotate140_png                  = "animations/rotate/rotate140.png";
-const string ResourceLoader::RID_rotate145_png                  = "animations/rotate/rotate145.png";
-const string ResourceLoader::RID_rotate150_png                  = "animations/rotate/rotate150.png";
-const string ResourceLoader::RID_rotate155_png                  = "animations/rotate/rotate155.png";
-const string ResourceLoader::RID_rotate160_png                  = "animations/rotate/rotate160.png";
-const string ResourceLoader::RID_rotate165_png                  = "animations/rotate/rotate165.png";
-const string ResourceLoader::RID_rotate170_png                  = "animations/rotate/rotate170.png";
-const string ResourceLoader::RID_rotate175_png                  = "animations/rotate/rotate175.png";
-const string ResourceLoader::RID_rotate180_png                  = "animations/rotate/rotate180.png";
+
+// 动画配置文件
+const string ResourceLoader::RID_rotateBtn_jsonc                = "animations/rotateBtn/rotateBtn.jsonc";
+const string ResourceLoader::RID_bombBlock_jsonc                = "animations/bombBlock/bombBlock.jsonc";
+const string ResourceLoader::RID_pierceBlock_jsonc              = "animations/pierceBlock/pierceBlock.jsonc";
+const string ResourceLoader::RID_cyanBlock_jsonc                = "animations/cyanBlock/cyanBlock.jsonc";
+const string ResourceLoader::RID_darkGreenBlock_jsonc           = "animations/darkGreenBlock/darkGreenBlock.jsonc";
+const string ResourceLoader::RID_deepBlueBlock_jsonc            = "animations/deepBlueBlock/deepBlueBlock.jsonc";
+const string ResourceLoader::RID_greenBlock_jsonc               = "animations/greenBlock/greenBlock.jsonc";
+const string ResourceLoader::RID_purpleBlock_jsonc              = "animations/purpleBlock/purpleBlock.jsonc";
+const string ResourceLoader::RID_redBlock_jsonc                 = "animations/redBlock/redBlock.jsonc";
+const string ResourceLoader::RID_grayBlock_jsonc                = "animations/grayBlock/grayBlock.jsonc";
+const string ResourceLoader::RID_yellowBlock_jsonc              = "animations/yellowBlock/yellowBlock.jsonc";
+
+// 动画元素文件
+const string ResourceLoader::RID_rotateBtn_svg                  = "animations/rotateBtn/rotateBtn.svg";
+const string ResourceLoader::RID_bomb_svg                       = "animations/bombBlock/bomb.svg";
+const string ResourceLoader::RID_marker_svg                     = "animations/bombBlock/marker.svg";
+const string ResourceLoader::RID_grayBlock_svg                  = "animations/grayBlock/grayBlock.svg";
+const string ResourceLoader::RID_chisel_svg                     = "animations/chisel/chisel.svg";
+const string ResourceLoader::RID_cyanBlock_svg                  = "animations/cyanBlock/cyanBlock.svg";
+const string ResourceLoader::RID_darkGreenBlock_svg             = "animations/darkGreenBlock/darkGreenBlock.svg";
+const string ResourceLoader::RID_deepBlueBlock_svg              = "animations/deepBlueBlock/deepBlueBlock.svg";
+const string ResourceLoader::RID_greenBlock_svg                 = "animations/greenBlock/greenBlock.svg";
+const string ResourceLoader::RID_purpleBlock_svg                = "animations/purpleBlock/purpleBlock.svg";
+const string ResourceLoader::RID_redBlock_svg                   = "animations/redBlock/redBlock.svg";
+const string ResourceLoader::RID_yellowBlock_svg                = "animations/yellowBlock/yellowBlock.svg";
+
+const string ResourceLoader::RID_lightBand_svg                  = "animations/lightBand/lightBand.svg";
+
 // 背景音乐
 const string ResourceLoader::RID_3_am_West_End_wav              = "music/3 am West End.wav";
 const string ResourceLoader::RID_Beat_One_wav                   = "music/Beat One.wav";
@@ -346,118 +329,126 @@ void ResourceLoader::saveResourceToPrefPath(string resourceId){
 }
 
 void ResourceLoader::saveAllResourceToPrefPath(void){
-    // 方块配置
-    saveResourceToPrefPath(ResourceLoader::RID_RBlock_jsonc);
-    // 字体
-    saveResourceToPrefPath(ResourceLoader::RID_Asul_Bold_ttf);
-    saveResourceToPrefPath(ResourceLoader::RID_HarmonyOS_Sans_SC_Regular_ttf);
-    saveResourceToPrefPath(ResourceLoader::RID_HarmonyOS_Sans_SC_Thin_ttf);
-    saveResourceToPrefPath(ResourceLoader::RID_MapleMono_NF_CN_Regular_ttf);
-    saveResourceToPrefPath(ResourceLoader::RID_Muyao_Softbrush_ttf);
-    saveResourceToPrefPath(ResourceLoader::RID_Quando_Regular_ttf);
-    // 图片
-    saveResourceToPrefPath(ResourceLoader::RID_bitmap1_bmp);
-    saveResourceToPrefPath(ResourceLoader::RID_bitmap2_bmp);
-    saveResourceToPrefPath(ResourceLoader::RID_bitmap3_bmp);
-    saveResourceToPrefPath(ResourceLoader::RID_bitmap4_bmp);
-    saveResourceToPrefPath(ResourceLoader::RID_bitmap5_bmp);
-    saveResourceToPrefPath(ResourceLoader::RID_bitmap6_bmp);
-    saveResourceToPrefPath(ResourceLoader::RID_bitmap7_bmp);
-    saveResourceToPrefPath(ResourceLoader::RID_bitmap8_bmp);
-    saveResourceToPrefPath(ResourceLoader::RID_bitmap9_bmp);
-    saveResourceToPrefPath(ResourceLoader::RID_cross_down_png);
-    saveResourceToPrefPath(ResourceLoader::RID_cross_over_png);
-    saveResourceToPrefPath(ResourceLoader::RID_cross_up_png);
-    saveResourceToPrefPath(ResourceLoader::RID_down_png);
-    saveResourceToPrefPath(ResourceLoader::RID_down_hover_png);
-    saveResourceToPrefPath(ResourceLoader::RID_down_pressed_png);
-    saveResourceToPrefPath(ResourceLoader::RID_icon_ico);
-    saveResourceToPrefPath(ResourceLoader::RID_icon_png);
-    saveResourceToPrefPath(ResourceLoader::RID_left_png);
-    saveResourceToPrefPath(ResourceLoader::RID_left_hover_png);
-    saveResourceToPrefPath(ResourceLoader::RID_left_pressed_png);
-    saveResourceToPrefPath(ResourceLoader::RID_pause_png);
-    saveResourceToPrefPath(ResourceLoader::RID_play_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rblock_png);
-    saveResourceToPrefPath(ResourceLoader::RID_right_png);
-    saveResourceToPrefPath(ResourceLoader::RID_right_hover_png);
-    saveResourceToPrefPath(ResourceLoader::RID_right_pressed_png);
-    // 背景
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE00_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE01_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE02_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE03_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE04_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE05_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE06_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE07_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE08_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE09_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE10_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE11_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE12_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE13_jpg);
-    saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE14_jpg);
-    // 旋转动画
-    saveResourceToPrefPath(ResourceLoader::RID_rotate000_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate005_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate010_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate015_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate020_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate025_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate030_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate035_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate040_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate045_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate050_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate055_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate060_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate065_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate070_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate075_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate080_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate085_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate090_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate095_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate100_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate105_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate110_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate115_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate120_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate125_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate130_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate135_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate140_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate145_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate150_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate155_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate160_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate165_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate170_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate175_png);
-    saveResourceToPrefPath(ResourceLoader::RID_rotate180_png);
-    // 背景音乐
-    saveResourceToPrefPath(ResourceLoader::RID_3_am_West_End_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Beat_One_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Fright_Night_Twist_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Goodnightmare_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Palm_and_Soul_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Take_the_Ride_wav);
-    // 音效
-    saveResourceToPrefPath(ResourceLoader::RID_Bomb_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_BombExplode_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_CantDo_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Excellent_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_GameOver_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Go_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Good_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_LevelComplete_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Move_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_MultiShot_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Pierce_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Save_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Speedup_wav);
-    saveResourceToPrefPath(ResourceLoader::RID_Warning_wav);
+    for (auto kv : m_resourceMap){
+        if (kv.second == nullptr || kv.second->pMem == nullptr) {
+            SDL_Log("Resource %s not found", kv.first.c_str());
+            // throw "Resource not found";
+            continue;
+        }
+        saveResourceToPrefPath(kv.first);
+    }
+    // // 方块配置
+    // saveResourceToPrefPath(ResourceLoader::RID_RBlock_jsonc);
+    // // 字体
+    // saveResourceToPrefPath(ResourceLoader::RID_Asul_Bold_ttf);
+    // saveResourceToPrefPath(ResourceLoader::RID_HarmonyOS_Sans_SC_Regular_ttf);
+    // saveResourceToPrefPath(ResourceLoader::RID_HarmonyOS_Sans_SC_Thin_ttf);
+    // saveResourceToPrefPath(ResourceLoader::RID_MapleMono_NF_CN_Regular_ttf);
+    // saveResourceToPrefPath(ResourceLoader::RID_Muyao_Softbrush_ttf);
+    // saveResourceToPrefPath(ResourceLoader::RID_Quando_Regular_ttf);
+    // // 图片
+    // saveResourceToPrefPath(ResourceLoader::RID_bitmap1_bmp);
+    // saveResourceToPrefPath(ResourceLoader::RID_bitmap2_bmp);
+    // saveResourceToPrefPath(ResourceLoader::RID_bitmap3_bmp);
+    // saveResourceToPrefPath(ResourceLoader::RID_bitmap4_bmp);
+    // saveResourceToPrefPath(ResourceLoader::RID_bitmap5_bmp);
+    // saveResourceToPrefPath(ResourceLoader::RID_bitmap6_bmp);
+    // saveResourceToPrefPath(ResourceLoader::RID_bitmap7_bmp);
+    // saveResourceToPrefPath(ResourceLoader::RID_bitmap8_bmp);
+    // saveResourceToPrefPath(ResourceLoader::RID_bitmap9_bmp);
+    // saveResourceToPrefPath(ResourceLoader::RID_cross_down_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_cross_over_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_cross_up_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_down_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_down_hover_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_down_pressed_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_icon_ico);
+    // saveResourceToPrefPath(ResourceLoader::RID_icon_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_left_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_left_hover_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_left_pressed_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_pause_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_play_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rblock_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_right_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_right_hover_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_right_pressed_png);
+    // // 背景
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE00_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE01_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE02_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE03_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE04_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE05_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE06_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE07_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE08_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE09_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE10_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE11_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE12_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE13_jpg);
+    // saveResourceToPrefPath(ResourceLoader::RID_BACKGROUND_IMAGE14_jpg);
+    // // 旋转动画
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate000_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate005_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate010_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate015_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate020_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate025_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate030_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate035_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate040_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate045_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate050_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate055_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate060_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate065_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate070_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate075_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate080_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate085_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate090_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate095_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate100_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate105_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate110_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate115_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate120_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate125_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate130_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate135_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate140_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate145_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate150_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate155_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate160_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate165_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate170_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate175_png);
+    // saveResourceToPrefPath(ResourceLoader::RID_rotate180_png);
+    // // 背景音乐
+    // saveResourceToPrefPath(ResourceLoader::RID_3_am_West_End_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Beat_One_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Fright_Night_Twist_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Goodnightmare_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Palm_and_Soul_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Take_the_Ride_wav);
+    // // 音效
+    // saveResourceToPrefPath(ResourceLoader::RID_Bomb_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_BombExplode_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_CantDo_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Excellent_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_GameOver_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Go_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Good_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_LevelComplete_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Move_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_MultiShot_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Pierce_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Save_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Speedup_wav);
+    // saveResourceToPrefPath(ResourceLoader::RID_Warning_wav);
 }
 
 SDL_IOStream * ResourceLoader::openTempSavedFile(char mode){

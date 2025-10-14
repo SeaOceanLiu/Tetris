@@ -2,8 +2,10 @@
 #define ConstDefH
 #include <filesystem>
 #include <vector>
+#include <string>
 #include <SDL3/SDL.h>
 
+using namespace std;
 namespace fs = std::filesystem;
 
 class SMultipleSize{
@@ -144,6 +146,9 @@ public:
         m_sdlFRect = SDL_FRect{left, top, width, height};
         return &m_sdlFRect;
     }
+    SDL_Rect toSDLRect(void){
+        return SDL_Rect{(int)left, (int)top, (int)width, (int)height};
+    }
 };
 
 class ConstDef{
@@ -222,6 +227,7 @@ public:
     static SRect  PG                        ;   //宽10格，高20格
     static SRect  HINT_PLACE                ;   // 提示方块放置位置，宽高各5格，与XML中的最大值保持一致
     static float  VERSION_FONT_SIZE         ;
+    static string VERSION_TEXT              ;   // 版本信息文本
     static float  INFORMATION_FONT_SIZE     ;
     static float  PAUSED_TEXT_FONT_SIZE     ;
     static float  FAILED_TEXT_FONT_SIZE     ;
@@ -274,5 +280,35 @@ protected:
     static SPoint s_offset;
 };
 
+template<class F>
+class final_action{
+public:
+    static_assert(!std::is_reference<F>::value && !std::is_const<F>::value &&
+                    !std::is_volatile<F>::value,
+                    "Final_action must be a callable type");
+    // 构造函数，传进来的东西，比如函数，就会赋值给自己的成员F m_f;
+    explicit final_action(F f) noexcept : m_f(std::move(f)){}
+    final_action(final_action&& other) noexcept :
+        m_f(std::move(other.m_f)), m_invoke(other.m_invoke)
+    {}
+    final_action(const final_action& other) = delete;
+    final_action& operator=(const final_action& other) = delete;
+    final_action& operator=(final_action&& other) = delete;
 
+    // 析构函数时候，就调用m_f()函数，也就是构造函数时候传进来的函数
+    ~final_action() noexcept{
+        if(m_invoke){
+            m_f();
+        }
+    }
+private:
+    F m_f;
+    bool m_invoke = true; // 默认为true，表示析构时调用m_f
+};
+template<class F>
+final_action<typename std::remove_cv<typename std::remove_reference<F>::type>::type>
+finally(F&& f) noexcept{
+    return final_action<typename std::remove_cv<typename std::remove_reference<F>::type>::type>(
+        std::forward<F>(f));
+}
 #endif

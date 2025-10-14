@@ -23,8 +23,7 @@ Label::Label(Control *parent, SRect rect, float xScale, float yScale):
     m_hotRect({0, 0, 0, 0}),
     m_onClick(nullptr),
     m_state(LabelState::Normal),
-    m_fontStyle(TTF_STYLE_NORMAL),
-    m_id(INT_MAX)
+    m_fontStyle(TTF_STYLE_NORMAL)
 {
     m_rect = rect;
 
@@ -204,10 +203,6 @@ bool Label::handleEvent(shared_ptr<Event> event){
     return false;
 }
 
-int Label::getId(void) const{
-    return m_id;
-}
-
 SRect Label::getHotRect(void) const{
     return m_hotRect;
 }
@@ -329,10 +324,6 @@ Label& Label::setShadowOffset(SPoint offset){
 }
 Label& Label::setOnClick(OnClickHandler handler){
     m_onClick = handler;
-    return *this;
-}
-Label& Label::setId(int id){
-    m_id = id;
     return *this;
 }
 Label& Label::SetFontStyle(TTF_FontStyleFlags fontStyle){

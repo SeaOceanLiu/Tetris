@@ -1,6 +1,6 @@
 {
     // 资源版本号或SHA256值
-    "resourceVersion": "1.0.0",
+    "resourceVersion": "1.2.0",
 
     // 方块配置
     "blockDefine": "config/RBlock.jsonc",
@@ -17,15 +17,6 @@
 
     // 图片
     "images": [
-        "images/bitmap1.bmp",
-        "images/bitmap2.bmp",
-        "images/bitmap3.bmp",
-        "images/bitmap4.bmp",
-        "images/bitmap5.bmp",
-        "images/bitmap6.bmp",
-        "images/bitmap7.bmp",
-        "images/bitmap8.bmp",
-        "images/bitmap9.bmp",
         "images/cross_down.png",
         "images/cross_over.png",
         "images/cross_up.png",
@@ -66,43 +57,34 @@
 
     // 动画
     "animations": [
-        "animations/rotate/rotate000.png",
-        "animations/rotate/rotate005.png",
-        "animations/rotate/rotate010.png",
-        "animations/rotate/rotate015.png",
-        "animations/rotate/rotate020.png",
-        "animations/rotate/rotate025.png",
-        "animations/rotate/rotate030.png",
-        "animations/rotate/rotate035.png",
-        "animations/rotate/rotate040.png",
-        "animations/rotate/rotate045.png",
-        "animations/rotate/rotate050.png",
-        "animations/rotate/rotate055.png",
-        "animations/rotate/rotate060.png",
-        "animations/rotate/rotate065.png",
-        "animations/rotate/rotate070.png",
-        "animations/rotate/rotate075.png",
-        "animations/rotate/rotate080.png",
-        "animations/rotate/rotate085.png",
-        "animations/rotate/rotate090.png",
-        "animations/rotate/rotate095.png",
-        "animations/rotate/rotate100.png",
-        "animations/rotate/rotate105.png",
-        "animations/rotate/rotate110.png",
-        "animations/rotate/rotate115.png",
-        "animations/rotate/rotate120.png",
-        "animations/rotate/rotate125.png",
-        "animations/rotate/rotate130.png",
-        "animations/rotate/rotate135.png",
-        "animations/rotate/rotate140.png",
-        "animations/rotate/rotate145.png",
-        "animations/rotate/rotate150.png",
-        "animations/rotate/rotate155.png",
-        "animations/rotate/rotate160.png",
-        "animations/rotate/rotate165.png",
-        "animations/rotate/rotate170.png",
-        "animations/rotate/rotate175.png",
-        "animations/rotate/rotate180.png"
+        // 动画配置文件
+        "animations/rotateBtn/rotateBtn.jsonc",
+        "animations/bombBlock/bombBlock.jsonc",
+        "animations/pierceBlock/pierceBlock.jsonc",
+        "animations/cyanBlock/cyanBlock.jsonc",
+        "animations/darkGreenBlock/darkGreenBlock.jsonc",
+        "animations/deepBlueBlock/deepBlueBlock.jsonc",
+        "animations/greenBlock/greenBlock.jsonc",
+        "animations/purpleBlock/purpleBlock.jsonc",
+        "animations/redBlock/redBlock.jsonc",
+        "animations/grayBlock/grayBlock.jsonc",
+        "animations/yellowBlock/yellowBlock.jsonc",
+
+        // 动画元素文件
+        "animations/rotateBtn/rotateBtn.svg",
+        "animations/bombBlock/bomb.svg",
+        "animations/bombBlock/marker.svg",
+        "animations/grayBlock/grayBlock.svg",
+        "animations/pierceBlock/chisel.svg",
+        "animations/cyanBlock/cyanBlock.svg",
+        "animations/darkGreenBlock/darkGreenBlock.svg",
+        "animations/deepBlueBlock/deepBlueBlock.svg",
+        "animations/greenBlock/greenBlock.svg",
+        "animations/purpleBlock/purpleBlock.svg",
+        "animations/redBlock/redBlock.svg",
+        "animations/yellowBlock/yellowBlock.svg",
+
+        "animations/lightBand/lightBand.svg"
     ],
 
     // 背景音乐

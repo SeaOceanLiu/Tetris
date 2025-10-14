@@ -39,6 +39,8 @@ enum class EventName: int{
     Timer,      //SystemEvent: Timer
 
     AnimationEnded, //Animationvent: AnimationEnded. Todo: 在事件的参数中增加id来表示是哪个动画
+    LuotiAniEnded,  //LuotiAniEvent: LuotiAniEnded.
+    LuotiInstanceEnded,
     AudioEnded,
     NextMusic,
     NextBackground,

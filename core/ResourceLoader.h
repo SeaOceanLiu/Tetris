@@ -104,15 +104,6 @@ public:
     static const string RID_Muyao_Softbrush_ttf;
     static const string RID_Quando_Regular_ttf;
     // 图片
-    static const string RID_bitmap1_bmp;
-    static const string RID_bitmap2_bmp;
-    static const string RID_bitmap3_bmp;
-    static const string RID_bitmap4_bmp;
-    static const string RID_bitmap5_bmp;
-    static const string RID_bitmap6_bmp;
-    static const string RID_bitmap7_bmp;
-    static const string RID_bitmap8_bmp;
-    static const string RID_bitmap9_bmp;
     static const string RID_cross_down_png;
     static const string RID_cross_over_png;
     static const string RID_cross_up_png;
@@ -146,44 +137,36 @@ public:
     static const string RID_BACKGROUND_IMAGE12_jpg;
     static const string RID_BACKGROUND_IMAGE13_jpg;
     static const string RID_BACKGROUND_IMAGE14_jpg;
-    // 旋转动画
-    static const string RID_rotate000_png;
-    static const string RID_rotate005_png;
-    static const string RID_rotate010_png;
-    static const string RID_rotate015_png;
-    static const string RID_rotate020_png;
-    static const string RID_rotate025_png;
-    static const string RID_rotate030_png;
-    static const string RID_rotate035_png;
-    static const string RID_rotate040_png;
-    static const string RID_rotate045_png;
-    static const string RID_rotate050_png;
-    static const string RID_rotate055_png;
-    static const string RID_rotate060_png;
-    static const string RID_rotate065_png;
-    static const string RID_rotate070_png;
-    static const string RID_rotate075_png;
-    static const string RID_rotate080_png;
-    static const string RID_rotate085_png;
-    static const string RID_rotate090_png;
-    static const string RID_rotate095_png;
-    static const string RID_rotate100_png;
-    static const string RID_rotate105_png;
-    static const string RID_rotate110_png;
-    static const string RID_rotate115_png;
-    static const string RID_rotate120_png;
-    static const string RID_rotate125_png;
-    static const string RID_rotate130_png;
-    static const string RID_rotate135_png;
-    static const string RID_rotate140_png;
-    static const string RID_rotate145_png;
-    static const string RID_rotate150_png;
-    static const string RID_rotate155_png;
-    static const string RID_rotate160_png;
-    static const string RID_rotate165_png;
-    static const string RID_rotate170_png;
-    static const string RID_rotate175_png;
-    static const string RID_rotate180_png;
+
+    // 动画配置文件
+    static const string RID_rotateBtn_jsonc;
+    static const string RID_bombBlock_jsonc;
+    static const string RID_pierceBlock_jsonc;
+    static const string RID_cyanBlock_jsonc;
+    static const string RID_darkGreenBlock_jsonc;
+    static const string RID_deepBlueBlock_jsonc;
+    static const string RID_greenBlock_jsonc;
+    static const string RID_purpleBlock_jsonc;
+    static const string RID_redBlock_jsonc;
+    static const string RID_grayBlock_jsonc;
+    static const string RID_yellowBlock_jsonc;
+
+    // 动画元素文件
+    static const string RID_rotateBtn_svg;
+    static const string RID_bomb_svg;
+    static const string RID_marker_svg;
+    static const string RID_grayBlock_svg;
+    static const string RID_chisel_svg;
+    static const string RID_cyanBlock_svg;
+    static const string RID_darkGreenBlock_svg;
+    static const string RID_deepBlueBlock_svg;
+    static const string RID_greenBlock_svg;
+    static const string RID_purpleBlock_svg;
+    static const string RID_redBlock_svg;
+    static const string RID_yellowBlock_svg;
+
+    static const string RID_lightBand_svg;
+
     // 背景音乐
     static const string RID_3_am_West_End_wav;
     static const string RID_Beat_One_wav;

@@ -2,10 +2,10 @@
 #define ConstDefH
 #include <filesystem>
 #include <vector>
-#include <string>
 #include <SDL3/SDL.h>
+#include <string>
 
-using namespace std;
+// using namespace std; // 先不使用 using namespace std，避免在Windows下编译因命名冲突而失败
 namespace fs = std::filesystem;
 
 class SMultipleSize{
@@ -227,7 +227,7 @@ public:
     static SRect  PG                        ;   //宽10格，高20格
     static SRect  HINT_PLACE                ;   // 提示方块放置位置，宽高各5格，与XML中的最大值保持一致
     static float  VERSION_FONT_SIZE         ;
-    static string VERSION_TEXT              ;   // 版本信息文本
+    static std::string VERSION_TEXT              ;   // 版本信息文本
     static float  INFORMATION_FONT_SIZE     ;
     static float  PAUSED_TEXT_FONT_SIZE     ;
     static float  FAILED_TEXT_FONT_SIZE     ;

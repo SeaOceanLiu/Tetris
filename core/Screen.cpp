@@ -148,11 +148,11 @@ void Screen::initial(void){
                         .setTitle(u8"本软件使用的第三方开源库和媒体资源")
                                   //----------------------------------------------------89
                         .addText(u8"第三方开源库：")
-                        .addText(u8"1. SDL3-3.2.14")
+                        .addText(u8"1. SDL3-3.2.24")
                         .addText(u8"   <https://github.com/libsdl-org/SDL>")
                         .addText(u8"2. SDL_image-3.2.4")
                         .addText(u8"   <https://github.com/libsdl-org/SDL_image>")
-                        .addText(u8"3. SDL_ttf-3.2.0")
+                        .addText(u8"3. SDL_ttf-3.2.2")
                         .addText(u8"   <https://github.com/libsdl-org/SDL_ttf>")
                         .addText(u8"4. nlohmann-3.12.0")
                         .addText(u8"   <https://github.com/nlohmann/json>")

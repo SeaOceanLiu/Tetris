@@ -1,0 +1,84 @@
+{
+    "overview": {
+        "version": "0.0.1",
+        "name": "Bomb block Animation",
+        "view": {   // 动画预览画布设置，超过视口范围的内容将不会显示
+            "width": 512,
+            "height": 512
+        },
+        "frameRate": 60,
+        "totalFrames": 60,
+        "loop": true    // 是否循环播放，布尔值
+    },
+    "layers":[
+        {
+            "name": "marker",
+            "type": "image",
+            "src": "animations/bombBlock/marker.svg",    // 图片资源ID，实际上是图片在资源包中的完整路径
+            "width": 512,   // 定义该值时，图片会被拉伸到该尺寸，否则保持图片原始尺寸
+            "height": 512,  // 定义该值时，图片会被拉伸到该尺寸，否则保持图片原始尺寸
+            "opacity": 100, // 不透明度，百分比整数，当关键帧中未定义透明度时，以图层级透明度为准
+            "blendMode": "blend",
+            "keyFrames": [
+                {
+                    "frame": 0, // 关键帧所在的帧数，从0开始
+                    "operation": [
+                        {
+                            "type": "translate",
+                            "tx": 0,    // x坐标的平移值，浮点
+                            "ty": 0     // y坐标的平移值，浮点
+                        },
+                        {
+                            "type": "scale",
+                            "sx": 1,    // x坐标的缩放值，浮点
+                            "sy": 1     // y坐标的缩放值，浮点
+                        },
+                        {
+                            "type": "rotate",
+                            "angle": 0, // 旋转角度，浮点
+                            "cx": 256,  // 以本图层内的坐标为准的旋转中心点x坐标
+                            "cy": 256   // 以本图层内的坐标为准的旋转中心点y坐标
+                        },
+                        {
+                            "type": "opacity",
+                            "opacity": 100  // 不透明度，百分比整数
+                        },
+                        {
+                            "type": "visible",
+                            "visible": true // 可见性，布尔值，不定义时缺省为true
+                        }
+                    ]
+                },
+                {
+                    "frame": 59, // 关键帧所在的帧数，从0开始
+                    "operation": [
+                        {
+                            "type": "translate",
+                            "tx": 0,    // x坐标的平移值，浮点
+                            "ty": 0     // y坐标的平移值，浮点
+                        },
+                        {
+                            "type": "scale",
+                            "sx": 1,    // x坐标的缩放值，浮点
+                            "sy": 1     // y坐标的缩放值，浮点
+                        },
+                        {
+                            "type": "rotate",
+                            "angle": 360, // 旋转角度，浮点
+                            "cx": 256,  // 以本图层内的坐标为准的旋转中心点x坐标
+                            "cy": 256   // 以本图层内的坐标为准的旋转中心点y坐标
+                        },
+                        {
+                            "type": "opacity",
+                            "opacity": 100  // 不透明度，百分比整数
+                        },
+                        {
+                            "type": "visible",
+                            "visible": true // 可见性，布尔值，不定义时缺省为true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

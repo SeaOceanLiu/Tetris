@@ -31,6 +31,7 @@
 #include FT_STROKER_H
 #include FT_GLYPH_H
 #include FT_TRUETYPE_IDS_H
+#include FT_TRUETYPE_TABLES_H
 #include FT_IMAGE_H
 
 /* Enable rendering with color
@@ -306,6 +307,7 @@ struct TTF_Font {
 
     // The font style
     TTF_FontStyleFlags style;
+    int weight;
     int outline;
     FT_Stroker stroker;
 
@@ -552,51 +554,6 @@ static void BG_Blended_LCD(const TTF_Image *image, Uint32 *destination, Sint32 s
     }
 
 }
-
-#if TTF_USE_SDF
-
-// Blended Opaque SDF
-static void BG_Blended_Opaque_SDF(const TTF_Image *image, Uint32 *destination, Sint32 srcskip, Uint32 dstskip)
-{
-    const Uint8 *src    = image->buffer;
-    Uint32      *dst    = destination;
-    Uint32       width  = image->width;
-    Uint32       height = image->rows;
-
-    while (height--) {
-        /* *INDENT-OFF* */
-        DUFFS_LOOP4(
-            *dst++ = ((Uint32)*src++) << 24;
-        , width);
-        /* *INDENT-ON* */
-        src += srcskip;
-        dst  = (Uint32 *)((Uint8 *)dst + dstskip);
-    }
-}
-
-// Blended non-opaque SDF
-// Note: This doesn't make sense when we're outputting raw SDF values.
-//       We'll just copy the alpha channel as-is for now.
-static void BG_Blended_SDF(const TTF_Image *image, Uint32 *destination, Sint32 srcskip, Uint32 dstskip, Uint8 fg_alpha)
-{
-    const Uint8 *src    = image->buffer;
-    Uint32      *dst    = destination;
-    Uint32       width  = image->width;
-    Uint32       height = image->rows;
-
-    (void)fg_alpha;
-    while (height--) {
-        /* *INDENT-OFF* */
-        DUFFS_LOOP4(
-            *dst++ = ((Uint32)*src++) << 24;
-        , width);
-        /* *INDENT-ON* */
-        src += srcskip;
-        dst  = (Uint32 *)((Uint8 *)dst + dstskip);
-    }
-}
-
-#endif // TTF_USE_SDF
 
 // Blended Opaque
 static void BG_Blended_Opaque(const TTF_Image *image, Uint32 *destination, Sint32 srcskip, Uint32 dstskip)
@@ -1385,18 +1342,6 @@ BUILD_RENDER_LINE(8_LCD_SP              , 0, 0, 1,    LCD, SUBPIX,              
 #endif
 
 
-#if TTF_USE_SDF
-static int (*Render_Line_SDF_Shaded)(TTF_Font *font, SDL_Surface *textbuf, int xstart, int ystart, SDL_Color *fg) = NULL;
-BUILD_RENDER_LINE(SDF_Blended           , 1, 0, 0,  COLOR, 0     ,                       , BG_Blended_SDF ,            )
-BUILD_RENDER_LINE(SDF_Blended_Opaque    , 1, 1, 0,  COLOR, 0     , BG_Blended_Opaque_SDF ,                ,            )
-static int (*Render_Line_SDF_Solid)(TTF_Font *font, SDL_Surface *textbuf, int xstart, int ystart, SDL_Color *fg) = NULL;
-static int (*Render_Line_SDF_Shaded_SP)(TTF_Font *font, SDL_Surface *textbuf, int xstart, int ystart, SDL_Color *fg) = NULL;
-BUILD_RENDER_LINE(SDF_Blended_SP        , 1, 0, 0,  COLOR, SUBPIX,                       , BG_Blended_SDF ,            )
-BUILD_RENDER_LINE(SDF_Blended_Opaque_SP , 1, 1, 0,  COLOR, SUBPIX, BG_Blended_Opaque_SDF ,                ,            )
-static int (*Render_Line_SDF_LCD)(TTF_Font *font, SDL_Surface *textbuf, int xstart, int ystart, SDL_Color *fg) = NULL;
-static int (*Render_Line_SDF_LCD_SP)(TTF_Font *font, SDL_Surface *textbuf, int xstart, int ystart, SDL_Color *fg) = NULL;
-#endif
-
 #ifdef __GNUC__
 #pragma GCC diagnostic pop
 #endif
@@ -1439,12 +1384,6 @@ static bool Render_Line(const render_mode_t render_mode, int subpixel, TTF_Font 
         } else {                                                                                            \
             return Render_Line_##NAME##_Solid(font, textbuf, xstart, ystart, NULL);                         \
         }
-
-#if TTF_USE_SDF
-    if (font->render_sdf && render_mode == RENDER_BLENDED) {
-        Call_Specific_Render_Line(SDF)
-    }
-#endif
 
 #if defined(HAVE_NEON_INTRINSICS)
     if (hasNEON()) {
@@ -2192,6 +2131,7 @@ TTF_Font *TTF_OpenFontWithProperties(SDL_PropertiesID props)
     // Set the default font style
     if (existing_font) {
         font->style = existing_font->style;
+        font->weight = existing_font->weight;
         font->outline = existing_font->outline;
         font->ft_load_target = existing_font->ft_load_target;
         font->enable_kerning = existing_font->enable_kerning;
@@ -2200,6 +2140,16 @@ TTF_Font *TTF_OpenFontWithProperties(SDL_PropertiesID props)
         font->outline = 0;
         font->ft_load_target = FT_LOAD_TARGET_NORMAL;
         TTF_SetFontKerning(font, true);
+
+        // Retrieve the weight from the OS2 TrueType table
+        const TT_OS2 *os2_table = (const TT_OS2 *)FT_Get_Sfnt_Table(face, FT_SFNT_OS2);
+        if (os2_table != NULL && os2_table->usWeightClass != 0) {
+            font->weight = os2_table->usWeightClass;
+        } else if (face->style_flags & FT_STYLE_FLAG_BOLD) {
+            font->weight = TTF_FONT_WEIGHT_BOLD;
+        } else {
+            font->weight = TTF_FONT_WEIGHT_NORMAL;
+        }
     }
 
 #if TTF_USE_HARFBUZZ
@@ -3875,9 +3825,6 @@ static bool TTF_Size_Internal(TTF_Font *font, const char *text, size_t length, T
     if (ystart) {
         *ystart = (miny < 0) ? -miny : 0;
         *ystart += font->outline;
-        if (font->render_sdf && include_spread) {
-            *ystart += DEFAULT_SDF_SPREAD;
-        }
     }
 
     // Fill the bounds rectangle
@@ -3890,6 +3837,9 @@ static bool TTF_Size_Internal(TTF_Font *font, const char *text, size_t length, T
     if (h) {
         *h = (maxy - miny);
         *h += 2 * font->outline;
+        if (font->render_sdf && include_spread) {
+            *h += (2 * DEFAULT_SDF_SPREAD);
+        }
     }
     return true;
 }
@@ -4284,16 +4234,6 @@ static SDL_Surface* TTF_Render_Wrapped_Internal(TTF_Font *font, const char *text
         SDL_SetError("LCD rendering is not available for non-scalable font");
         goto failure;
     }
-
-#if TTF_USE_SDF
-    // Invalid cache if we were using SDF
-    if (render_mode != RENDER_BLENDED) {
-        if (font->render_sdf) {
-            font->render_sdf = false;
-            Flush_Cache(font);
-        }
-    }
-#endif
 
     // Create surface for rendering
     if (fg.a == SDL_ALPHA_TRANSPARENT) {
@@ -5828,7 +5768,7 @@ void TTF_SetFontHinting(TTF_Font *font, TTF_HintingFlags hinting)
 
 TTF_HintingFlags TTF_GetFontHinting(const TTF_Font *font)
 {
-    TTF_CHECK_FONT(font, -1);
+    TTF_CHECK_FONT(font, TTF_HINTING_INVALID);
 
     if (font->ft_load_target == FT_LOAD_TARGET_LIGHT) {
         if (font->render_subpixel == 0) {
@@ -5865,6 +5805,13 @@ bool TTF_GetFontSDF(const TTF_Font *font)
     TTF_CHECK_FONT(font, false);
 
     return font->render_sdf;
+}
+
+int TTF_GetFontWeight(const TTF_Font *font)
+{
+    TTF_CHECK_FONT(font, -1);
+
+    return font->weight;
 }
 
 void TTF_SetFontWrapAlignment(TTF_Font *font, TTF_HorizontalAlignment align)
